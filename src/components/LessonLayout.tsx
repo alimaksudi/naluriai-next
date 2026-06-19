@@ -14,7 +14,6 @@ export function LessonLayout({ sidebar, activePath, title, children }: LessonLay
       <Sidebar sections={sidebar} activePath={activePath} />
       <main className="min-w-0 flex-1 px-8 py-10">
         <div className="mx-auto max-w-3xl">
-          <h1 className="mb-8 text-3xl font-bold text-gray-900">{title}</h1>
           <article className="prose prose-gray max-w-none">{children}</article>
         </div>
       </main>
