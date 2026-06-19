@@ -1,0 +1,153 @@
+---
+title: Input & Output
+sidebar_position: 2
+---
+
+# Input & Output
+
+## Kenapa ini penting?
+
+Program yang berguna harus bisa "ngobrol" dua arah: menerima sesuatu dari pengguna, lalu menjawab. Tanpa ini, programmu cuma bisa bicara sendiri dengan nilai yang sudah kamu tulis di kode.
+
+**Fokus kita:** menampilkan informasi dengan `print()` (output) dan menerima informasi dari pengguna dengan `input()` (input).
+
+## Apa itu input dan output?
+
+- **Output** adalah apa yang komputer keluarkan untuk kita lihat. Caranya pakai `print()`.
+- **Input** adalah apa yang kita masukkan ke program. Caranya pakai `input()`.
+
+```python
+nama = input("Siapa namamu? ")
+print("Halo,", nama)
+```
+
+Saat program ini jalan, dia berhenti di `input()` dan menunggu kamu mengetik. Setelah kamu tekan Enter, apa yang kamu ketik disimpan ke variable `nama`, lalu ditampilkan kembali.
+
+## Analogi sederhana
+
+Bayangkan kamu chat dengan teman.
+
+- Kamu mengetik pesan dan mengirimnya = `input()`.
+- Balasan yang muncul di layar = `print()`.
+
+Program tanpa input itu seperti teman yang ngomong terus tanpa pernah mau mendengarkan.
+
+## Bedah konsep
+
+### 1. Output dengan print()
+
+`print()` bisa menampilkan teks, angka, atau gabungan beberapa hal sekaligus (dipisah koma).
+
+```python
+print("Selamat datang!")
+print("Saldo kamu:", 100000)
+print("Nama:", "Budi", "| Umur:", 25)
+```
+
+Koma di dalam `print()` otomatis menambahkan satu spasi di antara setiap bagian.
+
+### 2. Cara rapi: f-string
+
+Menggabungkan teks dan variable pakai koma kadang berantakan. Cara yang lebih rapi dan populer adalah *f-string*: tulis huruf `f` sebelum tanda kutip, lalu taruh variable di dalam kurung kurawal `{}`.
+
+```python
+nama = "Budi"
+umur = 25
+print(f"Halo {nama}, umurmu {umur} tahun.")
+```
+
+Hasilnya: `Halo Budi, umurmu 25 tahun.` Jauh lebih enak dibaca, kan?
+
+### 3. Input selalu berupa teks
+
+Ini bagian yang sering bikin pemula bingung. Apa pun yang diketik pengguna, `input()` selalu menganggapnya **teks**. Jadi kalau butuh angka untuk dihitung, ubah dulu.
+
+```python
+umur = input("Umur kamu: ")   # ini teks, misalnya "25"
+umur = int(umur)              # ubah jadi angka 25
+```
+
+Atau versi singkat, langsung diubah dalam satu baris:
+
+```python
+umur = int(input("Umur kamu: "))
+```
+
+Untuk angka berkoma, pakai `float()` bukan `int()`:
+
+```python
+tinggi = float(input("Tinggi badan (meter): "))   # misalnya 1.75
+```
+
+## Contoh penggunaan
+
+Program penghitung total belanja sederhana:
+
+```python
+harga = int(input("Harga barang: "))
+jumlah = int(input("Beli berapa: "))
+
+total = harga * jumlah
+print(f"Total bayar: Rp {total}")
+```
+
+Contoh lain, sapaan yang dipersonalisasi:
+
+```python
+nama = input("Nama kamu: ")
+kota = input("Asal kota: ")
+print(f"Halo {nama} dari {kota}, semoga harimu menyenangkan!")
+```
+
+## Latihan singkat
+
+Buat program yang menanyakan nama dan kota asal, lalu menyapa pengguna dengan ramah memakai f-string.
+
+```python
+nama = input("Nama: ")
+kota = input("Asal kota: ")
+print(f"Halo {nama} dari {kota}, selamat belajar Python!")
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Tanyakan nama pengguna, lalu tampilkan "Selamat belajar, [nama]!".
+
+**2. Menengah**  
+Tanyakan harga sebuah produk, lalu tampilkan harga setelah ditambah pajak 11 persen.
+
+**3. Tantangan**  
+Buat konversi suhu: minta pengguna memasukkan suhu dalam Celsius, lalu tampilkan hasilnya dalam Fahrenheit. Rumusnya: `F = C * 9 / 5 + 32`.
+
+**4. Project mini**  
+Buat "kalkulator cicilan" sederhana: tanyakan total pinjaman dan jumlah bulan, lalu tampilkan cicilan per bulan. Awali program dengan menanyakan nama pengguna dan sapa dia, lalu tampilkan hasil akhir dengan f-string yang rapi.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+umur = input("Umur: ")
+print("Tahun depan umurmu", umur + 1)   # error: teks + angka
+```
+
+✅ Benar:
+
+```python
+umur = int(input("Umur: "))
+print("Tahun depan umurmu", umur + 1)   # aman, hasilnya angka
+```
+
+Aturan emasnya: **hasil `input()` selalu teks.** Kalau mau dihitung, bungkus dengan `int()` (untuk bilangan bulat) atau `float()` (untuk bilangan berkoma).
+
+:::tip Catatan Pro
+`int(input("Masukkan angka: "))` menggabungkan dua langkah jadi satu: mengambil input sekaligus mengubahnya ke integer. Lebih ringkas dari dua baris terpisah.
+:::
+
+## Ringkasan
+
+- `print()` untuk menampilkan, `input()` untuk menerima dari pengguna.
+- *f-string* (`f"... {variable} ..."`) adalah cara rapi menggabungkan teks dan variable.
+- Hasil `input()` selalu teks; ubah dengan `int()` atau `float()` kalau butuh angka.
+- Pola input lalu output adalah dasar dari hampir semua aplikasi, termasuk aplikasi AI.

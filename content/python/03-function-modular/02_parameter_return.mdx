@@ -1,0 +1,153 @@
+---
+title: Parameter & Return
+sidebar_position: 2
+---
+
+# Parameter & Return
+
+## Kenapa ini penting?
+
+Function di lesson sebelumnya selalu melakukan hal yang sama persis. Padahal yang kita mau biasanya function yang fleksibel: "hitung total belanja, tapi angkanya beda-beda tergantung pembeli". Untuk itu function butuh **input** (lewat *parameter*) dan bisa memberi **hasil** (lewat *return*).
+
+**Fokus kita:** mengirim data ke function lewat *parameter*, dan mengambil hasilnya lewat *return*.
+
+## Apa itu parameter dan return?
+
+- *Parameter* adalah data yang kita kirim masuk ke function.
+- *Return* adalah hasil yang dikeluarkan function untuk kita pakai lagi.
+
+```python
+def luas_persegi(sisi):     # sisi = parameter
+    return sisi * sisi      # return = hasil
+
+hasil = luas_persegi(5)
+print(hasil)                # 25
+```
+
+## Analogi sederhana
+
+Function dengan parameter dan return itu seperti **mesin jus**. Kamu masukkan buah (parameter), mesin memproses, lalu mengeluarkan jus (return). Buah yang berbeda menghasilkan jus yang berbeda, padahal mesinnya sama.
+
+```text
+   input              proses            output
+  (buah)   ───►   [ mesin jus ]   ───►  (jus)
+ parameter          function            return
+```
+
+## Bedah konsep
+
+### 1. Satu atau banyak parameter
+
+```python
+def total_harga(harga, jumlah):
+    return harga * jumlah
+
+print(total_harga(15000, 3))   # 45000
+```
+
+### 2. return vs print
+
+Ini sering tertukar. `print()` hanya menampilkan ke layar. `return` memberi nilai yang bisa **disimpan dan dipakai lagi**.
+
+```python
+def tambah(a, b):
+    return a + b
+
+x = tambah(4, 6)     # hasil disimpan ke x
+print(x * 2)         # 20, karena nilainya bisa diolah lagi
+```
+
+Kalau function cuma `print` tanpa `return`, hasilnya tidak bisa dipakai untuk perhitungan berikutnya.
+
+### 3. Parameter dengan nilai default
+
+Beri nilai cadangan supaya parameter boleh tidak diisi.
+
+```python
+def sapa(nama, salam="Halo"):
+    print(salam, nama)
+
+sapa("Budi")              # Halo Budi
+sapa("Sari", "Selamat datang")   # Selamat datang Sari
+```
+
+## Contoh penggunaan
+
+Function menghitung harga setelah diskon:
+
+```python
+def harga_diskon(harga, persen):
+    potongan = harga * persen / 100
+    return harga - potongan
+
+print(harga_diskon(100000, 20))   # 80000
+```
+
+Function menghitung rata-rata dari sebuah list:
+
+```python
+def rata_rata(angka):
+    return sum(angka) / len(angka)
+
+print(rata_rata([80, 90, 70]))    # 80.0
+```
+
+## Latihan singkat
+
+Buat function `keliling_persegi(sisi)` yang mengembalikan keliling (sisi dikali 4), lalu tampilkan hasilnya untuk sisi 7.
+
+```python
+def keliling_persegi(sisi):
+    return ...
+
+print(keliling_persegi(7))
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat function `kuadrat(angka)` yang mengembalikan angka dipangkatkan dua.
+
+**2. Menengah**  
+Buat function `total_belanja(harga, jumlah, ongkir)` yang mengembalikan total bayar. Beri `ongkir` nilai default `10000`.
+
+**3. Tantangan**  
+Buat function `konversi_suhu(celsius)` yang mengembalikan nilai Fahrenheit. Panggil untuk tiga suhu berbeda dan tampilkan hasilnya.
+
+**4. Project mini**  
+Buat "kalkulator gaji". Buat function `hitung_gaji(gaji_pokok, lembur_jam)` yang menghitung total gaji, dengan asumsi upah lembur Rp 50000 per jam. Tambahkan parameter default `bonus=0`. Uji dengan beberapa kombinasi input.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+def tambah(a, b):
+    print(a + b)        # cuma menampilkan, tidak mengembalikan
+
+hasil = tambah(2, 3)
+print(hasil * 2)        # error/None, karena tambah() tidak me-return apa pun
+```
+
+✅ Benar:
+
+```python
+def tambah(a, b):
+    return a + b        # mengembalikan nilai
+
+hasil = tambah(2, 3)
+print(hasil * 2)        # 10
+```
+
+Kalau kamu ingin memakai hasil function untuk perhitungan lain, function itu harus `return`, bukan sekadar `print`.
+
+:::tip Catatan Pro
+Function Python tanpa pernyataan `return` secara diam-diam mengembalikan `None`. Kalau `print(fungsi_ku())` mencetak `None`, itu tandanya function belum punya `return` — bukan bug di pemanggil.
+:::
+
+## Ringkasan
+
+- *Parameter* adalah input yang dikirim ke function; *return* adalah hasil yang dikeluarkan.
+- `return` berbeda dari `print`: return memberi nilai yang bisa dipakai lagi.
+- Parameter bisa diberi nilai default agar opsional.
+- Function yang menerima input dan mengembalikan hasil jauh lebih fleksibel.

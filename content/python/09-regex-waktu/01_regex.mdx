@@ -1,0 +1,193 @@
+---
+title: Regular Expression Dasar
+sidebar_position: 1
+---
+
+# Regular Expression Dasar
+
+## Kenapa ini penting?
+
+Bagaimana cara mengecek apakah sebuah teks adalah email yang valid? Atau mengambil semua nomor telepon dari satu paragraf? Menulis kode manual untuk ini sangat panjang. *Regular expression* (regex) adalah "bahasa pola" yang menyelesaikannya dengan ringkas. Sangat berguna saat membersihkan data teks.
+
+**Fokus kita:** memakai *regex* lewat module `re` untuk mencari dan memeriksa pola di dalam teks.
+
+## Apa itu regular expression?
+
+*Regular expression* adalah pola untuk mencocokkan teks. Misalnya "tiga angka diikuti huruf" bisa ditulis sebagai sebuah pola, lalu dipakai untuk mencari di teks mana pun. Di Python, regex ada di module `re`.
+
+```python
+import re
+
+teks = "Hubungi saya di 08123456789"
+hasil = re.findall(r"\d+", teks)   # cari semua deretan angka
+print(hasil)   # ['08123456789']
+```
+
+## Analogi sederhana
+
+Regex itu seperti **fitur pencarian super canggih**. Pencarian biasa cuma bisa mencari kata persis. Regex bisa mencari "pola": semua angka, semua email, semua kata yang diawali huruf besar. Seperti memberi mesin pencari sebuah deskripsi, bukan kata mati.
+
+## Bedah konsep
+
+### 1. Pola dasar
+
+Tulis pola sebagai *raw string* dengan awalan `r"..."`.
+
+```text
+\d    # satu angka (0-9)
+\w    # satu huruf, angka, atau garis bawah
+\s    # satu spasi
+.     # karakter apa pun
++     # satu atau lebih
+*     # nol atau lebih
+```
+
+### 2. Fungsi penting di module re
+
+```python
+import re
+
+teks = "harga: 50000 dan 75000"
+
+print(re.findall(r"\d+", teks))   # ['50000', '75000']  semua kecocokan
+print(re.search(r"\d+", teks))    # kecocokan pertama (object Match)
+```
+
+### 3. Memeriksa format (validasi)
+
+```python
+import re
+
+def email_valid(email):
+    pola = r"^[\w.]+@[\w]+\.[a-z]+$"
+    return re.match(pola, email) is not None
+
+print(email_valid("budi@mail.com"))   # True
+print(email_valid("budi-mail.com"))   # False
+```
+
+### 4. Mengganti dengan pola
+
+`re.sub` mengganti semua yang cocok dengan pola.
+
+```python
+import re
+teks = "Telp saya 0812-3456-7890 ya"
+bersih = re.sub(r"\D", "", teks)   # buang semua yang BUKAN angka
+print(bersih)   # 081234567890
+```
+
+## Referensi cepat pola regex
+
+```text
+Karakter khusus:
+  .       → sembarang karakter (kecuali newline)
+  \d      → angka [0-9]
+  \D      → bukan angka
+  \w      → huruf, angka, underscore [a-zA-Z0-9_]
+  \W      → bukan \w
+  \s      → whitespace (spasi, tab, newline)
+  \S      → bukan whitespace
+
+Kuantifier (berapa kali):
+  *       → 0 kali atau lebih
+  +       → 1 kali atau lebih
+  ?       → 0 atau 1 kali (opsional)
+  {3}     → tepat 3 kali
+  {2,5}   → 2 sampai 5 kali
+
+Jangkar (posisi):
+  ^       → awal string
+  $       → akhir string
+
+Pengelompokan:
+  [abc]   → a atau b atau c
+  [^abc]  → bukan a, b, atau c
+  (pola)  → grup yang bisa direferensi
+  a|b     → a atau b
+```
+
+Tes pola regex di **regex101.com** sebelum masuk ke kode Python — visualisasinya sangat membantu.
+
+## Contoh penggunaan
+
+Mengambil semua hashtag dari sebuah caption media sosial:
+
+```python
+import re
+
+caption = "Belajar Python itu seru #python #belajar #coding"
+hashtag = re.findall(r"#\w+", caption)
+print(hashtag)   # ['#python', '#belajar', '#coding']
+```
+
+Mengambil tanggal dari teks:
+
+```python
+import re
+
+# Contoh 3: Format tanggal (YYYY-MM-DD)
+teks = "Rapat dijadwalkan tanggal 2024-03-15 dan 2024-04-01"
+tanggal = re.findall(r"\d{4}-\d{2}-\d{2}", teks)
+print(tanggal)  # ['2024-03-15', '2024-04-01']
+
+# Format tanggal alternatif (DD/MM/YYYY)
+teks2 = "Lahir 25/12/1999, expired 01/01/2025"
+tanggal2 = re.findall(r"\d{2}/\d{2}/\d{4}", teks2)
+print(tanggal2)  # ['25/12/1999', '01/01/2025']
+```
+
+## Latihan singkat
+
+Pakai regex untuk mengambil semua angka dari teks `"Pesanan 3 item seharga 45000"`.
+
+```python
+import re
+teks = "Pesanan 3 item seharga 45000"
+print(re.findall(r"\d+", teks))   # ['3', '45000']
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Dari sebuah kalimat, ambil semua kata memakai pola `\w+`.
+
+**2. Menengah**  
+Buat function yang mengecek apakah sebuah string hanya berisi angka (cocok untuk validasi nomor).
+
+**3. Tantangan**  
+Dari sebuah paragraf, ambil semua alamat email yang ada di dalamnya.
+
+**4. Project mini**  
+Buat "pembersih nomor telepon". Diberi list nomor dengan format berantakan (`"0812-3456-7890"`, `"(021) 555 1234"`, `"+62 813 0000"`), pakai regex untuk menyisakan angkanya saja, lalu tampilkan dalam format yang seragam.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+import re
+pola = "\d+"          # tanpa r, backslash bisa salah ditafsirkan
+re.findall(pola, teks)
+```
+
+✅ Benar:
+
+```python
+import re
+pola = r"\d+"         # pakai raw string r"..."
+re.findall(pola, teks)
+```
+
+Selalu tulis pola regex sebagai *raw string* dengan awalan `r`. Tanpa itu, karakter seperti `\d` bisa salah ditafsirkan oleh Python sebelum sampai ke mesin regex.
+
+:::tip Catatan Pro
+Selalu gunakan raw string `r"pola"` untuk regex — supaya `\d`, `\w`, `\s` tidak diinterpretasikan sebagai escape sequence Python. Tanpa `r`, `"\d"` adalah karakter `d` biasa, bukan "angka".
+:::
+
+## Ringkasan
+
+- *Regex* adalah pola untuk mencocokkan teks, dipakai lewat module `re`.
+- Pola dasar: `\d` (angka), `\w` (huruf/angka), `\s` (spasi), `+` (satu atau lebih).
+- `re.findall` mengambil semua kecocokan, `re.match` memeriksa format, `re.sub` mengganti.
+- Selalu tulis pola sebagai raw string `r"..."`.

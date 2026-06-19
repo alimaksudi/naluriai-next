@@ -1,0 +1,180 @@
+---
+title: Encapsulation & Property
+sidebar_position: 4
+---
+
+# Encapsulation & Property
+
+## Kenapa ini penting?
+
+Tidak semua data object boleh diubah sembarangan. Saldo rekening, misalnya, tidak boleh tiba-tiba diganti jadi minus dari luar. *Encapsulation* melindungi data object dan mengatur cara aksesnya, sehingga aturan bisnismu tidak bisa dilanggar diam-diam. Ini bikin kodemu lebih aman dan lebih dipercaya.
+
+**Fokus kita:** menyembunyikan dan melindungi atribut (*encapsulation*), serta mengaksesnya dengan aman lewat *property*.
+
+## Apa itu encapsulation?
+
+*Encapsulation* adalah menjaga data di dalam object agar tidak diubah langsung dari luar tanpa aturan. Akses dilakukan lewat method atau *property* yang bisa mengecek dulu apakah perubahannya sah.
+
+## Analogi sederhana
+
+Encapsulation itu seperti **mesin ATM**. Kamu tidak bisa membuka brankas bank dan mengambil uang langsung. Kamu harus lewat mesin (method) yang mengecek PIN dan saldo dulu. Brankas (data) terlindungi, akses lewat pintu resmi.
+
+## Bedah konsep
+
+### 1. Atribut "private" dengan garis bawah
+
+Di Python, atribut yang diawali dua garis bawah (`__`) jadi sulit diakses langsung dari luar. Ini sinyal "jangan utak-atik dari luar".
+
+```python
+class Akun:
+    def __init__(self, saldo):
+        self.__saldo = saldo     # private
+
+    def cek_saldo(self):
+        return self.__saldo
+
+akun = Akun(100000)
+print(akun.cek_saldo())   # 100000
+# print(akun.__saldo)     # error: tidak bisa diakses langsung
+```
+
+### 2. Method untuk mengubah dengan aturan
+
+Perubahan data lewat method, sehingga bisa divalidasi dulu.
+
+```python
+class Akun:
+    def __init__(self, saldo):
+        self.__saldo = saldo
+
+    def tarik(self, jumlah):
+        if jumlah > self.__saldo:
+            print("Saldo tidak cukup")
+            return
+        self.__saldo = self.__saldo - jumlah
+```
+
+### 3. Property: akses seperti atribut, aman seperti method
+
+`@property` membuat sebuah method bisa diakses seperti atribut biasa (tanpa kurung), tapi tetap terkontrol.
+
+```python
+class Lingkaran:
+    def __init__(self, radius):
+        self.__radius = radius
+
+    @property
+    def luas(self):
+        return 3.14 * self.__radius ** 2
+
+c = Lingkaran(7)
+print(c.luas)     # 153.86  (tanpa kurung, seperti atribut)
+```
+
+### 4. Setter: mengatur saat nilai diubah
+
+Dengan `@nama.setter`, kamu bisa mengecek nilai sebelum disimpan.
+
+```python
+class Produk:
+    def __init__(self, harga):
+        self.__harga = harga
+
+    @property
+    def harga(self):
+        return self.__harga
+
+    @harga.setter
+    def harga(self, nilai):
+        if nilai < 0:
+            raise ValueError("Harga tidak boleh negatif")
+        self.__harga = nilai
+
+p = Produk(1000)
+p.harga = 2000        # lewat setter, dicek dulu
+# p.harga = -5        # akan memicu error
+```
+
+## Contoh penggunaan
+
+Rekening yang saldonya tidak bisa dibuat negatif dari luar:
+
+```python
+class Rekening:
+    def __init__(self, saldo):
+        self.__saldo = saldo
+
+    @property
+    def saldo(self):
+        return self.__saldo
+
+    def setor(self, jumlah):
+        if jumlah <= 0:
+            raise ValueError("Setoran harus positif")
+        self.__saldo += jumlah
+
+r = Rekening(50000)
+r.setor(20000)
+print(r.saldo)    # 70000
+```
+
+## Latihan singkat
+
+Buat class `Suhu` dengan atribut private `__celsius`, dan property `fahrenheit` yang menghitung dari celsius.
+
+```python
+class Suhu:
+    def __init__(self, celsius):
+        self.__celsius = celsius
+
+    @property
+    def fahrenheit(self):
+        return self.__celsius * 9 / 5 + 32
+
+print(Suhu(25).fahrenheit)
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat class dengan satu atribut private, lalu sediakan method untuk membacanya.
+
+**2. Menengah**  
+Buat class `Produk` dengan property `harga` yang hanya bisa dibaca (tanpa setter).
+
+**3. Tantangan**  
+Tambahkan setter pada `harga` yang menolak nilai negatif dengan `raise`.
+
+**4. Project mini**  
+Buat class `Rekening` yang aman. Atribut saldo private. Sediakan property `saldo` (baca saja), method `setor` dan `tarik` yang memvalidasi (setoran positif, penarikan tidak melebihi saldo), dan catat jumlah transaksi. Jalankan beberapa transaksi termasuk yang seharusnya ditolak.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+class Akun:
+    def __init__(self, saldo):
+        self.saldo = saldo       # publik, siapa pun bisa: akun.saldo = -999999
+```
+
+✅ Benar:
+
+```python
+class Akun:
+    def __init__(self, saldo):
+        self.__saldo = saldo     # private, hanya bisa diubah lewat method bervalidasi
+```
+
+Membiarkan data penting bersifat publik berarti siapa pun bisa mengubahnya jadi nilai tidak masuk akal. Lindungi dengan `__` dan sediakan jalur resmi (method atau property) yang memvalidasi perubahan.
+
+:::tip Catatan Pro
+Mulai tanpa `@property` — tambahkan hanya saat butuh validasi atau kalkulasi saat mengakses atribut. Jangan tambah sebelum benar-benar diperlukan. Kompleksitas ekstra hanya worth it kalau ada manfaat nyata.
+:::
+
+## Ringkasan
+
+- *Encapsulation* melindungi data object agar tidak diubah sembarangan dari luar.
+- Atribut diawali `__` menjadi private (sinyal "jangan diakses langsung").
+- `@property` membuat method bisa diakses seperti atribut, tetap terkontrol.
+- `@nama.setter` memvalidasi nilai sebelum perubahan disimpan.

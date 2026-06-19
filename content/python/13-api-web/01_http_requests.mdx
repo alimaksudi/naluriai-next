@@ -1,0 +1,182 @@
+---
+title: HTTP & requests Dasar
+sidebar_position: 1
+---
+
+# HTTP & requests Dasar
+
+## Kenapa ini penting?
+
+Sebagian besar data menarik tidak ada di komputermu, melainkan di internet: data cuaca, kurs mata uang, harga saham, postingan media sosial. Untuk mengambilnya lewat Python, kita pakai library `requests`. Ini gerbang menuju data dunia nyata yang selalu terbarui.
+
+**Fokus kita:** memahami dasar *HTTP* dan mengambil data dari internet dengan library `requests`.
+
+## Apa itu HTTP dan requests?
+
+- *HTTP* adalah aturan cara komputer "berbicara" lewat internet: kamu kirim permintaan (*request*), server membalas (*response*).
+- `requests` adalah library Python populer untuk mengirim permintaan HTTP dengan mudah.
+
+```python
+import requests
+
+respon = requests.get("https://api.github.com")
+print(respon.status_code)   # 200 artinya berhasil
+```
+
+## Analogi sederhana
+
+Mengambil data dari internet itu seperti **memesan makanan lewat aplikasi**. Kamu kirim pesanan (*request*) ke restoran (server), lalu makanan diantar (*response*). Status kode itu seperti notifikasi: "200" pesanan beres, "404" menu tidak ada, "500" dapurnya bermasalah.
+
+## Bedah konsep
+
+### 1. Memasang requests
+
+Library ini eksternal, jadi pasang dulu (sudah ada di Colab).
+
+```bash
+pip install requests
+```
+
+### 2. Mengirim GET request
+
+`GET` dipakai untuk mengambil data.
+
+```python
+import requests
+
+respon = requests.get("https://api.github.com")
+print(respon.status_code)   # 200
+print(respon.text[:100])    # 100 karakter pertama isi respon
+```
+
+### 3. Status code yang umum
+
+```python
+# 200 -> OK, berhasil
+# 404 -> Not Found, alamat salah
+# 401 -> Unauthorized, butuh izin/kunci
+# 500 -> server bermasalah
+```
+
+Selalu cek status code sebelum memproses isinya.
+
+### 4. Mengubah respon JSON jadi data Python
+
+Banyak API membalas dalam format JSON. `requests` bisa langsung mengubahnya jadi dictionary dengan `.json()`.
+
+```python
+import requests
+
+respon = requests.get("https://api.github.com")
+data = respon.json()        # langsung jadi dictionary
+print(type(data))           # <class 'dict'>
+```
+
+Di sinilah ilmu JSON dan dictionary dari modul sebelumnya terpakai.
+
+## Contoh penggunaan
+
+Mengecek apakah sebuah layanan online dan membaca jawabannya:
+
+```python
+import requests
+
+respon = requests.get("https://api.github.com")
+
+if respon.status_code == 200:
+    data = respon.json()
+    print("Berhasil terhubung")
+else:
+    print("Gagal, status:", respon.status_code)
+```
+
+### Alternatif: raise_for_status()
+
+Library `requests` menyediakan cara yang lebih ringkas untuk pengecekan status:
+
+```python
+import requests
+
+respon = requests.get("https://api.github.com")
+respon.raise_for_status()   # otomatis raise error untuk status 4xx/5xx
+
+# kalau tidak ada error, lanjutkan
+data = respon.json()
+print(data)
+```
+
+`raise_for_status()` melempar `requests.exceptions.HTTPError` untuk status apapun selain 2xx. Cocok digabung dengan `try/except`:
+
+```python
+import requests
+
+try:
+    respon = requests.get("https://api.github.com/endpoint-yang-salah")
+    respon.raise_for_status()
+    data = respon.json()
+except requests.exceptions.HTTPError as e:
+    print("Error HTTP:", e)
+except requests.exceptions.ConnectionError:
+    print("Tidak bisa terhubung ke server")
+```
+
+## Latihan singkat
+
+Kirim GET request ke `https://api.github.com` lalu tampilkan status code-nya.
+
+```python
+import requests
+respon = requests.get("https://api.github.com")
+print(respon.status_code)
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Kirim request ke sebuah alamat dan tampilkan status code-nya.
+
+**2. Menengah**  
+Kirim request ke sebuah API yang membalas JSON, ubah dengan `.json()`, lalu tampilkan tipe datanya.
+
+**3. Tantangan**  
+Tambahkan pengecekan: kalau status 200, proses datanya; kalau bukan, tampilkan pesan error yang sesuai dengan status code-nya.
+
+**4. Project mini**  
+Buat "pengecek status website". Diberi list beberapa alamat, kirim GET request ke masing-masing, lalu tampilkan apakah tiap situs "online" (status 200) atau "bermasalah" (status lain), lengkap dengan kode statusnya. Bungkus dengan `try/except` agar tidak crash kalau salah satu alamat tidak bisa dijangkau.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+import requests
+respon = requests.get("https://api.contoh.com/data")
+data = respon.json()       # langsung proses tanpa cek status
+```
+
+✅ Benar — gunakan `raise_for_status()` yang sudah kita pelajari:
+
+```python
+import requests
+
+try:
+    respon = requests.get("https://jsonplaceholder.typicode.com/posts/1")
+    respon.raise_for_status()  # otomatis error jika status bukan 2xx
+    data = respon.json()
+    print(data["title"])
+except requests.exceptions.HTTPError as e:
+    print(f"HTTP Error: {e}")
+```
+
+Jangan langsung memproses respon tanpa mengecek status code. Kalau permintaan gagal (misalnya 404 atau 500), memaksa `.json()` bisa memicu error. Gunakan `raise_for_status()` agar pengecekan otomatis dan konsisten.
+
+:::tip Catatan Pro
+`respon.raise_for_status()` adalah alternatif yang lebih ringkas dari `if respon.status_code != 200` — satu baris menggantikan pengecekan manual dan langsung melempar error yang bermakna untuk semua status 4xx dan 5xx.
+:::
+
+## Ringkasan
+
+- *HTTP* adalah aturan request-response antara program dan server di internet.
+- `requests.get(url)` mengambil data; cek `.status_code` (200 berarti berhasil).
+- `.json()` mengubah respon JSON jadi dictionary Python siap olah.
+- Selalu periksa status code sebelum memproses isi respon.

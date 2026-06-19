@@ -1,0 +1,171 @@
+---
+title: Variabel & Tipe Data
+sidebar_position: 1
+---
+
+# Variabel & Tipe Data
+
+## Kenapa ini penting?
+
+Setiap program butuh tempat untuk menyimpan informasi: nama pengguna, harga barang, jumlah like di sebuah postingan. Tanpa tempat menyimpan, komputer langsung "lupa" begitu selesai menghitung sesuatu.
+
+**Fokus kita:** belajar membuat "wadah" bernama *variable*, dan mengenal beberapa jenis isi (*tipe data*) yang bisa kita taruh di dalamnya. Ini fondasi dari semua kode yang akan kamu tulis nanti.
+
+## Apa itu variable?
+
+*Variable* adalah wadah berlabel untuk menyimpan satu nilai. Kamu kasih nama, lalu isi pakai tanda sama dengan (`=`).
+
+```python
+nama = "Budi"
+umur = 25
+```
+
+Setelah baris di atas, setiap kali kamu menyebut `nama`, Python tahu maksudmu `"Budi"`. Dan setiap kali kamu menyebut `umur`, Python tahu maksudmu `25`.
+
+Penting: tanda `=` di sini **bukan** "sama dengan" seperti di matematika. Bacanya "isi dengan". Jadi `umur = 25` artinya "isi wadah `umur` dengan nilai 25".
+
+## Analogi sederhana
+
+Bayangkan variable itu seperti **kotak makan dengan label**.
+
+- Labelnya = nama variable (`nama`, `umur`).
+- Isinya = nilai (`"Budi"`, `25`).
+
+Kalau mau lihat isinya, kamu cukup sebut labelnya. Kalau mau ganti isi, tinggal timpa dengan yang baru. Kotak yang sama, isi berubah.
+
+```text
+   nama                 umur
+ ┌──────────┐         ┌──────────┐
+ │  "Budi"  │         │    25    │
+ └──────────┘         └──────────┘
+  label di luar, nilai tersimpan di dalam
+```
+
+## Bedah konsep
+
+### 1. Cara membuat variable
+
+Tulis nama di kiri, nilai di kanan, dipisah tanda `=`.
+
+```python
+saldo = 100000
+kota = "Bandung"
+```
+
+### 2. Aturan penamaan
+
+Nama variable sebaiknya jelas dan menggambarkan isinya. Ini bukan cuma soal rapi, tapi soal kode yang gampang dibaca lagi nanti.
+
+```python
+x = 350000          # boleh, tapi x itu apa?
+harga_sepatu = 350000   # jauh lebih jelas
+```
+
+Beberapa aturan: tidak boleh diawali angka, tidak boleh pakai spasi (pakai garis bawah `_`), dan huruf besar/kecil dianggap beda (`umur` dan `Umur` adalah dua variable berbeda).
+
+### 3. Tipe data (jenis isi)
+
+Isi variable punya beberapa jenis utama:
+
+```python
+nama = "Budi"       # str   -> teks, selalu pakai tanda kutip
+umur = 25           # int   -> bilangan bulat
+tinggi = 1.75       # float -> bilangan berkoma
+aktif = True        # bool  -> benar / salah (True atau False)
+```
+
+Kalau penasaran sebuah variable tipenya apa, tanya saja ke Python pakai `type()`:
+
+```python
+harga = 50000
+print(type(harga))   # output: <class 'int'>
+```
+
+### 4. Mengganti isi kapan saja
+
+```python
+skor = 10
+skor = 20    # sekarang skor jadi 20, nilai lama (10) hilang
+```
+
+## Contoh penggunaan
+
+Misalnya kita simpan data satu produk di sebuah toko online:
+
+```python
+nama_produk = "Sepatu Lari"
+harga = 350000
+berat_kg = 0.8
+ada_stok = True
+
+print(nama_produk, "harganya Rp", harga)
+print("Stok tersedia?", ada_stok)
+```
+
+Contoh lain, menyimpan data satu pengguna media sosial:
+
+```python
+username = "budi_keren"
+jumlah_follower = 1280
+terverifikasi = False
+
+print(username, "punya", jumlah_follower, "follower")
+```
+
+Perhatikan polanya: kita kasih label yang jelas, isi dengan tipe yang sesuai, lalu pakai kembali kapan pun dibutuhkan.
+
+## Latihan singkat
+
+Buat tiga variable tentang dirimu: `nama`, `umur`, dan `kota`. Lalu tampilkan dalam satu kalimat.
+
+```python
+nama = "..."
+umur = ...
+kota = "..."
+print("Halo, aku", nama, "umur", umur, "dari", kota)
+```
+
+## Latihan bertingkat
+
+Mulai dari yang gampang, naik pelan-pelan.
+
+**1. Pemula**  
+Simpan harga sebuah barang ke variable `harga`, lalu tampilkan ke layar.
+
+**2. Menengah**  
+Buat variable `harga` dan `jumlah`. Hitung dan tampilkan `total` (harga dikali jumlah).
+
+**3. Tantangan**  
+Buat program yang menyimpan saldo awal `saldo = 100000`, kurangi dengan satu pembelian `belanja = 35000`, lalu tampilkan sisa saldonya.
+
+**4. Project mini**  
+Buat "kartu profil" satu pengguna media sosial: simpan `username`, `jumlah_follower`, dan `terverifikasi` (True atau False), lalu tampilkan rapi dalam beberapa baris. Tambahkan juga variable `bio` berisi teks bebas tentang pengguna itu.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+umur = "25"        # ini teks, bukan angka
+total = umur + 5   # error: teks tidak bisa dijumlah dengan angka
+```
+
+✅ Benar:
+
+```python
+umur = 25          # tanpa tanda kutip, jadi angka
+total = umur + 5   # hasilnya 30
+```
+
+Ingat: tanda kutip membuat sesuatu menjadi **teks**, walaupun isinya kelihatan seperti angka. `"25"` dan `25` itu beda di mata Python.
+
+:::tip Catatan Pro
+`type(x)` berguna saat debug: kalau program crash dengan pesan "unsupported operand type", jalankan `print(type(variabel))` untuk melihat tipe sebenarnya — sering ternyata string padahal dikira angka.
+:::
+
+## Ringkasan
+
+- *Variable* adalah wadah berlabel untuk menyimpan nilai, dibuat dengan tanda `=`.
+- Tipe data utama: `str` (teks), `int` (bilangan bulat), `float` (berkoma), `bool` (True / False).
+- Beri nama variable yang jelas supaya kodemu mudah dibaca.
+- Angka di dalam tanda kutip dianggap teks dan tidak bisa dihitung.

@@ -1,0 +1,153 @@
+---
+title: Class & Object
+sidebar_position: 1
+---
+
+# Class & Object
+
+## Kenapa ini penting?
+
+Sejauh ini data dan function kita terpisah. Tapi di dunia nyata, sebuah "benda" punya data sekaligus kemampuan: mobil punya data (warna, kecepatan) dan aksi (maju, rem). *Object-Oriented Programming* (OOP) membungkus data dan aksi jadi satu kesatuan. Hampir semua program besar, termasuk library AI, dibangun dengan gaya ini.
+
+**Fokus kita:** memahami *class* (cetakan) dan *object* (hasil cetakan), fondasi dari OOP.
+
+## Apa itu class dan object?
+
+- *Class* adalah cetakan atau blueprint: mendefinisikan seperti apa sebuah benda.
+- *Object* adalah benda nyata yang dibuat dari cetakan itu.
+
+```python
+class Mobil:
+    pass
+
+mobil_budi = Mobil()    # object, dibuat dari class Mobil
+```
+
+## Analogi sederhana
+
+*Class* itu seperti **cetakan kue**, dan *object* itu **kue yang dihasilkan**. Satu cetakan bisa membuat banyak kue. Semua kue punya bentuk dasar yang sama (dari cetakan), tapi masing-masing benda yang berbeda.
+
+```text
+   Class "Mobil"  (cetakan)
+        │
+        ├──► object mobil_budi  (Avanza, merah)
+        ├──► object mobil_sari  (Brio, putih)
+        └──► object mobil_andi  (Jazz, hitam)
+```
+
+## Bedah konsep
+
+### 1. Membuat class
+
+Pakai kata kunci `class`, namanya diawali huruf besar (konvensi).
+
+```python
+class Anjing:
+    pass     # masih kosong
+```
+
+### 2. Membuat object dari class
+
+Memanggil class seperti function akan membuat object baru.
+
+```python
+anjing1 = Anjing()
+anjing2 = Anjing()    # dua object berbeda dari class yang sama
+```
+
+### 3. Atribut: data milik object
+
+Tiap object bisa punya datanya sendiri.
+
+```python
+class Anjing:
+    pass
+
+anjing1 = Anjing()
+anjing1.nama = "Rex"
+anjing1.umur = 3
+
+print(anjing1.nama)   # Rex
+```
+
+Tapi memberi atribut satu per satu seperti ini repot. Di lesson berikutnya kita pakai `__init__` agar tiap object langsung punya datanya saat dibuat.
+
+### 4. Kenapa OOP berguna?
+
+Bayangkan mengelola 100 pengguna. Tanpa OOP, kamu punya banyak variable terpisah. Dengan OOP, tiap pengguna adalah satu object rapi yang membawa semua datanya sendiri. Lebih teratur dan gampang dikelola.
+
+## Contoh penggunaan
+
+Membuat beberapa object produk:
+
+```python
+class Produk:
+    pass
+
+sepatu = Produk()
+sepatu.nama = "Sepatu Lari"
+sepatu.harga = 350000
+
+topi = Produk()
+topi.nama = "Topi"
+topi.harga = 45000
+
+print(sepatu.nama, sepatu.harga)
+print(topi.nama, topi.harga)
+```
+
+## Latihan singkat
+
+Buat class `Kucing`, lalu buat satu object darinya dan beri atribut `nama`.
+
+```python
+class Kucing:
+    pass
+
+kucing1 = Kucing()
+kucing1.nama = "..."
+print(kucing1.nama)
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat class `Buku`, buat satu object, beri atribut `judul` dan `penulis`, lalu tampilkan.
+
+**2. Menengah**  
+Buat class `Pengguna`, lalu buat dua object berbeda, masing-masing dengan `username` dan `umur`.
+
+**3. Tantangan**  
+Buat class `Produk`, buat tiga object, simpan ketiganya dalam sebuah list, lalu telusuri list itu untuk menampilkan nama tiap produk.
+
+**4. Project mini**  
+Buat class `Akun`. Buat beberapa object akun media sosial dengan atribut `username` dan `follower`. Masukkan semuanya ke sebuah list, lalu cari akun dengan follower terbanyak.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+class mobil:        # nama class diawali huruf kecil (melanggar konvensi)
+    pass
+```
+
+✅ Benar:
+
+```python
+class Mobil:        # nama class diawali huruf besar (PascalCase)
+    pass
+```
+
+Secara konvensi, nama *class* diawali huruf besar dan memakai gaya PascalCase (`MobilSport`). Ini bukan error, tapi standar yang membuat kode mudah dibaca dan langsung dikenali sebagai class.
+
+:::tip Catatan Pro
+Konvensi penamaan Python: nama class pakai `PascalCase` (`BukuHarian`, `AkunBank`); nama object/variabel pakai `snake_case` (`buku_harian`, `akun_bank`). Ini dipakai di seluruh ekosistem Python dan membuat kode mudah dibaca sekilas.
+:::
+
+## Ringkasan
+
+- *Class* adalah cetakan; *object* adalah benda nyata yang dibuat dari cetakan itu.
+- Buat class dengan `class Nama:`, buat object dengan `Nama()`.
+- *Atribut* adalah data yang menempel pada object.
+- Nama class memakai PascalCase dan satu class bisa menghasilkan banyak object.

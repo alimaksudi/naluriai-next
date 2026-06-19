@@ -1,0 +1,171 @@
+---
+title: Iterator & Generator
+sidebar_position: 1
+---
+
+# Iterator & Generator
+
+## Kenapa ini penting?
+
+Bayangkan memproses file berisi 10 juta baris. Kalau dimuat semua ke list sekaligus, memori komputer bisa jebol. *Generator* memungkinkan kita mengolah data satu per satu tanpa menyimpan semuanya di memori. Ini penting saat bekerja dengan data besar, situasi yang sangat umum di dunia AI.
+
+**Fokus kita:** memahami *iterator* dan membuat *generator* yang hemat memori dengan `yield`.
+
+## Apa itu iterator dan generator?
+
+- *Iterator* adalah object yang bisa ditelusuri satu per satu (apa pun yang bisa dipakai di loop `for`).
+- *Generator* adalah cara mudah membuat iterator memakai kata kunci `yield`, yang menghasilkan nilai satu per satu sesuai permintaan.
+
+```python
+def hitung_sampai(n):
+    for i in range(1, n + 1):
+        yield i
+
+for angka in hitung_sampai(3):
+    print(angka)   # 1, lalu 2, lalu 3
+```
+
+## Analogi sederhana
+
+List itu seperti **memasak semua makanan sekaligus** lalu menaruhnya di meja besar (boros tempat). Generator itu seperti **memasak satu porsi tiap kali ada yang minta**. Hemat tempat, dan kamu tidak perlu menyiapkan semuanya di awal.
+
+## Bedah konsep
+
+### 1. yield vs return
+
+`return` mengembalikan satu nilai lalu function selesai. `yield` mengeluarkan nilai satu per satu, dan function "berhenti sejenak" lalu lanjut saat diminta nilai berikutnya.
+
+```python
+def angka_genap(maks):
+    n = 0
+    while n <= maks:
+        yield n
+        n += 2
+
+for x in angka_genap(6):
+    print(x)   # 0, 2, 4, 6
+```
+
+### 2. Hemat memori
+
+Generator tidak menyimpan semua hasil sekaligus. Ia menghasilkan nilai saat dibutuhkan, lalu melupakannya. Cocok untuk data sangat besar.
+
+### 3. Generator expression
+
+Mirip list comprehension, tapi pakai kurung biasa `( )`. Hasilnya generator, bukan list.
+
+```python
+# list comprehension: semua disimpan
+kuadrat_list = [x * x for x in range(1000000)]
+
+# generator expression: dihasilkan satu per satu (hemat memori)
+kuadrat_gen = (x * x for x in range(1000000))
+```
+
+Perbedaan memori bisa sangat besar:
+
+```python
+import sys
+
+# List biasa — semua data ada di memori
+bilangan_list = [x**2 for x in range(1_000_000)]
+print(sys.getsizeof(bilangan_list))  # ~8 MB
+
+# Generator — hanya satu nilai di memori
+bilangan_gen = (x**2 for x in range(1_000_000))
+print(sys.getsizeof(bilangan_gen))  # ~104 bytes
+```
+
+### 4. next() mengambil satu nilai
+
+```python
+def warna():
+    yield "merah"
+    yield "hijau"
+    yield "biru"
+
+g = warna()
+print(next(g))   # merah
+print(next(g))   # hijau
+```
+
+## Contoh penggunaan
+
+Membaca file baris demi baris tanpa memuat semuanya (pola umum untuk file besar):
+
+```python
+def baca_baris(nama_file):
+    with open(nama_file) as f:
+        for baris in f:
+            yield baris.strip()
+
+# hanya satu baris di memori pada satu waktu
+for baris in baca_baris("data_besar.txt"):
+    print(baris)
+```
+
+## Latihan singkat
+
+Buat generator `hitung_mundur(n)` yang menghasilkan angka dari `n` sampai 1.
+
+```python
+def hitung_mundur(n):
+    while n > 0:
+        yield n
+        n -= 1
+
+for x in hitung_mundur(5):
+    print(x)
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat generator yang menghasilkan angka 1 sampai 10.
+
+**2. Menengah**  
+Buat generator yang menghasilkan hanya bilangan ganjil sampai sebuah batas.
+
+**3. Tantangan**  
+Buat generator `fibonacci(n)` yang menghasilkan `n` angka pertama deret Fibonacci.
+
+**4. Project mini**  
+Buat generator pembaca "log transaksi" dari sebuah file teks besar. Generator menghasilkan tiap baris yang sudah dirapikan. Pakai generator itu untuk menghitung total nilai transaksi tanpa pernah memuat seluruh file ke memori sekaligus.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+def angka():
+    yield 1
+    yield 2
+
+g = angka()
+print(g)        # <generator object ...>, bukan nilainya
+```
+
+✅ Benar:
+
+```python
+def angka():
+    yield 1
+    yield 2
+
+for x in angka():    # telusuri dengan for
+    print(x)
+# atau ambil satu per satu dengan next()
+```
+
+Generator tidak langsung memberi semua nilainya. Kamu harus menelusurinya dengan `for` atau mengambil satu per satu dengan `next()`.
+
+:::tip Catatan Pro
+Generator expression `(x*2 for x in range(n))` hemat memori dibanding list comprehension `[x*2 for x in range(n)]` — bedanya hanya tanda kurung `[]` vs `()`, tapi perbedaan memori bisa jutaan kali lipat untuk data besar.
+:::
+
+## Ringkasan
+
+- *Iterator* adalah apa pun yang bisa ditelusuri dengan loop `for`.
+- *Generator* dibuat dengan `yield`, menghasilkan nilai satu per satu sesuai permintaan.
+- Generator hemat memori, cocok untuk data besar.
+- Telusuri generator dengan `for` atau ambil per nilai dengan `next()`.

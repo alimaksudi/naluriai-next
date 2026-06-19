@@ -1,0 +1,163 @@
+---
+title: Dictionary
+sidebar_position: 3
+---
+
+# Dictionary
+
+## Kenapa ini penting?
+
+List bagus untuk menyimpan daftar berurutan, tapi dia tidak tahu "arti" tiap item. Kalau kamu punya data `["Budi", 25, "Bandung"]`, mana yang nama, mana yang umur? Kamu harus ingat-ingat urutannya. Repot dan rawan salah.
+
+**Fokus kita:** *dictionary*, wadah yang menyimpan data berpasangan *key* (label) dan *value* (nilai), sehingga setiap data punya nama yang jelas.
+
+## Apa itu dictionary?
+
+*Dictionary* menyimpan data dalam pasangan `key: value` di dalam kurung kurawal `{ }`.
+
+```python
+profil = {
+    "nama": "Budi",
+    "umur": 25,
+    "kota": "Bandung"
+}
+```
+
+Sekarang jelas: `"nama"` isinya `"Budi"`, `"umur"` isinya `25`. Kita memanggil data lewat *key*-nya, bukan lewat nomor urut.
+
+## Analogi sederhana
+
+Dictionary itu seperti **KTP** atau **kamus**. Di KTP, kamu tidak mencari data berdasarkan urutan baris, tapi berdasarkan labelnya: "Nama", "Tanggal Lahir", "Alamat". Kamu sebut labelnya, langsung dapat isinya.
+
+```text
+  profil = {"nama": "Budi", "umur": 25}
+
+     key          value
+  ┌─────────┬──────────────┐
+  │ nama    │   "Budi"     │
+  │ umur    │     25       │
+  └─────────┴──────────────┘
+```
+
+## Bedah konsep
+
+### 1. Mengambil value lewat key
+
+```python
+print(profil["nama"])   # Budi
+print(profil["kota"])   # Bandung
+```
+
+### 2. Menambah dan mengubah
+
+```python
+profil["pekerjaan"] = "Desainer"   # menambah pasangan baru
+profil["umur"] = 26                # mengubah value yang sudah ada
+```
+
+### 3. Cara aman dengan get()
+
+Mengambil key yang tidak ada lewat `[ ]` akan error. `get()` lebih aman karena mengembalikan `None` (atau nilai cadangan) kalau key tidak ditemukan.
+
+```python
+print(profil.get("email"))              # None, tidak error
+print(profil.get("email", "kosong"))    # kosong
+```
+
+### 4. Menelusuri dictionary
+
+```python
+for key in profil:
+    print(key, "->", profil[key])
+```
+
+Atau langsung ambil pasangannya sekaligus dengan `.items()`:
+
+```python
+for key, value in profil.items():
+    print(key, "=", value)
+```
+
+### 5. Mengecek keberadaan key
+
+```python
+print("nama" in profil)    # True
+print("gaji" in profil)    # False
+```
+
+## Contoh penggunaan
+
+Menyimpan satu produk toko online dengan rapi:
+
+```python
+produk = {
+    "nama": "Sepatu Lari",
+    "harga": 350000,
+    "stok": 12
+}
+
+print(produk["nama"], "harganya Rp", produk["harga"])
+
+if produk["stok"] > 0:
+    print("Barang tersedia")
+```
+
+Menghitung total harga dari sebuah pesanan:
+
+```python
+pesanan = {"harga": 50000, "jumlah": 3, "ongkir": 10000}
+total = pesanan["harga"] * pesanan["jumlah"] + pesanan["ongkir"]
+print("Total bayar: Rp", total)
+```
+
+## Latihan singkat
+
+Buat dictionary `buku` berisi `judul`, `penulis`, dan `tahun`. Lalu tampilkan judul dan penulisnya dalam satu kalimat.
+
+```python
+buku = {"judul": "...", "penulis": "...", "tahun": ...}
+print(buku["judul"], "ditulis oleh", buku["penulis"])
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat dictionary `pengguna` berisi `username` dan `umur`, lalu tampilkan keduanya.
+
+**2. Menengah**  
+Buat dictionary `produk` berisi `nama`, `harga`, dan `stok`. Tambahkan key baru `diskon`, lalu tampilkan harga setelah diskon.
+
+**3. Tantangan**  
+Buat dictionary `nilai` yang memetakan mata pelajaran ke nilainya, misalnya `{"matematika": 80, "bahasa": 90}`. Telusuri dengan loop dan tampilkan setiap mata pelajaran beserta nilainya.
+
+**4. Project mini**  
+Buat "profil media sosial". Simpan dictionary berisi `username`, `bio`, `jumlah_follower`, dan `terverifikasi` (True/False). Tampilkan kartu profil yang rapi, dan beri tanda centang kalau akunnya terverifikasi memakai percabangan `if`.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+profil = {"nama": "Budi"}
+print(profil["umur"])    # error: key 'umur' tidak ada (KeyError)
+```
+
+✅ Benar:
+
+```python
+profil = {"nama": "Budi"}
+print(profil.get("umur", "tidak diketahui"))   # aman
+```
+
+Mengakses key yang tidak ada lewat `[ ]` langsung error. Kalau kamu tidak yakin sebuah key pasti ada, pakai `.get()` dengan nilai cadangan.
+
+:::tip Catatan Pro
+Selalu pakai `.get(key, default)` bukan `dict[key]` saat key mungkin tidak ada — menghindari `KeyError` tanpa perlu `try/except`. Contoh: `nilai.get("fisika", 0)` mengembalikan 0 kalau "fisika" tidak ada.
+:::
+
+## Ringkasan
+
+- *Dictionary* menyimpan pasangan `key: value` di dalam `{ }`.
+- Ambil data lewat *key*-nya, bukan lewat index angka.
+- `get()` lebih aman daripada `[ ]` saat key mungkin tidak ada.
+- `.items()` memudahkan menelusuri key dan value sekaligus dalam loop.

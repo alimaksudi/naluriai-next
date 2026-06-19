@@ -1,0 +1,140 @@
+---
+title: DataFrame
+sidebar_position: 5
+---
+
+# DataFrame
+
+## Kenapa ini penting?
+
+*DataFrame* adalah alat kerja utama saat menganalisis data. Sebelum bisa menyaring atau meringkas data, kamu harus bisa memuatnya dari file, mengintip isinya, dan memahami strukturnya. Ini langkah pertama yang dilakukan setiap praktisi data saat menerima dataset baru.
+
+**Fokus kita:** memuat data ke *DataFrame* (terutama dari CSV), lalu mengintip dan memahami isinya.
+
+## Apa itu DataFrame?
+
+*DataFrame* adalah tabel data dua dimensi di Pandas: punya baris, kolom berlabel, dan bisa menampung tipe data campuran. Mirip satu sheet di Excel.
+
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "nama": ["Budi", "Sari", "Andi"],
+    "umur": [25, 30, 22]
+})
+```
+
+## Analogi sederhana
+
+DataFrame itu seperti **spreadsheet** yang kamu kendalikan lewat perintah. Setiap kolom punya nama, setiap baris satu data, dan kamu bisa menyuruhnya merapikan atau menghitung apa pun dengan satu baris kode.
+
+## Bedah konsep
+
+### 1. Memuat data dari CSV
+
+Inilah cara paling umum mendapatkan DataFrame di dunia nyata. Satu baris, dan seluruh file CSV jadi tabel siap olah.
+
+```python
+import pandas as pd
+
+df = pd.read_csv("data.csv")
+```
+
+### 2. Mengintip data
+
+Begitu data dimuat, jangan langsung olah semuanya. Intip dulu.
+
+```python
+print(df.head())      # 5 baris pertama
+print(df.tail(3))     # 3 baris terakhir
+print(df.shape)       # (jumlah baris, jumlah kolom)
+print(df.columns)     # daftar nama kolom
+```
+
+### 3. Memahami struktur dan ringkasan
+
+```python
+print(df.info())          # tipe tiap kolom dan jumlah data kosong
+print(df.describe())      # ringkasan statistik kolom angka (rata-rata, min, max, dll)
+```
+
+`info()` dan `describe()` adalah dua perintah pertama yang biasa dijalankan untuk "berkenalan" dengan dataset baru.
+
+### 4. Mengambil satu kolom
+
+```python
+print(df["nama"])         # satu kolom (berupa Series)
+print(df["umur"].mean())  # langsung hitung rata-rata kolom umur
+```
+
+## Contoh penggunaan
+
+Berkenalan dengan dataset penjualan baru:
+
+```python
+import pandas as pd
+
+df = pd.read_csv("penjualan.csv")
+
+print("Ukuran data:", df.shape)
+print(df.head())
+print(df.describe())
+print("Rata-rata harga:", df["harga"].mean())
+```
+
+## Latihan singkat
+
+Buat DataFrame kecil dari dictionary (kolom `produk` dan `harga`), lalu tampilkan 5 baris pertama dan rata-rata harganya.
+
+```python
+import pandas as pd
+df = pd.DataFrame({"produk": ["A", "B", "C"], "harga": [100, 200, 150]})
+print(df.head())
+print(df["harga"].mean())
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat DataFrame berisi tiga kolom, lalu tampilkan nama-nama kolomnya dengan `df.columns`.
+
+**2. Menengah**  
+Muat sebuah file CSV, tampilkan `shape` dan lima baris pertamanya.
+
+**3. Tantangan**  
+Dari CSV tersebut, tampilkan `describe()` lalu jelaskan dengan kata-katamu sendiri apa arti nilai rata-rata salah satu kolom.
+
+**4. Project mini**  
+Cari dataset CSV sederhana (atau buat sendiri minimal 10 baris berisi data produk: nama, kategori, harga, stok). Muat ke DataFrame, lalu buat "laporan kenalan data": ukuran tabel, daftar kolom, tipe tiap kolom, dan ringkasan statistik kolom angkanya.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+import pandas as pd
+df = pd.read_csv("data.csv")
+print(df["Nama"])     # error kalau nama kolom aslinya 'nama' (huruf kecil)
+```
+
+✅ Benar:
+
+```python
+import pandas as pd
+df = pd.read_csv("data.csv")
+print(df.columns)     # cek dulu nama kolom yang sebenarnya
+print(df["nama"])     # pakai nama persis sesuai header
+```
+
+Nama kolom bersifat sensitif huruf besar/kecil dan spasi. Saat kolom "tidak ditemukan", cek dulu `df.columns` untuk melihat nama aslinya.
+
+:::tip Catatan Pro
+`df.head()` menampilkan 5 baris pertama; `df.sample(5)` mengambil 5 baris acak dari berbagai posisi — lebih representatif untuk data yang urutannya tidak acak (misal: data terurut berdasarkan tanggal).
+:::
+
+## Ringkasan
+
+- *DataFrame* adalah tabel data utama di Pandas, mirip satu sheet Excel.
+- `pd.read_csv()` memuat file CSV jadi DataFrame dalam satu baris.
+- `head()`, `info()`, `describe()`, `shape`, `columns` dipakai untuk mengenali data baru.
+- Ambil satu kolom dengan `df["nama_kolom"]`, lalu bisa langsung dihitung.

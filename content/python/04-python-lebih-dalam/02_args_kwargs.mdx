@@ -1,0 +1,164 @@
+---
+title: "*args & **kwargs"
+sidebar_position: 2
+---
+
+# *args & **kwargs
+
+## Kenapa ini penting?
+
+Function di Module 3 selalu butuh jumlah parameter yang pasti. Tapi kadang kita tidak tahu berapa banyak input yang akan datang. Misalnya function "jumlahkan semua angka", padahal angkanya bisa 2, bisa 10. `*args` dan `**kwargs` membuat function bisa menerima parameter dalam jumlah bebas.
+
+**Fokus kita:** membuat function yang fleksibel dengan `*args` (banyak nilai biasa) dan `**kwargs` (banyak pasangan key-value).
+
+## Apa itu args dan kwargs?
+
+- `*args` menampung sejumlah argumen biasa menjadi sebuah tuple.
+- `**kwargs` menampung sejumlah argumen berlabel (key=value) menjadi sebuah dictionary.
+
+```python
+def jumlahkan(*angka):
+    return sum(angka)
+
+print(jumlahkan(1, 2))        # 3
+print(jumlahkan(1, 2, 3, 4))  # 10
+```
+
+Satu function, jumlah input bebas.
+
+## Analogi sederhana
+
+`*args` itu seperti **keranjang belanja**: kamu boleh memasukkan berapa pun barang, semuanya muat. `**kwargs` seperti **formulir berlabel**: tiap isian punya nama (alamat, telepon, email), dan kamu boleh isi sebanyak yang perlu.
+
+## Cara kerja *args dan **kwargs
+
+```text
+def fungsi(*args, **kwargs):
+             │        │
+             │        └─► **kwargs → dictionary  {key: value, key: value, ...}
+             │
+             └──────────► *args    → tuple       (nilai1, nilai2, nilai3, ...)
+
+Pemanggil:
+  fungsi(1, 2, 3, nama="Ali", kota="Jakarta")
+  
+Di dalam fungsi:
+  args   = (1, 2, 3)
+  kwargs = {"nama": "Ali", "kota": "Jakarta"}
+```
+
+## Bedah konsep
+
+### 1. *args (tuple)
+
+Tanda bintang satu mengumpulkan semua argumen lepas jadi tuple.
+
+```python
+def sapa_semua(*nama):
+    for n in nama:
+        print("Halo,", n)
+
+sapa_semua("Budi", "Sari", "Andi")
+```
+
+### 2. **kwargs (dictionary)
+
+Dua bintang mengumpulkan argumen berlabel jadi dictionary.
+
+```python
+def buat_profil(**data):
+    for key, value in data.items():
+        print(key, ":", value)
+
+buat_profil(nama="Budi", umur=25, kota="Bandung")
+```
+
+### 3. Menggabungkan keduanya
+
+Urutannya: parameter biasa, lalu `*args`, lalu `**kwargs`.
+
+```python
+def pesanan(pembeli, *barang, **info):
+    print("Pembeli:", pembeli)
+    print("Barang:", barang)
+    print("Info:", info)
+
+pesanan("Budi", "susu", "roti", ongkir=10000, prioritas=True)
+```
+
+### 4. Membongkar dengan bintang saat memanggil
+
+Bintang juga bisa "membongkar" list atau dictionary menjadi argumen.
+
+```python
+def total(a, b, c):
+    return a + b + c
+
+angka = [1, 2, 3]
+print(total(*angka))   # sama dengan total(1, 2, 3)
+```
+
+## Contoh penggunaan
+
+Function menghitung total belanja berapa pun jumlah barangnya:
+
+```python
+def total_belanja(*harga):
+    return sum(harga)
+
+print("Total:", total_belanja(15000, 30000, 25000, 50000))
+```
+
+## Latihan singkat
+
+Buat function `rata_rata(*angka)` yang mengembalikan rata-rata dari berapa pun angka yang diberikan.
+
+```python
+def rata_rata(*angka):
+    return sum(angka) / len(angka)
+
+print(rata_rata(80, 90, 70))
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat function `gabung(*kata)` yang menyambung semua kata jadi satu kalimat dipisah spasi.
+
+**2. Menengah**  
+Buat function `buat_kartu(**data)` yang menampilkan semua informasi yang dikirim sebagai pasangan label dan nilai.
+
+**3. Tantangan**  
+Buat function `pesan(pembeli, *barang, **opsi)` yang mencetak nama pembeli, daftar barang, dan setiap opsi tambahan (misalnya ongkir, diskon).
+
+**4. Project mini**  
+Buat "kalkulator nilai fleksibel": function `lapor(nama, *nilai, **catatan)`. Tampilkan nama siswa, rata-rata semua nilainya, status lulus atau tidak (ambang 70), dan semua catatan tambahan (misalnya `wali="Bu Sari"`).
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+def info(**kwargs, nama):   # error: **kwargs harus paling akhir
+    pass
+```
+
+✅ Benar:
+
+```python
+def info(nama, *args, **kwargs):   # urutan: biasa, *args, **kwargs
+    pass
+```
+
+Urutan parameter wajib: parameter biasa dulu, lalu `*args`, paling akhir `**kwargs`. Menyalahi urutan ini langsung memicu error.
+
+:::tip Catatan Pro
+`**kwargs` cocok untuk function yang meneruskan konfigurasi ke function lain — cukup satu parameter, berapapun isi dict-nya. Banyak dipakai di framework seperti Django dan Flask.
+:::
+
+## Ringkasan
+
+- `*args` menampung banyak argumen biasa menjadi tuple.
+- `**kwargs` menampung banyak argumen berlabel menjadi dictionary.
+- Urutan parameter: biasa, lalu `*args`, lalu `**kwargs`.
+- Bintang juga bisa membongkar list/dictionary jadi argumen saat memanggil function.

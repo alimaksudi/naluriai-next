@@ -1,0 +1,185 @@
+---
+title: Polymorphism & Dunder Method
+sidebar_position: 5
+---
+
+# Polymorphism & Dunder Method
+
+## Kenapa ini penting?
+
+Bayangkan kamu punya banyak object berbeda (Kucing, Anjing, Sapi), tapi ingin memperlakukan mereka dengan cara yang sama ("keluarkan suara"). *Polymorphism* memungkinkan itu. Dan *dunder method* membuat object-mu bisa "berperilaku seperti tipe bawaan", misalnya bisa dijumlah dengan `+` atau ditampilkan rapi dengan `print`. Ini sentuhan akhir yang membuat class-mu terasa profesional.
+
+**Fokus kita:** memahami *polymorphism* (banyak bentuk, satu cara pakai) dan *dunder method* (method khusus berawalan dua garis bawah).
+
+## Apa itu polymorphism dan dunder method?
+
+- *Polymorphism* artinya object berbeda bisa merespons perintah yang sama dengan caranya masing-masing.
+- *Dunder method* (dari "double underscore", seperti `__init__`, `__str__`) adalah method khusus yang mengatur bagaimana object berperilaku terhadap operasi bawaan Python.
+
+## Analogi sederhana
+
+*Polymorphism* itu seperti **tombol "mainkan"** di berbagai alat: tekan play di radio keluar musik, di TV keluar film, di game mulai bermain. Satu perintah (`play`), hasil berbeda sesuai alatnya.
+
+*Dunder method* itu seperti **mengajari object sopan santun bawaan**: bagaimana memperkenalkan diri saat dicetak, atau bagaimana dijumlahkan.
+
+## Bedah konsep
+
+### 1. Polymorphism lewat method bernama sama
+
+Beberapa class punya method dengan nama sama, tapi isi berbeda.
+
+```python
+class Kucing:
+    def suara(self):
+        return "Meong"
+
+class Anjing:
+    def suara(self):
+        return "Guk"
+
+hewan = [Kucing(), Anjing()]
+for h in hewan:
+    print(h.suara())    # tiap object merespons dengan caranya sendiri
+```
+
+Kode yang memanggil `h.suara()` tidak peduli itu Kucing atau Anjing. Itulah kekuatan polymorphism: kode yang sama bekerja untuk banyak tipe.
+
+### 2. __str__: menampilkan object dengan rapi
+
+Tanpa `__str__`, mencetak object menghasilkan teks aneh. Dengan `__str__`, kamu atur tampilannya.
+
+```python
+class Produk:
+    def __init__(self, nama, harga):
+        self.nama = nama
+        self.harga = harga
+
+    def __str__(self):
+        return f"{self.nama} (Rp {self.harga})"
+
+p = Produk("Sepatu", 350000)
+print(p)     # Sepatu (Rp 350000)
+```
+
+### 3. __len__ — mengatur panjang object
+
+Dunder method membuat object merespons fungsi bawaan seperti `len()` atau operator `+`.
+
+```python
+class Keranjang:
+    def __init__(self):
+        self.barang = []
+
+    def tambah(self, item):
+        self.barang.append(item)
+
+    def __len__(self):
+        return len(self.barang)
+
+k = Keranjang()
+k.tambah("susu")
+k.tambah("roti")
+print(len(k))    # 2  -> berkat __len__
+```
+
+### 4. __eq__: mengatur arti "sama dengan"
+
+```python
+class Uang:
+    def __init__(self, jumlah):
+        self.jumlah = jumlah
+
+    def __eq__(self, lain):
+        return self.jumlah == lain.jumlah
+
+print(Uang(1000) == Uang(1000))   # True
+```
+
+## Contoh penggunaan
+
+Menghitung total dari berbagai bentuk dengan polymorphism:
+
+```python
+class Persegi:
+    def __init__(self, sisi):
+        self.sisi = sisi
+    def luas(self):
+        return self.sisi ** 2
+
+class Lingkaran:
+    def __init__(self, r):
+        self.r = r
+    def luas(self):
+        return 3.14 * self.r ** 2
+
+bentuk = [Persegi(4), Lingkaran(3), Persegi(2)]
+total = sum(b.luas() for b in bentuk)
+print("Total luas:", total)
+```
+
+## Latihan singkat
+
+Buat class `Buku` dengan `__str__` yang menampilkan judul dan penulisnya saat dicetak.
+
+```python
+class Buku:
+    def __init__(self, judul, penulis):
+        self.judul = judul
+        self.penulis = penulis
+
+    def __str__(self):
+        return f"{self.judul} oleh {self.penulis}"
+
+print(Buku("Belajar AI", "Tim NaluriAI"))
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Tambahkan `__str__` pada sebuah class agar `print(object)` menampilkan info yang rapi.
+
+**2. Menengah**  
+Buat dua class hewan berbeda dengan method `suara()`, masukkan ke list, lalu telusuri dan panggil `suara()` semuanya (polymorphism).
+
+**3. Tantangan**  
+Buat class `Keranjang` dengan `__len__` (jumlah barang) dan `__str__` (daftar isi). Uji dengan `len()` dan `print()`.
+
+**4. Project mini**  
+Buat sistem pembayaran sederhana dengan polymorphism. Buat beberapa class metode bayar (`Tunai`, `Kartu`, `Ewallet`), masing-masing punya method `bayar(jumlah)` dengan perilaku berbeda (misalnya ewallet kena biaya admin). Simpan beberapa di list, lalu proses semuanya dengan satu loop yang memanggil `bayar()`. Tambahkan `__str__` agar tiap metode tampil rapi.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+class Produk:
+    def __init__(self, nama):
+        self.nama = nama
+
+print(Produk("Sepatu"))   # <__main__.Produk object at 0x7f...>  (tidak terbaca)
+```
+
+✅ Benar:
+
+```python
+class Produk:
+    def __init__(self, nama):
+        self.nama = nama
+    def __str__(self):
+        return f"Produk: {self.nama}"
+
+print(Produk("Sepatu"))   # Produk: Sepatu
+```
+
+Tanpa `__str__`, mencetak object menghasilkan teks teknis yang tidak berguna. Tambahkan `__str__` supaya object-mu tampil rapi dan mudah dibaca saat di-`print`.
+
+:::tip Catatan Pro
+`__str__` adalah dunder yang paling sering diimplementasikan — selalu tambahkan di tiap class supaya `print(object)` menampilkan informasi berguna, bukan `<__main__.Kelas object at 0x7f...>` yang tidak membantu.
+:::
+
+## Ringkasan
+
+- *Polymorphism*: object berbeda merespons method bernama sama dengan caranya sendiri.
+- *Dunder method* (seperti `__str__`, `__len__`, `__eq__`) mengatur perilaku object terhadap operasi bawaan Python.
+- `__str__` membuat object tampil rapi saat di-`print`.
+- Kombinasi ini membuat class buatanmu terasa menyatu dan profesional seperti tipe bawaan.

@@ -1,0 +1,156 @@
+---
+title: enumerate, zip & Unpacking
+sidebar_position: 3
+---
+
+# enumerate, zip & Unpacking
+
+## Kenapa ini penting?
+
+Ada tiga trik kecil yang dipakai praktisi Python hampir setiap hari saat menelusuri data: `enumerate` (loop sambil tahu nomornya), `zip` (loop dua list sekaligus), dan *unpacking* (membongkar isi sekali jalan). Menguasainya membuat kodemu jauh lebih bersih dan mudah dibaca.
+
+**Fokus kita:** memakai `enumerate`, `zip`, dan *unpacking* untuk menelusuri dan membongkar data dengan rapi.
+
+## Apa itu enumerate, zip, dan unpacking?
+
+- `enumerate` memberi nomor urut saat menelusuri sebuah list.
+- `zip` menggabungkan dua list (atau lebih) supaya bisa ditelusuri berbarengan.
+- *Unpacking* membongkar isi list/tuple langsung ke beberapa variable.
+
+## Analogi sederhana
+
+- `enumerate` seperti **petugas absen** yang menyebut nomor sekaligus nama: "1, Budi. 2, Sari".
+- `zip` seperti **menyatukan ritsleting**: gigi kiri dan kanan dipasangkan satu per satu.
+- *Unpacking* seperti **membongkar paket** dan langsung menaruh tiap isinya di tempat masing-masing.
+
+## Bedah konsep
+
+### 1. enumerate (loop sambil tahu nomor)
+
+Daripada bikin penghitung manual, `enumerate` memberi index otomatis.
+
+```python
+nama = ["Budi", "Sari", "Andi"]
+
+for i, n in enumerate(nama):
+    print(i, "->", n)
+# 0 -> Budi
+# 1 -> Sari
+# 2 -> Andi
+```
+
+Mau nomor mulai dari 1? Beri argumen kedua.
+
+```python
+for nomor, n in enumerate(nama, start=1):
+    print(nomor, n)
+```
+
+### range(len()) vs enumerate: apa bedanya?
+
+```text
+# Cara lama — verbose dan rawan IndexError
+for i in range(len(buah)):
+    print(i, buah[i])
+
+# Cara Python — ringkas dan tidak bisa salah index
+for i, nama in enumerate(buah):
+    print(i, nama)
+```
+
+Pakai `enumerate()` selalu — lebih ringkas dan tidak ada risiko index out of range.
+
+### 2. zip (menggabungkan dua list)
+
+```python
+produk = ["Sepatu", "Topi", "Tas"]
+harga = [350000, 45000, 120000]
+
+for p, h in zip(produk, harga):
+    print(p, "harganya Rp", h)
+```
+
+### 3. Unpacking
+
+Membongkar isi langsung ke beberapa variable sekaligus.
+
+```python
+titik = (3, 5)
+x, y = titik          # x = 3, y = 5
+
+a, b, c = [1, 2, 3]   # a = 1, b = 2, c = 3
+```
+
+Tukar nilai dua variable bahkan bisa satu baris:
+
+```python
+a, b = 10, 20
+a, b = b, a           # sekarang a = 20, b = 10
+```
+
+## Contoh penggunaan
+
+Membuat papan peringkat dengan nomor:
+
+```python
+pemain = ["Andi", "Budi", "Sari"]
+skor = [95, 88, 70]
+
+for peringkat, (nama, nilai) in enumerate(zip(pemain, skor), start=1):
+    print(f"{peringkat}. {nama} - {nilai} poin")
+```
+
+## Latihan singkat
+
+Pakai `enumerate` untuk menampilkan daftar belanja dengan nomor urut mulai dari 1.
+
+```python
+belanja = ["susu", "roti", "telur"]
+for nomor, barang in enumerate(belanja, start=1):
+    print(nomor, barang)
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Diberi list nama, tampilkan tiap nama dengan nomor urut memakai `enumerate`.
+
+**2. Menengah**  
+Diberi list `produk` dan `stok` yang sejajar, pakai `zip` untuk menampilkan tiap produk beserta stoknya.
+
+**3. Tantangan**  
+Diberi list `nama` dan `nilai`, gunakan `zip` untuk mencari siapa yang nilainya tertinggi.
+
+**4. Project mini**  
+Buat "rekap nilai kelas". Punya tiga list sejajar: `nama`, `nilai_uts`, `nilai_uas`. Pakai `zip` untuk menghitung nilai akhir tiap siswa (rata-rata UTS dan UAS), lalu tampilkan dengan nomor urut memakai `enumerate`, dan tandai siapa yang lulus.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+nama = ["Budi", "Sari", "Andi"]
+for i in range(len(nama)):
+    print(i, nama[i])      # ribet, tidak Pythonic
+```
+
+✅ Benar:
+
+```python
+nama = ["Budi", "Sari", "Andi"]
+for i, n in enumerate(nama):
+    print(i, n)            # lebih bersih
+```
+
+Kalau kamu butuh index sekaligus isinya, pakai `enumerate`, bukan `range(len(...))`. Lebih pendek, lebih jelas, dan lebih kecil kemungkinan salah index.
+
+:::tip Catatan Pro
+`zip()` berhenti di elemen terpendek dari semua iterable yang digabungkan. Kalau ingin terus sampai yang terpanjang, pakai `itertools.zip_longest(a, b, fillvalue=None)`.
+:::
+
+## Ringkasan
+
+- `enumerate` menelusuri data sambil memberi nomor urut otomatis.
+- `zip` menelusuri dua atau lebih list secara berbarengan.
+- *Unpacking* membongkar isi list/tuple langsung ke beberapa variable.
+- Trik-trik ini membuat kode lebih bersih dan "Pythonic".

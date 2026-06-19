@@ -1,0 +1,164 @@
+---
+title: "Modul Berguna: collections & itertools"
+sidebar_position: 2
+---
+
+# Modul Berguna: collections & itertools
+
+## Kenapa ini penting?
+
+Beberapa tugas muncul berulang kali saat mengolah data: menghitung berapa kali tiap item muncul, memberi nilai default otomatis, atau memasangkan banyak data. Daripada menulis kode panjang, `collections` dan `itertools` menyediakan alat yang langsung menyelesaikannya dalam satu baris.
+
+**Fokus kita:** beberapa alat paling berguna dari module `collections` dan `itertools`.
+
+## Apa itu collections dan itertools?
+
+Keduanya module standar Python.
+
+- `collections` berisi struktur data tambahan yang lebih pintar dari list dan dict biasa.
+- `itertools` berisi alat untuk bekerja dengan urutan dan kombinasi data.
+
+## Analogi sederhana
+
+Kalau list dan dict itu perkakas dasar, `collections` dan `itertools` itu seperti **perkakas listrik**: melakukan pekerjaan yang sama tapi jauh lebih cepat dan hemat tenaga.
+
+## Bedah konsep
+
+### 1. Counter: menghitung kemunculan
+
+Ini sangat sering dipakai untuk data. `Counter` langsung menghitung berapa kali tiap item muncul.
+
+```python
+from collections import Counter
+
+suara = ["A", "B", "A", "C", "A", "B"]
+hitung = Counter(suara)
+print(hitung)              # Counter({'A': 3, 'B': 2, 'C': 1})
+print(hitung.most_common(1))  # [('A', 3)] -> paling sering
+```
+
+### 2. defaultdict: dict dengan nilai default
+
+Dict biasa error kalau key belum ada. `defaultdict` otomatis menyiapkan nilai awal.
+
+```python
+from collections import defaultdict
+
+kelompok = defaultdict(list)
+kelompok["buah"].append("apel")   # tidak perlu bikin list kosong dulu
+kelompok["buah"].append("jeruk")
+print(kelompok["buah"])           # ['apel', 'jeruk']
+```
+
+### 3. itertools: kombinasi dan pasangan
+
+```python
+from itertools import combinations
+
+tim = ["Budi", "Sari", "Andi"]
+for pasangan in combinations(tim, 2):
+    print(pasangan)
+# ('Budi', 'Sari'), ('Budi', 'Andi'), ('Sari', 'Andi')
+```
+
+### 4. itertools.chain — menggabungkan beberapa iterable
+
+Berguna saat ingin memproses beberapa list seolah satu list tanpa membuat kopian:
+
+```python
+from itertools import chain
+
+batch_a = [1, 2, 3]
+batch_b = [4, 5, 6]
+batch_c = [7, 8, 9]
+
+for angka in chain(batch_a, batch_b, batch_c):
+    print(angka)
+# mencetak 1 sampai 9 berurutan
+
+# berguna juga untuk menggabungkan hasil dari beberapa sumber data
+semua_tag = list(chain(["python", "data"], ["ai", "python"]))
+# ["python", "data", "ai", "python"]  ← berbeda dari set (urutan terjaga)
+```
+
+## Contoh penggunaan
+
+Mencari kata yang paling sering muncul di sebuah kalimat:
+
+```python
+from collections import Counter
+
+kalimat = "ayo belajar python ayo semangat python python"
+kata = kalimat.split()
+hitung = Counter(kata)
+print(hitung.most_common(1))   # [('python', 3)]
+```
+
+Mengelompokkan siswa per kota tanpa repot:
+
+```python
+from collections import defaultdict
+
+data = [("Budi", "Bandung"), ("Sari", "Jakarta"), ("Andi", "Bandung")]
+per_kota = defaultdict(list)
+
+for nama, kota in data:
+    per_kota[kota].append(nama)
+
+print(dict(per_kota))   # {'Bandung': ['Budi', 'Andi'], 'Jakarta': ['Sari']}
+```
+
+## Latihan singkat
+
+Pakai `Counter` untuk menghitung berapa kali tiap angka muncul di `[1, 2, 2, 3, 3, 3]`.
+
+```python
+from collections import Counter
+angka = [1, 2, 2, 3, 3, 3]
+print(Counter(angka))
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Diberi list warna favorit beberapa orang, pakai `Counter` untuk menampilkan warna yang paling populer.
+
+**2. Menengah**  
+Diberi sebuah paragraf, hitung 3 kata yang paling sering muncul memakai `Counter.most_common`.
+
+**3. Tantangan**  
+Diberi list pasangan (nama, divisi), pakai `defaultdict` untuk mengelompokkan nama berdasarkan divisinya.
+
+**4. Project mini**  
+Buat "analisa review produk". Diberi list rating (angka 1 sampai 5) dari banyak pelanggan, gunakan `Counter` untuk menampilkan berapa banyak tiap rating, rating yang paling sering diberikan, dan persentase rating bintang 4 ke atas.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+hitung = {}
+for item in data:
+    hitung[item] = hitung[item] + 1   # error: key belum ada (KeyError)
+```
+
+✅ Benar:
+
+```python
+from collections import Counter
+hitung = Counter(data)                # langsung beres, tanpa error
+```
+
+Menghitung kemunculan secara manual dengan dict biasa rawan `KeyError`. `Counter` dibuat persis untuk tugas ini, jadi pakai itu.
+
+:::tip Catatan Pro
+`Counter(daftar)` membuat hitungan frekuensi dalam satu baris — lebih ekspresif dari loop count manual. Tambahan: `Counter.most_common(n)` langsung mengembalikan n elemen paling sering muncul.
+:::
+
+## Ringkasan
+
+- `Counter` menghitung kemunculan tiap item dan menemukan yang paling sering.
+- `defaultdict` memberi nilai default otomatis, menghindari `KeyError`.
+- `itertools` punya alat seperti `combinations` untuk memasangkan data.
+- `itertools.chain` menggabungkan beberapa iterable menjadi satu urutan tanpa membuat salinan di memori.
+- Alat-alat ini menyingkat kode yang umum dan rawan error jadi satu baris yang aman.

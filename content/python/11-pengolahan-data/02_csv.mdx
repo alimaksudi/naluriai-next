@@ -1,0 +1,149 @@
+---
+title: CSV (Data Tabular)
+sidebar_position: 2
+---
+
+# CSV (Data Tabular)
+
+## Kenapa ini penting?
+
+Sebagian besar data di dunia kerja berbentuk tabel: data penjualan, daftar pelanggan, hasil survei. Format paling umum untuk menyimpan tabel adalah *CSV*. Kalau kamu bisa membaca CSV, kamu bisa mengolah hampir semua data yang dikirim orang dalam bentuk file.
+
+**Fokus kita:** membaca dan menulis file *CSV* memakai modul `csv` bawaan Python.
+
+## Apa itu CSV?
+
+*CSV* (*Comma-Separated Values*) adalah file teks tempat setiap baris adalah satu data, dan kolomnya dipisah koma. Baris pertama biasanya berisi nama kolom (*header*).
+
+```text
+nama,umur,kota
+Budi,25,Bandung
+Sari,30,Jakarta
+```
+
+File di atas adalah tabel dengan 3 kolom dan 2 baris data. Sederhana, tapi inilah format yang dipakai di mana-mana.
+
+## Analogi sederhana
+
+CSV itu seperti **tabel Excel versi polos**. Tidak ada warna atau rumus, cuma teks rapi yang dipisah koma. Justru karena sederhana inilah dia bisa dibaca program apa pun.
+
+## Bedah konsep
+
+### 1. Membaca CSV baris demi baris
+
+```python
+import csv
+
+with open("data.csv") as f:
+    pembaca = csv.reader(f)
+    for baris in pembaca:
+        print(baris)     # tiap baris jadi list, misalnya ['Budi', '25', 'Bandung']
+```
+
+### 2. Membaca sebagai dictionary (lebih enak)
+
+`DictReader` memakai header sebagai key, jadi kamu memanggil data lewat nama kolom, bukan index angka.
+
+```python
+import csv
+
+with open("data.csv") as f:
+    pembaca = csv.DictReader(f)
+    for baris in pembaca:
+        print(baris["nama"], "berumur", baris["umur"])
+```
+
+Ini menghasilkan persis pola *list berisi dictionary* yang kamu pelajari di Module 2.
+
+### 3. Ingat: semua terbaca sebagai teks
+
+Angka di CSV terbaca sebagai teks. Kalau mau dihitung, ubah dulu dengan `int()` atau `float()`.
+
+```python
+umur = int(baris["umur"])
+```
+
+### 4. Menulis CSV
+
+```python
+import csv
+
+data = [
+    ["nama", "umur"],
+    ["Budi", 25],
+    ["Sari", 30]
+]
+
+with open("hasil.csv", "w", newline="") as f:
+    penulis = csv.writer(f)
+    penulis.writerows(data)
+```
+
+## Contoh penggunaan
+
+Menghitung rata-rata umur dari sebuah file CSV:
+
+```python
+import csv
+
+total_umur = 0
+jumlah = 0
+
+with open("data.csv") as f:
+    for baris in csv.DictReader(f):
+        total_umur = total_umur + int(baris["umur"])
+        jumlah = jumlah + 1
+
+print("Rata-rata umur:", total_umur / jumlah)
+```
+
+## Latihan singkat
+
+Buat file `data.csv` berisi kolom `nama` dan `kota` dengan dua baris data, lalu baca pakai `DictReader` dan tampilkan tiap nama beserta kotanya.
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Baca sebuah CSV dan tampilkan setiap baris sebagai list memakai `csv.reader`.
+
+**2. Menengah**  
+Baca CSV penjualan (kolom `produk` dan `harga`) memakai `DictReader`, lalu tampilkan setiap produk beserta harganya.
+
+**3. Tantangan**  
+Dari CSV penjualan tadi, hitung total seluruh harga. Ingat untuk mengubah harga dari teks ke angka dulu.
+
+**4. Project mini**  
+Buat "laporan penjualan". Baca file CSV berisi `produk`, `harga`, dan `jumlah`. Hitung total pendapatan (harga dikali jumlah, dijumlahkan), cari produk dengan pendapatan tertinggi, lalu tulis ringkasannya ke file `laporan.txt`.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+import csv
+with open("data.csv") as f:
+    for baris in csv.DictReader(f):
+        total = total + baris["umur"]   # error: menjumlah teks
+```
+
+✅ Benar:
+
+```python
+import csv
+with open("data.csv") as f:
+    for baris in csv.DictReader(f):
+        total = total + int(baris["umur"])   # ubah ke angka dulu
+```
+
+Semua data dari CSV terbaca sebagai teks. Lupa mengubahnya ke angka adalah kesalahan paling sering saat menghitung dari CSV.
+
+:::tip Catatan Pro
+`csv.DictReader` lebih praktis dari `csv.reader` untuk file dengan baris header — kamu langsung mendapat dictionary per baris, tidak perlu ingat posisi kolom berdasarkan index angka.
+:::
+
+## Ringkasan
+
+- *CSV* adalah format tabel berbasis teks, kolom dipisah koma, baris pertama biasanya header.
+- `csv.reader` membaca tiap baris jadi list; `csv.DictReader` jadi dictionary berkunci header.
+- Semua nilai terbaca sebagai teks; ubah ke `int`/`float` sebelum menghitung.
+- `csv.writer` dipakai untuk menulis data kembali ke file CSV.

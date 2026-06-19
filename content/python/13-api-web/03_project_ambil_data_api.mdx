@@ -1,0 +1,137 @@
+---
+title: "Project: Ambil & Olah Data dari API"
+sidebar_position: 3
+---
+
+# Project: Ambil & Olah Data dari API
+
+## Kenapa ini penting?
+
+Ini project yang menyatukan banyak skill sekaligus: requests, JSON, struktur data, function, dan analisis. Mengambil data hidup dari internet lalu mengubahnya jadi ringkasan yang berguna adalah persis pekerjaan nyata seorang praktisi data. Selesaikan ini dan kamu sudah bisa bekerja dengan data dunia nyata, bukan cuma data buatan sendiri.
+
+**Fokus kita:** membangun satu program utuh yang mengambil data dari API publik, mengolahnya, lalu menampilkan insight.
+
+## Gambaran project
+
+Kita ambil data pengguna dan postingan dari API publik gratis ([JSONPlaceholder](https://jsonplaceholder.typicode.com)), lalu menjawab: **siapa pengguna paling aktif, dan dari kota mana saja mereka?**
+
+Alurnya:
+
+```text
+  1. Ambil data   →   2. Olah & gabung   →   3. Hitung   →   4. Tampilkan insight
+   (requests)         (struktur data)       (loop/agg)       (kesimpulan)
+```
+
+## Langkah 1: Ambil data
+
+```python
+import requests
+
+users = requests.get("https://jsonplaceholder.typicode.com/users").json()
+posts = requests.get("https://jsonplaceholder.typicode.com/posts").json()
+
+print("Jumlah pengguna:", len(users))
+print("Jumlah post:", len(posts))
+```
+
+## Langkah 2: Hitung post per pengguna
+
+Tiap post punya `userId`. Kita hitung berapa post tiap pengguna memakai `Counter` (dari Module 5).
+
+```python
+from collections import Counter
+
+jumlah_post = Counter(post["userId"] for post in posts)
+print(jumlah_post)   # {1: 10, 2: 10, ...}
+```
+
+## Langkah 3: Gabungkan dengan nama pengguna
+
+Kita pasangkan jumlah post dengan nama dan kota tiap pengguna.
+
+```python
+ringkasan = []
+for user in users:
+    uid = user["id"]
+    ringkasan.append({
+        "nama": user["name"],
+        "kota": user["address"]["city"],
+        "post": jumlah_post.get(uid, 0)
+    })
+```
+
+## Langkah 4: Tarik insight
+
+```python
+# urutkan dari yang paling banyak post (pakai lambda, dari Module 3)
+ringkasan.sort(key=lambda u: u["post"], reverse=True)
+
+print("Pengguna paling aktif:")
+for u in ringkasan[:3]:
+    print(f"- {u['nama']} ({u['kota']}): {u['post']} post")
+
+# kota unik (pakai set, dari Module 2)
+kota = {u["kota"] for u in ringkasan}
+print("Jumlah kota berbeda:", len(kota))
+```
+
+## Versi rapi dengan function
+
+Bungkus tiap langkah jadi function (Module 3) dan tambah pengaman (Module 6):
+
+```python
+import requests
+from collections import Counter
+
+def ambil(url):
+    try:
+        respon = requests.get(url)
+        respon.raise_for_status()
+        return respon.json()
+    except requests.exceptions.RequestException as e:
+        raise RuntimeError(f"Gagal mengambil {url}: {e}")
+
+def buat_ringkasan(users, posts):
+    jumlah_post = Counter(p["userId"] for p in posts)
+    return [
+        {"nama": u["name"], "kota": u["address"]["city"], "post": jumlah_post.get(u["id"], 0)}
+        for u in users
+    ]
+
+try:
+    users = ambil("https://jsonplaceholder.typicode.com/users")
+    posts = ambil("https://jsonplaceholder.typicode.com/posts")
+    ringkasan = buat_ringkasan(users, posts)
+    ringkasan.sort(key=lambda u: u["post"], reverse=True)
+    for u in ringkasan[:3]:
+        print(f"{u['nama']} ({u['kota']}): {u['post']} post")
+except RuntimeError as e:
+    print("Terjadi masalah:", e)
+```
+
+## Tantangan lanjutan
+
+**1. Simpan hasilnya**  
+Tulis ringkasan ke file JSON atau CSV (Module 11) supaya bisa dipakai lagi nanti.
+
+**2. Tambah sumber data**  
+Ambil juga data `/comments`, lalu hitung berapa komentar yang diterima tiap pengguna.
+
+**3. Olah dengan Pandas**  
+Masukkan ringkasan ke `DataFrame` (Module 12), lalu pakai `groupby` untuk menghitung rata-rata post per kota.
+
+**4. Jadikan reusable**  
+Ubah jadi module dengan function dan docstring (Module 10), lalu tulis satu test sederhana untuk `buat_ringkasan`.
+
+## Checklist kelulusan
+
+Kamu menguasai materi ini kalau bisa, tanpa banyak melihat contoh:
+
+- Mengambil data dari sebuah API publik dan mengubahnya jadi data Python.
+- Menggabungkan dua sumber data berdasarkan id yang sama.
+- Meringkas dan mengurutkan untuk menemukan satu insight.
+- Membungkus semuanya dengan function dan penanganan error.
+
+## Penutup
+
+Selamat! Kamu baru saja membangun program yang mengambil data hidup dari internet dan mengubahnya jadi insight, menggabungkan hampir semua yang kamu pelajari di jalur Python. Dari sini, kamu benar-benar siap masuk ke Capstone, lalu melangkah ke Machine Learning. Lihat **[Peta Belajar](/peta-belajar)** untuk langkah berikutnya.

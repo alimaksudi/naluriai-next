@@ -1,0 +1,157 @@
+---
+title: Type Hints
+sidebar_position: 4
+---
+
+# Type Hints
+
+## Kenapa ini penting?
+
+Saat kode membesar dan dikerjakan banyak orang, sulit menebak sebuah function mau menerima apa dan mengembalikan apa. *Type hints* menambahkan petunjuk tipe data, sehingga kode jadi lebih mudah dibaca, dan editor bisa membantu menangkap kesalahan lebih awal. Kode profesional dan library modern hampir selalu memakainya.
+
+**Fokus kita:** menambahkan petunjuk tipe (*type hints*) pada variable dan function agar kode lebih jelas.
+
+## Apa itu type hints?
+
+*Type hints* adalah catatan tipe data yang kita tambahkan ke variable, parameter, dan nilai kembalian function. Sifatnya petunjuk, Python tidak memaksanya, tapi sangat membantu manusia dan editor.
+
+```python
+def sapa(nama: str) -> str:
+    return f"Halo, {nama}"
+```
+
+Artinya: `nama` diharapkan berupa `str`, dan function mengembalikan `str`.
+
+## Analogi sederhana
+
+Type hints itu seperti **label di stoples dapur**. Stoplesnya tetap berfungsi tanpa label, tapi dengan label ("gula", "garam") semua orang langsung tahu isinya tanpa harus membuka dan mencicipi. Kode jadi lebih mudah dipahami sekilas.
+
+## Bedah konsep
+
+### 1. Hint pada variable
+
+```python
+nama: str = "Budi"
+umur: int = 25
+tinggi: float = 1.75
+aktif: bool = True
+```
+
+### 2. Hint pada function
+
+Tipe parameter ditulis setelah titik dua, tipe kembalian setelah `->`.
+
+```python
+def luas_persegi(sisi: int) -> int:
+    return sisi * sisi
+
+def rata_rata(angka: list) -> float:
+    return sum(angka) / len(angka)
+```
+
+### 3. Tipe untuk struktur data
+
+Untuk tipe yang lebih rinci, impor dari module `typing`.
+
+```python
+from typing import List, Dict
+
+def total(harga: List[int]) -> int:
+    return sum(harga)
+
+def profil() -> Dict[str, str]:
+    return {"nama": "Budi", "kota": "Bandung"}
+```
+
+(Di Python versi baru kamu juga bisa menulis `list[int]` langsung tanpa import.)
+
+### Optional dan Union
+
+Dua tipe dari `typing` yang paling sering dipakai:
+
+```python
+from typing import Optional, Union
+
+# Optional[T] berarti nilainya bisa T atau None
+def cari_pengguna(user_id: int) -> Optional[str]:
+    if user_id == 1:
+        return "Ali"
+    return None   # tidak ditemukan
+
+# Union[T1, T2] berarti nilainya bisa T1 ATAU T2
+def format_nilai(nilai: Union[int, float]) -> str:
+    return f"{nilai:.2f}"
+
+format_nilai(85)     # int → ok
+format_nilai(87.5)   # float → ok
+```
+
+Di Python 3.10+, `Optional[str]` bisa ditulis `str | None`, dan `Union[int, float]` bisa ditulis `int | float`.
+
+### 4. Hanya petunjuk, bukan paksaan
+
+Penting: Python tidak akan menolak nilai yang tipenya salah. Type hints membantu manusia dan editor, bukan aturan yang dipaksakan saat program jalan. Untuk benar-benar memeriksanya, ada alat terpisah seperti `mypy`.
+
+## Contoh penggunaan
+
+Function yang jelas kontraknya berkat type hints:
+
+```python
+from typing import List
+
+def harga_setelah_pajak(harga: float, persen: float = 11) -> float:
+    return harga + (harga * persen / 100)
+
+def nama_produk(produk: List[dict]) -> List[str]:
+    return [p["nama"] for p in produk]
+```
+
+Sekali baris pertama dibaca, orang lain langsung paham cara memakai function ini.
+
+## Latihan singkat
+
+Tambahkan type hints pada function berikut: menerima dua `int`, mengembalikan `int`.
+
+```python
+def tambah(a: int, b: int) -> int:
+    return a + b
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Tambahkan type hints pada function yang menerima sebuah `str` dan mengembalikan `str`.
+
+**2. Menengah**  
+Buat function `rata_rata(angka: list) -> float` lengkap dengan type hints, lalu uji.
+
+**3. Tantangan**  
+Buat function yang menerima `List[dict]` (daftar produk) dan mengembalikan `List[str]` (daftar nama produk), lengkap dengan hint.
+
+**4. Project mini**  
+Ambil salah satu project mini dari modul sebelumnya (misalnya kalkulator gaji atau keranjang belanja). Tambahkan type hints ke semua function dan parameternya. Rasakan bagaimana kode jadi lebih mudah dibaca, dan perhatikan apakah editormu jadi memberi saran yang lebih baik.
+
+## Kesalahan umum
+
+❌ Salah paham:
+
+```python
+def umur(x: int) -> int:
+    return x
+
+umur("dua puluh")    # tetap jalan! Python tidak menolak tipe yang salah
+```
+
+✅ Pemahaman benar:
+Type hints adalah **petunjuk**, bukan penjaga. Python tidak akan error walau kamu mengirim tipe yang salah. Manfaatnya untuk keterbacaan dan bantuan editor. Kalau mau pengecekan tipe sungguhan, jalankan alat seperti `mypy` secara terpisah.
+
+:::tip Catatan Pro
+Type hints tidak memperlambat program — Python mengabaikannya saat runtime. Mereka hanya untuk editor (autocomplete) dan alat seperti `mypy`. Tidak ada biaya performa sama sekali.
+:::
+
+## Ringkasan
+
+- *Type hints* menambahkan petunjuk tipe pada variable dan function.
+- Format function: `def f(x: tipe) -> tipe_kembalian:`.
+- Untuk struktur seperti list/dict, pakai `typing` (atau `list[...]` di Python baru).
+- Sifatnya petunjuk, tidak dipaksakan saat runtime; gunanya untuk keterbacaan dan bantuan editor.

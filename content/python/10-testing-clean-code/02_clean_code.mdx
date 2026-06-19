@@ -1,0 +1,149 @@
+---
+title: Clean Code & PEP8
+sidebar_position: 2
+---
+
+# Clean Code & PEP8
+
+## Kenapa ini penting?
+
+Kode dibaca jauh lebih sering daripada ditulis, sering kali oleh dirimu sendiri tiga bulan kemudian. Kode yang bersih dan konsisten membuatmu (dan timmu) cepat paham dan jarang bikin bug. *PEP8* adalah panduan gaya resmi Python yang membuat semua kode Python terlihat seragam.
+
+**Fokus kita:** menulis kode yang bersih dan rapi mengikuti *PEP8*, panduan gaya standar Python.
+
+## Apa itu clean code dan PEP8?
+
+- *Clean code* adalah kode yang mudah dibaca, jelas maksudnya, dan gampang diubah.
+- *PEP8* adalah dokumen panduan gaya resmi Python: aturan soal penamaan, spasi, dan tata letak.
+
+## Analogi sederhana
+
+Clean code itu seperti **tulisan tangan yang rapi**. Isinya bisa sama, tapi yang rapi jauh lebih cepat dibaca dan dimengerti. PEP8 adalah "aturan menulis" yang disepakati bersama, supaya semua orang menulis dengan gaya yang sama.
+
+## Bedah konsep
+
+### 1. Nama yang bermakna
+
+Nama variable dan function harus menjelaskan isinya. Hindari singkatan yang membingungkan.
+
+```python
+# kurang baik
+x = 350000
+def calc(a, b): ...
+
+# lebih baik
+harga_produk = 350000
+def hitung_total(harga, jumlah): ...
+```
+
+### 2. Konvensi penamaan PEP8
+
+```python
+nama_variable = ...      # snake_case untuk variable dan function
+def hitung_pajak(): ...  # snake_case untuk function
+class ProdukToko: ...    # PascalCase untuk class
+HARGA_MAKS = 1000000     # HURUF_BESAR untuk konstanta
+```
+
+### 3. Spasi dan indentasi
+
+```python
+# kurang baik
+total=harga*jumlah
+x = [1,2,3]
+
+# lebih baik (spasi di sekeliling operator, setelah koma)
+total = harga * jumlah
+x = [1, 2, 3]
+```
+
+Gunakan 4 spasi untuk indentasi, dan beri baris kosong untuk memisahkan bagian yang berbeda.
+
+### 4. Function pendek, satu tugas
+
+Satu function sebaiknya melakukan satu hal. Kalau sebuah function sudah sangat panjang dan melakukan banyak hal, pecah jadi beberapa function kecil yang masing-masing jelas tugasnya.
+
+### 5. Komentar seperlunya
+
+Kode yang baik sebagian besar menjelaskan dirinya sendiri lewat nama yang jelas. Pakai komentar untuk menjelaskan *kenapa*, bukan mengulang *apa* yang sudah jelas dari kode.
+
+```python
+# kurang berguna
+x = x + 1   # tambah x dengan 1
+
+# berguna
+harga = harga + ongkir   # ongkir dihitung terpisah karena beda per wilayah
+```
+
+## Contoh penggunaan
+
+Membersihkan kode berantakan menjadi rapi:
+
+```python
+# sebelum
+def f(a,b,c):
+    r=a*b
+    r=r-(r*c/100)
+    return r
+
+# sesudah (nama jelas, spasi rapi, mudah dibaca)
+def harga_setelah_diskon(harga, jumlah, persen_diskon):
+    subtotal = harga * jumlah
+    return subtotal - (subtotal * persen_diskon / 100)
+```
+
+Kedua kode menghasilkan hasil sama, tapi yang kedua langsung bisa dipahami siapa pun.
+
+## Latihan singkat
+
+Ubah nama variable `x`, `y`, `z` di bawah jadi nama yang bermakna.
+
+```python
+x = 350000
+y = 2
+z = x * y
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Ambil potongan kode dengan nama variable buruk (`a`, `b`, `tmp`), ganti jadi nama yang menjelaskan isinya.
+
+**2. Menengah**  
+Rapikan sebuah baris kode tanpa spasi (`total=a+b*c`) sesuai PEP8.
+
+**3. Tantangan**  
+Diberi satu function panjang yang melakukan tiga hal sekaligus, pecah jadi tiga function kecil yang masing-masing jelas tugasnya.
+
+**4. Project mini**  
+Ambil salah satu project mini dari modul awal yang dulu kamu tulis. Tinjau ulang dan rapikan: perbaiki nama variable, rapikan spasi sesuai PEP8, pecah function yang terlalu panjang, dan hapus komentar yang tidak berguna. Bandingkan versi lama dan baru.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+def calc(d):
+    return d*0.11+d   # apa itu d? apa hasilnya?
+```
+
+✅ Benar:
+
+```python
+def harga_dengan_pajak(harga):
+    pajak = harga * 0.11
+    return harga + pajak
+```
+
+Nama satu huruf dan rumus padat mungkin terasa cepat saat menulis, tapi menyiksa saat dibaca lagi nanti. Nama yang jelas dan langkah yang terurai membuat kode jauh lebih mudah dipahami dan diperbaiki.
+
+:::tip Catatan Pro
+Baca kode yang baru kamu tulis setelah 24 jam — kalau ada bagian yang membingungkan, itu kandidat untuk diberi nama lebih baik atau dipecah jadi function terpisah. Kode yang baik bisa dibaca sekilas.
+:::
+
+## Ringkasan
+
+- *Clean code* mengutamakan keterbacaan: kode dibaca lebih sering daripada ditulis.
+- *PEP8*: `snake_case` untuk variable/function, `PascalCase` untuk class, spasi rapi, indentasi 4 spasi.
+- Beri nama yang bermakna dan buat function pendek dengan satu tugas.
+- Pakai komentar untuk menjelaskan *kenapa*, bukan mengulang yang sudah jelas.

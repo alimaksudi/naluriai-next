@@ -1,0 +1,141 @@
+---
+title: Install Python & Setup Environment
+sidebar_position: 2
+---
+
+# Install Python & Setup Environment
+
+## Kenapa ini penting?
+
+Sebelum komputer bisa menjalankan perintah Python kita, dia harus punya "kamus bahasa" Python di dalamnya. Proses inilah yang kita sebut *install Python*.
+
+**Fokus kita:** menyiapkan "meja kerja" (*environment*) di komputermu agar kita bisa mulai mengetik instruksi pemrograman.
+
+:::tip Buru-buru pengin nyoba? Lewati dulu install-nya
+Kalau kamu cuma pengin cepat mencoba Python tanpa ribet, buka **[Google Colab](https://colab.research.google.com)** di browser. Gratis, tidak perlu install apa pun, langsung bisa mengetik kode.
+
+Pakai Colab dulu untuk beberapa lesson awal, lalu balik ke sini buat install di komputermu saat kamu sudah mulai serius. Dua jalur ini sama-sama valid.
+:::
+
+## Apa itu environment?
+
+*Environment* (lingkungan kerja) adalah tempat kita menulis dan menjalankan kode Python.
+
+Bayangkan kamu mau menggambar. Kamu tidak mungkin menggambar di atas angin. Kamu butuh buku gambar dan spidol. Nah, *environment* adalah buku gambar dan spidol itu untuk menulis Python.
+
+## Analogi sederhana
+
+Misalnya kamu mau bermain Lego (merakit AI):
+
+1. **Install Python** sama seperti membeli buku panduan cara menyusun baloknya. Komputermu sekarang tahu aturan mainnya.
+2. **Setup environment** sama seperti menyiapkan karpet kosong khusus di ruang tamu untuk bermain balok, supaya tidak tercampur dengan barang lain.
+
+Tujuannya:
+
+- Komputer bisa mengenali perintah bahasa Python.
+- Kita punya aplikasi khusus yang nyaman untuk mengetik.
+
+## Bedah konsep
+
+### 1. Python interpreter (si penerjemah)
+
+Komputer aslinya hanya mengerti angka 0 dan 1. *Interpreter* (penerjemah) adalah program di dalam Python yang otomatis mengubah kata-kata kita menjadi bahasa mesin 0 dan 1, agar komputer langsung bertindak.
+
+### 2. Code editor (buku tulisnya)
+
+Kita butuh tempat untuk mengetik kode. Walaupun bisa di Notepad biasa, sangat disarankan memakai aplikasi khusus pembuat program (disebut *code editor*) seperti **VS Code**. Aplikasi ini memberi warna berbeda pada teks sehingga kita tidak gampang salah ketik.
+
+## Contoh penggunaan
+
+Buka browser di komputermu, lalu ikuti dua langkah ini.
+
+**1. Install Python (si penerjemah)**
+
+- Buka website `python.org/downloads`.
+- Klik tombol *Download* besar, lalu *install* (tekan *Next* sampai selesai).
+- **Khusus Windows, sangat penting:** centang kotak **"Add Python to PATH"** di layar awal. Ini supaya komputermu mengenali perintah Python dari mana saja.
+
+:::note Pengguna Mac & Linux
+Biasanya Python sudah terpasang, tapi namanya `python3` (bukan `python`). Jadi nanti pakai perintah `python3`. Cek dulu dengan mengetik `python3 --version` di Terminal. Kalau angkanya muncul, kamu tidak perlu install ulang.
+:::
+
+**2. Install VS Code (buku tulisnya)**
+
+- Buka website `code.visualstudio.com`.
+- *Download* dan install seperti aplikasi biasa.
+
+## Latihan singkat
+
+Mari cek apakah Python sudah berhasil masuk ke komputermu.
+
+1. Buka aplikasi **Terminal** (di Mac) atau **Command Prompt / CMD** (di Windows).
+2. Ketik perintah di bawah ini lalu tekan **Enter**:
+
+```bash
+python --version
+```
+
+Kalau `python` tidak dikenali, coba `python3 --version`. Jika muncul tulisan seperti `Python 3.x.x`, selamat, komputermu siap dipakai.
+
+## Latihan bertingkat
+
+### Pemula
+Buka terminal/command prompt dan ketik perintah berikut. Catat versi Python yang terpasang:
+
+```bash
+python --version
+```
+
+Jika berhasil, kamu akan melihat sesuatu seperti `Python 3.11.x`.
+
+### Menengah
+Buka Python interactive shell (REPL) dengan mengetik `python` di terminal. Kemudian coba operasi berikut dan lihat hasilnya:
+
+```python
+>>> 2 + 2
+>>> "Python" + " " + "keren"
+>>> type(42)
+>>> exit()
+```
+
+### Tantangan
+Coba install package `requests` menggunakan pip, kemudian verifikasi instalasinya:
+
+```bash
+pip install requests
+pip show requests
+```
+
+Tulis di komentar: versi `requests` berapa yang terinstall?
+
+### Project mini
+Buat virtual environment untuk proyek latihan pertamamu:
+
+```bash
+python -m venv latihan-env
+source latihan-env/bin/activate  # Mac/Linux
+# atau: latihan-env\Scripts\activate  # Windows
+pip install requests
+pip freeze > requirements.txt
+```
+
+Buka file `requirements.txt` yang dibuat. Apa isinya? Ini adalah cara profesional mendokumentasikan dependency proyekmu.
+
+## Kesalahan umum
+
+❌ Salah:
+Buru-buru menekan *Next* saat install di Windows dan lupa mencentang **"Add Python to PATH"**. Akibatnya komputer diam saja saat diperintah `python` di Terminal.
+
+✅ Benar:
+Selalu baca layar pertama saat install. Kalau terlanjur lupa mencentangnya, kamu tidak perlu menghapus apa pun. Jalankan lagi file installer Python yang sama, pilih opsi **"Modify"**, lalu centang **"Add Python to PATH"**. Beres tanpa install ulang dari nol.
+
+:::tip Catatan Pro
+Kalau baru mulai, Colab saja sudah cukup — install lokal bisa belakangan saat project semakin besar dan butuh library khusus.
+:::
+
+## Ringkasan
+
+- Kita install Python agar komputer punya *interpreter* dari bahasa manusia ke bahasa mesin.
+- Kita pakai *code editor* seperti VS Code sebagai tempat yang nyaman untuk mengetik.
+- Di Windows, selalu centang "Add Python to PATH" saat install.
+- Di Mac dan Linux, gunakan perintah `python3`.

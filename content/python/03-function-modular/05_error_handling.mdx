@@ -1,0 +1,147 @@
+---
+title: Error Handling Dasar
+sidebar_position: 5
+---
+
+# Error Handling Dasar
+
+## Kenapa ini penting?
+
+Program yang baik tidak langsung mati saat ada yang salah. Kalau pengguna mengetik huruf padahal diminta angka, program seharusnya bilang "input tidak valid", bukan langsung *crash*. Kemampuan menangani error inilah yang membedakan program latihan dengan program yang dipakai orang.
+
+**Fokus kita:** membaca pesan error, lalu menangani error dengan `try` dan `except` supaya program tetap berjalan mulus.
+
+## Apa itu error handling?
+
+*Error handling* adalah cara menangkap error yang mungkin terjadi, lalu memberi tahu Python apa yang harus dilakukan, alih-alih membiarkan program berhenti mendadak.
+
+```python
+try:
+    angka = int(input("Masukkan angka: "))
+    print("Kuadratnya:", angka * angka)
+except ValueError:
+    print("Itu bukan angka yang valid.")
+```
+
+## Analogi sederhana
+
+Error handling itu seperti **jaring pengaman di sirkus**. Pemain akrobat tetap berusaha sebaik mungkin, tapi kalau jatuh, jaring menangkapnya supaya tidak cedera fatal. Program tetap jalan, tidak langsung "jatuh".
+
+## Bedah konsep
+
+### 1. Membaca pesan error dulu
+
+Sebelum menangani, belajar membaca. Lihat baris terakhir pesan error, di situ jenis dan sebab masalahnya.
+
+```text
+ValueError: invalid literal for int() with base 10: 'abc'
+```
+
+Artinya: kita mencoba mengubah `'abc'` menjadi `int`, padahal itu bukan angka. Membaca baris ini biasanya sudah cukup untuk tahu masalahnya.
+
+### 2. try dan except
+
+Kode yang berisiko ditaruh di `try`. Kalau gagal, Python lompat ke `except`.
+
+```python
+try:
+    hasil = 10 / 0
+except ZeroDivisionError:
+    print("Tidak bisa membagi dengan nol.")
+```
+
+### 3. Beberapa jenis error umum
+
+- `ValueError`: tipe nilainya tidak sesuai, misalnya `int("abc")`.
+- `ZeroDivisionError`: membagi dengan nol.
+- `KeyError`: mengambil key yang tidak ada di dictionary.
+- `IndexError`: mengakses index list di luar jangkauan.
+
+### 4. else dan finally
+
+`else` jalan kalau tidak ada error. `finally` selalu jalan, error atau tidak.
+
+```python
+try:
+    angka = int(input("Angka: "))
+except ValueError:
+    print("Input salah.")
+else:
+    print("Berhasil membaca:", angka)
+finally:
+    print("Selesai memproses.")
+```
+
+## Contoh penggunaan
+
+Pembagian yang aman dari input pengguna:
+
+```python
+try:
+    a = int(input("Angka pertama: "))
+    b = int(input("Angka kedua: "))
+    print("Hasil bagi:", a / b)
+except ValueError:
+    print("Masukkan angka, bukan teks.")
+except ZeroDivisionError:
+    print("Angka kedua tidak boleh nol.")
+```
+
+## Latihan singkat
+
+Buat program yang meminta sebuah angka dan menampilkan akar kuadratnya, tapi tidak crash kalau pengguna mengetik huruf.
+
+```python
+try:
+    angka = int(input("Angka: "))
+    print(angka ** 0.5)
+except ValueError:
+    print("Itu bukan angka.")
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Bungkus `int(input(...))` dengan `try/except` supaya tidak crash saat pengguna mengetik teks.
+
+**2. Menengah**  
+Buat kalkulator pembagian yang menangani dua error sekaligus: input bukan angka, dan pembagi bernilai nol.
+
+**3. Tantangan**  
+Buat program yang terus meminta angka sampai pengguna benar-benar memasukkan angka yang valid (gabungkan `while` dengan `try/except`).
+
+**4. Project mini**  
+Buat "mesin penarikan ATM" mini. Minta saldo dan jumlah penarikan. Tangani kasus: input bukan angka, jumlah penarikan melebihi saldo, dan jumlah penarikan negatif. Tampilkan pesan yang ramah untuk setiap kasus, dan saldo akhir kalau berhasil.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+try:
+    nilai = int(input("Angka: "))
+except:
+    print("Ada error")     # menangkap semua error tanpa tahu apa
+```
+
+✅ Benar:
+
+```python
+try:
+    nilai = int(input("Angka: "))
+except ValueError:
+    print("Input harus berupa angka")   # spesifik, jelas masalahnya
+```
+
+Menangkap semua error dengan `except` kosong membuat kamu tidak tahu apa yang sebenarnya salah, dan bisa menyembunyikan bug serius. Sebutkan jenis errornya supaya pesannya tepat.
+
+:::tip Catatan Pro
+Tangkap exception spesifik (`ValueError`, `TypeError`, `FileNotFoundError`) bukan `Exception` kosong — kalau tidak, bug yang tidak terduga bisa tersembunyi tanpa kamu sadari. Lebih sempit = lebih aman.
+:::
+
+## Ringkasan
+
+- Selalu baca baris terakhir pesan error; di situ jenis dan sebabnya.
+- `try` membungkus kode berisiko; `except` menangani saat terjadi error.
+- Sebutkan jenis error yang spesifik, jangan pakai `except` kosong.
+- `else` jalan saat aman, `finally` selalu jalan.

@@ -1,0 +1,157 @@
+---
+title: List
+sidebar_position: 1
+---
+
+# List
+
+## Kenapa ini penting?
+
+Sampai sekarang, satu variable cuma menyimpan satu nilai. Tapi data di dunia nyata jarang sendirian: daftar belanja, nilai ujian satu kelas, harga semua barang di keranjang. Menyimpan semua itu di variable terpisah (`nilai1`, `nilai2`, `nilai3`, ...) jelas tidak masuk akal.
+
+**Fokus kita:** menyimpan banyak nilai sekaligus dalam satu wadah bernama *list*.
+
+## Apa itu list?
+
+*List* adalah wadah yang bisa menyimpan banyak nilai secara berurutan, di dalam tanda kurung siku `[ ]` dan dipisah koma.
+
+```python
+belanjaan = ["susu", "roti", "telur"]
+nilai = [80, 95, 70, 88]
+```
+
+Satu variable, tapi isinya banyak. Urutannya pun dijaga: yang kamu tulis pertama tetap di posisi pertama.
+
+## Analogi sederhana
+
+Bayangkan list itu seperti **rak sepatu bernomor**. Setiap kotak punya nomor urut, dan kamu bisa menaruh atau mengambil sepatu berdasarkan nomor kotaknya. Nomor inilah yang nanti kita sebut *index*.
+
+## Bedah konsep
+
+### 1. Index dimulai dari 0
+
+Ini bagian yang sering bikin pemula kaget: item pertama ada di index **0**, bukan 1.
+
+```python
+belanjaan = ["susu", "roti", "telur"]
+
+print(belanjaan[0])   # susu
+print(belanjaan[1])   # roti
+print(belanjaan[2])   # telur
+```
+
+```text
+  belanjaan = ["susu", "roti", "telur"]
+
+  index:        0       1        2
+            ┌───────┬────────┬─────────┐
+            │ susu  │  roti  │  telur  │
+            └───────┴────────┴─────────┘
+  dari belakang:  -3      -2       -1
+```
+
+### 2. Index negatif (dari belakang)
+
+Index negatif menghitung dari ujung. Praktis kalau kamu cuma butuh item terakhir.
+
+```python
+print(belanjaan[-1])   # telur  (paling belakang)
+print(belanjaan[-2])   # roti
+```
+
+### 3. Mengubah isi
+
+List bisa diubah. Tinggal timpa item di index tertentu.
+
+```python
+belanjaan[0] = "kopi"
+print(belanjaan)   # ['kopi', 'roti', 'telur']
+```
+
+### 4. Panjang list
+
+`len()` memberi tahu berapa banyak item di dalam list.
+
+```python
+print(len(belanjaan))   # 3
+```
+
+### 5. List bisa berisi apa saja
+
+Angka, teks, bahkan campuran.
+
+```python
+campur = ["Budi", 25, True, 1.75]
+```
+
+## Contoh penggunaan
+
+Menyimpan harga barang di keranjang belanja, lalu menampilkan harga pertama dan terakhir:
+
+```python
+keranjang = [15000, 30000, 25000, 50000]
+
+print("Jumlah barang:", len(keranjang))
+print("Barang pertama: Rp", keranjang[0])
+print("Barang terakhir: Rp", keranjang[-1])
+```
+
+Menyimpan daftar follower terbaru sebuah akun:
+
+```python
+follower_baru = ["sari", "andi", "rina"]
+print(follower_baru[0], "adalah follower terbaru sebelum dua lainnya")
+```
+
+## Latihan singkat
+
+Buat list berisi tiga film favoritmu, lalu tampilkan film pertama dan jumlah total filmnya.
+
+```python
+film = ["...", "...", "..."]
+print("Film pertama:", film[0])
+print("Total film:", len(film))
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat list berisi 4 angka, lalu tampilkan angka di index ke-2.
+
+**2. Menengah**  
+Buat list `suhu` berisi suhu lima hari terakhir. Tampilkan suhu hari pertama dan hari terakhir memakai index negatif.
+
+**3. Tantangan**  
+Buat list harga `[12000, 8000, 20000]`. Ganti harga di index pertama menjadi `15000`, lalu tampilkan list yang sudah berubah.
+
+**4. Project mini**  
+Buat "rapor mini": simpan list `nilai` berisi 5 angka nilai ujian. Tampilkan jumlah mata pelajaran, nilai tertinggi (petunjuk: pakai `max()`), nilai terendah (`min()`), dan total semua nilai (`sum()`).
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+belanjaan = ["susu", "roti", "telur"]
+print(belanjaan[3])   # error: index di luar jangkauan
+```
+
+✅ Benar:
+
+```python
+belanjaan = ["susu", "roti", "telur"]
+print(belanjaan[2])   # telur (index terakhir untuk 3 item adalah 2)
+```
+
+Karena index mulai dari 0, list dengan 3 item index validnya cuma 0, 1, 2. Index 3 sudah lewat batas dan memicu `IndexError`.
+
+:::tip Catatan Pro
+`list[-1]` selalu mengambil elemen terakhir — lebih aman dan lebih ringkas dari `list[len(list)-1]`. Index negatif berlaku untuk semua posisi: `[-2]` kedua dari belakang, dan seterusnya.
+:::
+
+## Ringkasan
+
+- *List* menyimpan banyak nilai berurutan di dalam `[ ]`.
+- Index dimulai dari 0; index negatif menghitung dari belakang.
+- Isi list bisa diubah, dan `len()` menghitung jumlah item.
+- `max()`, `min()`, dan `sum()` berguna untuk list berisi angka.

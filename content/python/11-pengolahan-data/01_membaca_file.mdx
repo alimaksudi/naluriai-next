@@ -1,0 +1,142 @@
+---
+title: Membaca File (txt)
+sidebar_position: 1
+---
+
+# Membaca File (txt)
+
+## Kenapa ini penting?
+
+Sampai sekarang semua data kita ketik sendiri di dalam kode. Tapi data sungguhan tersimpan di file: catatan, log, daftar nama. Kemampuan membaca file dari komputer adalah langkah pertama untuk mengolah data nyata, dan ini gerbang menuju dunia data dan AI.
+
+**Fokus kita:** membuka, membaca, dan menulis file teks (`.txt`) dengan aman memakai `with open(...)`.
+
+## Apa itu membaca file?
+
+*Membaca file* berarti mengambil isi sebuah file dari penyimpanan komputer ke dalam program kita, supaya bisa diolah. Python menyediakan `open()` untuk membuka file.
+
+```python
+with open("catatan.txt") as f:
+    isi = f.read()
+    print(isi)
+```
+
+## Analogi sederhana
+
+Membaca file itu seperti **membuka buku**. `open()` adalah membuka bukunya, `read()` adalah membaca isinya, dan saat selesai, buku ditutup kembali. Blok `with` memastikan bukunya otomatis ditutup walau terjadi error.
+
+## Bedah konsep
+
+### 1. Membuka file dengan with
+
+Cara yang disarankan adalah `with`, karena file otomatis ditutup setelah blok selesai.
+
+```python
+with open("catatan.txt") as f:
+    isi = f.read()
+print(isi)
+```
+
+### 2. Tiga cara membaca
+
+```python
+with open("catatan.txt") as f:
+    semua = f.read()          # seluruh isi jadi satu teks
+
+with open("catatan.txt") as f:
+    baris_list = f.readlines()  # list, tiap baris satu item
+
+with open("catatan.txt") as f:
+    for baris in f:             # baca baris demi baris (hemat memori)
+        print(baris.strip())    # strip() membuang enter di ujung
+```
+
+### 3. Mode file
+
+`open()` punya mode kedua: `"r"` membaca (default), `"w"` menulis (menimpa), `"a"` menambah di akhir.
+
+```python
+with open("catatan.txt", "w") as f:
+    f.write("Baris pertama\n")
+    f.write("Baris kedua\n")
+```
+
+Hati-hati: mode `"w"` menghapus isi lama file. Pakai `"a"` kalau mau menambah tanpa menghapus.
+
+## Contoh penggunaan
+
+Menghitung berapa baris dalam sebuah file log:
+
+```python
+with open("log.txt") as f:
+    baris = f.readlines()
+
+print("Jumlah baris:", len(baris))
+```
+
+Menyimpan daftar tugas ke file:
+
+```python
+tugas = ["belajar Python", "olahraga", "baca buku"]
+
+with open("tugas.txt", "w") as f:
+    for t in tugas:
+        f.write(t + "\n")
+```
+
+## Latihan singkat
+
+Buat file `tugas.txt` lewat kode, isi dengan tiga baris tugas, lalu baca kembali dan tampilkan isinya.
+
+```python
+with open("tugas.txt", "w") as f:
+    f.write("...\n")
+
+with open("tugas.txt") as f:
+    print(f.read())
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Tulis satu kalimat ke file `pesan.txt`, lalu baca dan tampilkan isinya.
+
+**2. Menengah**  
+Tulis lima nama ke sebuah file (satu nama per baris), lalu baca kembali dan tampilkan jumlah namanya.
+
+**3. Tantangan**  
+Baca sebuah file teks, lalu hitung berapa banyak baris yang tidak kosong.
+
+**4. Project mini**  
+Buat "buku tamu" sederhana. Setiap kali program dijalankan, minta nama pengguna lalu tambahkan ke file `tamu.txt` memakai mode `"a"` (jangan menimpa yang lama). Setelah itu, tampilkan seluruh daftar tamu yang pernah mengisi.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+f = open("catatan.txt")
+isi = f.read()
+# lupa menutup file, bisa bikin masalah
+```
+
+✅ Benar:
+
+```python
+with open("catatan.txt") as f:
+    isi = f.read()
+# file otomatis ditutup setelah blok with selesai
+```
+
+Selalu pakai `with open(...)`. Selain lebih ringkas, file dijamin ditutup dengan benar walau terjadi error di tengah jalan.
+
+:::tip Catatan Pro
+Selalu pakai `with open()` — jangan `f = open()` diikuti `f.close()` manual. `with` menjamin file tertutup bahkan jika terjadi error di tengah jalan, menghindari file terkunci atau data tidak tersimpan.
+:::
+
+## Ringkasan
+
+- `with open(...)` adalah cara aman membuka file karena otomatis menutupnya.
+- `read()`, `readlines()`, atau loop `for` dipakai untuk membaca isi.
+- Mode `"w"` menimpa isi lama, `"a"` menambah di akhir, `"r"` membaca.
+- `strip()` berguna membuang karakter enter di ujung tiap baris.

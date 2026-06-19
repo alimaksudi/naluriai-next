@@ -1,0 +1,135 @@
+---
+title: pip & Package Eksternal
+sidebar_position: 4
+---
+
+# pip & Package Eksternal
+
+## Kenapa ini penting?
+
+Standard library hebat, tapi kekuatan terbesar Python ada di ratusan ribu *package* buatan komunitas: NumPy, Pandas, requests, sampai library AI. Semuanya dipasang lewat satu alat bernama `pip`. Tanpa ini, kamu tidak bisa memakai tool data dan AI yang akan datang.
+
+**Fokus kita:** memasang, memakai, dan mengelola *package* eksternal dengan `pip`.
+
+## Apa itu pip dan package?
+
+- *Package* adalah kumpulan kode buatan orang lain yang bisa kamu pasang dan pakai.
+- `pip` adalah alat resmi Python untuk memasang package dari internet (dari gudang bernama *PyPI*).
+
+```bash
+pip install requests
+```
+
+## Analogi sederhana
+
+Kalau Python itu ponsel, `pip` itu **app store**-nya. Standard library adalah aplikasi bawaan, sedangkan `pip install` adalah mengunduh aplikasi tambahan sesuai kebutuhanmu.
+
+## Bedah konsep
+
+### 1. Memasang package
+
+Perintah `pip` dijalankan di Terminal, bukan di dalam kode Python.
+
+```bash
+pip install pandas
+```
+
+Di Google Colab, banyak package populer sudah terpasang. Kalau perlu pasang, tambahkan tanda seru: `!pip install nama_package`.
+
+### 2. Memakai package yang sudah dipasang
+
+Setelah terpasang, pakai seperti module biasa lewat `import`.
+
+```python
+import requests   # bisa dipakai setelah pip install requests
+```
+
+### 3. Perintah pip lain yang berguna
+
+```bash
+pip list                 # lihat semua package yang terpasang
+pip show pandas          # lihat detail satu package
+pip install pandas==2.0  # pasang versi tertentu
+pip uninstall pandas     # hapus package
+```
+
+### 4. requirements.txt
+
+Project nyata mencatat daftar package yang dibutuhkan di file `requirements.txt`, supaya orang lain bisa memasang semuanya sekaligus.
+
+```text
+pandas
+numpy
+requests
+```
+
+```bash
+pip install -r requirements.txt
+```
+
+## Contoh penggunaan
+
+Memasang dan memakai package untuk meminta data dari internet:
+
+```bash
+pip install requests
+```
+
+```python
+import requests
+respon = requests.get("https://example.com")
+print(respon.status_code)   # 200 kalau berhasil
+```
+
+(Kita akan pelajari requests lebih dalam di Module 13.)
+
+## Latihan singkat
+
+Di Terminal (atau Colab dengan `!`), pasang package `requests`, lalu impor di Python untuk memastikan berhasil.
+
+```bash
+pip install requests
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Jalankan `pip list` dan amati package apa saja yang sudah terpasang di sistemmu.
+
+**2. Menengah**  
+Pasang package `pandas`, lalu impor dan tampilkan versinya dengan `pandas.__version__`.
+
+**3. Tantangan**  
+Buat file `requirements.txt` berisi tiga package, lalu pasang semuanya sekaligus dengan satu perintah.
+
+**4. Project mini**  
+Siapkan sebuah folder project kecil. Buat `requirements.txt` berisi package yang kamu butuhkan (misalnya pandas dan requests), pasang semuanya, lalu tulis skrip Python pendek yang mengimpor keduanya dan menampilkan versinya masing-masing.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+# menulis pip install di dalam file Python
+pip install requests     # SyntaxError, ini perintah Terminal bukan kode Python
+```
+
+✅ Benar:
+
+```bash
+# jalankan di Terminal
+pip install requests
+```
+
+`pip install` adalah perintah Terminal, bukan baris kode Python. Di Jupyter atau Colab, kamu boleh menulisnya dengan awalan tanda seru: `!pip install requests`.
+
+:::tip Catatan Pro
+Simpan dependensi dengan `pip freeze > requirements.txt` sebelum berbagi project. Penerima bisa langsung install semua dengan `pip install -r requirements.txt` — satu perintah, tanpa tebak-tebak versi.
+:::
+
+## Ringkasan
+
+- *Package* adalah kode buatan komunitas; `pip` memasangnya dari PyPI.
+- `pip install nama`, `pip list`, `pip uninstall nama` adalah perintah dasar.
+- `pip` dijalankan di Terminal (atau `!pip` di Colab), bukan di dalam kode.
+- `requirements.txt` mencatat semua package agar mudah dipasang ulang oleh orang lain.

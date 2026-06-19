@@ -1,0 +1,164 @@
+---
+title: Tuple & Set
+sidebar_position: 4
+---
+
+# Tuple & Set
+
+## Kenapa ini penting?
+
+List dan dictionary sudah menutup sebagian besar kebutuhan. Tapi ada dua situasi khusus: data yang **tidak boleh berubah** (misalnya koordinat lokasi), dan data yang harus **unik tanpa duplikat** (misalnya daftar tag). Untuk dua hal itu, Python punya *tuple* dan *set*.
+
+**Fokus kita:** mengenal *tuple* (list yang terkunci) dan *set* (kumpulan tanpa duplikat), serta kapan sebaiknya pakai masing-masing.
+
+## Apa itu tuple dan set?
+
+- *Tuple* mirip list, tapi isinya **tidak bisa diubah** setelah dibuat. Pakai kurung biasa `( )`.
+- *Set* adalah kumpulan nilai **unik** (otomatis membuang duplikat) dan tidak berurutan. Pakai kurung kurawal `{ }`.
+
+```python
+lokasi = (-6.20, 106.81)      # tuple: koordinat, tidak akan diubah
+tag = {"python", "ai", "data"}   # set: kumpulan unik
+```
+
+## Analogi sederhana
+
+- *Tuple* itu seperti **tanggal lahir** yang dicetak di akta. Sudah pasti dan tidak boleh diutak-atik.
+- *Set* itu seperti **kantong stiker tanpa duplikat**. Walau kamu masukkan stiker yang sama dua kali, di dalam kantong tetap cuma ada satu.
+
+## Bedah konsep
+
+### 1. Tuple tidak bisa diubah
+
+Membacanya sama seperti list (pakai index), tapi mengubahnya akan error.
+
+```python
+lokasi = (-6.20, 106.81)
+
+print(lokasi[0])     # -6.2
+lokasi[0] = 0        # error: tuple tidak bisa diubah
+```
+
+Justru "tidak bisa diubah" inilah kelebihannya: kamu jadi yakin data itu aman dari perubahan tak sengaja.
+
+### 2. Set membuang duplikat otomatis
+
+```python
+angka = {1, 2, 2, 3, 3, 3}
+print(angka)         # {1, 2, 3}
+```
+
+### 3. Operasi set
+
+```python
+tag = {"python", "ai"}
+
+tag.add("data")          # tambah item
+print("ai" in tag)       # True, pengecekan sangat cepat
+```
+
+Set juga jago membandingkan dua kumpulan:
+
+```python
+a = {"budi", "sari", "andi"}
+b = {"sari", "rina"}
+
+print(a & b)   # {'sari'}            -> ada di keduanya (irisan)
+print(a | b)   # gabungan keduanya   -> semua, tanpa duplikat
+print(a - b)   # {'budi', 'andi'}    -> ada di a tapi tidak di b
+```
+
+### 4. Membuang duplikat dari list
+
+Trik populer: ubah list jadi set untuk menghapus duplikat, lalu kembalikan ke list.
+
+```python
+emails = ["a@mail.com", "b@mail.com", "a@mail.com"]
+unik = list(set(emails))
+print(unik)   # tinggal 2 email unik
+```
+
+## Kapan pakai tuple vs set?
+
+```text
+┌─────────────────┬────────────────────────────┬──────────────────────────────┐
+│ Aspek           │ Tuple                      │ Set                          │
+├─────────────────┼────────────────────────────┼──────────────────────────────┤
+│ Urutan          │ Terurut (index 0, 1, 2...) │ Tidak terurut                │
+│ Duplikat        │ Boleh ada                  │ Otomatis dihapus             │
+│ Bisa diubah     │ Tidak (immutable)          │ Bisa ditambah/hapus elemen   │
+│ Cocok untuk     │ Data tetap (koordinat,     │ Cek keanggotaan, deduplikasi │
+│                 │ warna RGB, nama hari)      │                              │
+│ Contoh          │ (10.5, 106.8) → koordinat │ {"python", "java"} → tag     │
+└─────────────────┴────────────────────────────┴──────────────────────────────┘
+```
+
+## Contoh penggunaan
+
+Menyimpan koordinat toko yang tidak boleh berubah:
+
+```python
+koordinat_toko = (-6.917, 107.619)
+print("Lokasi toko:", koordinat_toko)
+```
+
+Menghitung berapa banyak pengunjung unik dari daftar kunjungan:
+
+```python
+kunjungan = ["budi", "sari", "budi", "andi", "sari", "budi"]
+pengunjung_unik = set(kunjungan)
+print("Pengunjung unik:", len(pengunjung_unik))   # 3
+```
+
+## Latihan singkat
+
+Buat sebuah set dari list angka yang berisi duplikat, lalu tampilkan jumlah angka uniknya.
+
+```python
+angka = [1, 2, 2, 3, 3, 3, 4]
+unik = set(angka)
+print("Jumlah angka unik:", len(unik))
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat tuple berisi tiga warna favoritmu, lalu tampilkan warna pertama.
+
+**2. Menengah**  
+Diberi list tag `["ai", "python", "ai", "data", "python"]`, ubah jadi set lalu tampilkan tag uniknya beserta jumlahnya.
+
+**3. Tantangan**  
+Ada dua set: `kelas_a = {"budi", "sari", "andi"}` dan `kelas_b = {"sari", "rina", "andi"}`. Tampilkan siapa saja yang ikut dua kelas sekaligus, dan siapa yang hanya ikut kelas A.
+
+**4. Project mini**  
+Buat penghitung kata unik. Minta pengguna mengetik sebuah kalimat, pecah jadi daftar kata dengan `.split()`, lalu pakai set untuk menampilkan berapa banyak kata yang berbeda dalam kalimat itu.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+hari = ("Senin")       # ini bukan tuple, cuma teks biasa di dalam kurung
+print(type(hari))      # <class 'str'>
+```
+
+✅ Benar:
+
+```python
+hari = ("Senin",)      # tuple satu item butuh koma di belakang
+print(type(hari))      # <class 'tuple'>
+```
+
+Untuk tuple berisi satu item, koma di belakang itu wajib. Tanpa koma, Python menganggapnya nilai biasa yang kebetulan dikurung.
+
+:::tip Catatan Pro
+`set()` adalah cara tercepat deduplikasi: `list_unik = list(set(list_duplikat))` — satu baris mengganti loop panjang. Tapi ingat: urutan tidak dijamin, jadi kalau urutan penting, pakai cara lain.
+:::
+
+## Ringkasan
+
+- *Tuple* (`( )`) seperti list tapi tidak bisa diubah; cocok untuk data tetap seperti koordinat.
+- *Set* (`{ }`) menyimpan nilai unik tanpa duplikat dan tidak berurutan.
+- Set unggul untuk pengecekan keanggotaan yang cepat dan operasi irisan/gabungan.
+- `list(set(...))` adalah cara cepat membuang duplikat dari sebuah list.

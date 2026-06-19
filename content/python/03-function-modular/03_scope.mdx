@@ -1,0 +1,158 @@
+---
+title: Scope (Local vs Global)
+sidebar_position: 3
+---
+
+# Scope (Local vs Global)
+
+## Kenapa ini penting?
+
+Pernah bikin variable di dalam function, lalu bingung kenapa di luar function dia "hilang"? Itu bukan bug, itu aturan main bernama *scope*. Memahaminya akan menyelamatkanmu dari banyak error membingungkan.
+
+**Fokus kita:** memahami di mana sebuah variable bisa "dilihat", yaitu *local scope* (di dalam function) dan *global scope* (di luar function).
+
+## Apa itu scope?
+
+*Scope* adalah wilayah tempat sebuah variable dikenali. Variable yang dibuat di dalam function hanya hidup di dalam function itu (*local*). Variable yang dibuat di luar function bisa diakses di mana saja (*global*).
+
+```python
+total = 100          # global
+
+def hitung():
+    diskon = 10      # local, cuma ada di dalam hitung()
+    print(total)     # boleh, global bisa dibaca di sini
+
+hitung()
+print(diskon)        # error: diskon tidak dikenal di luar function
+```
+
+## Analogi sederhana
+
+Bayangkan **kamar pribadi** dan **ruang tamu**.
+
+- Barang di kamar pribadi (local) cuma bisa dipakai di kamar itu.
+- Barang di ruang tamu (global) bisa dilihat semua orang di rumah.
+
+Begitu kamu keluar dari kamar (function selesai), barang di dalamnya dirapikan dan hilang.
+
+## Bedah konsep
+
+### 1. Variable local
+
+Lahir saat function dipanggil, hilang saat function selesai.
+
+```python
+def sapa():
+    pesan = "Halo"     # local
+    print(pesan)
+
+sapa()
+# print(pesan)  -> error, pesan sudah hilang
+```
+
+### 2. Variable global
+
+Dibuat di luar function, bisa dibaca dari dalam function.
+
+```python
+nama_toko = "NaluriMart"   # global
+
+def buka_toko():
+    print("Selamat datang di", nama_toko)   # boleh baca global
+
+buka_toko()
+```
+
+### 3. Hati-hati mengubah global dari dalam
+
+Membaca global dari dalam function itu boleh. Tapi kalau kamu menetapkan nilai baru, Python menganggapnya sebagai variable local baru, kecuali kamu memakai `global`.
+
+```python
+skor = 0
+
+def tambah_skor():
+    global skor       # nyatakan kita mau pakai yang global
+    skor = skor + 10
+
+tambah_skor()
+print(skor)           # 10
+```
+
+Catatan: terlalu sering memakai `global` membuat kode susah dilacak. Lebih disarankan mengirim nilai lewat parameter dan mengembalikannya lewat `return`.
+
+## Contoh penggunaan
+
+Versi yang rapi tanpa global, memakai parameter dan return:
+
+```python
+def tambah_skor(skor_sekarang, poin):
+    return skor_sekarang + poin
+
+skor = 0
+skor = tambah_skor(skor, 10)
+skor = tambah_skor(skor, 5)
+print(skor)           # 15
+```
+
+## Latihan singkat
+
+Buat function dengan satu variable local di dalamnya. Coba akses variable itu dari luar function, lalu amati error yang muncul dan pahami kenapa.
+
+```python
+def coba():
+    rahasia = 42
+    print("Di dalam:", rahasia)
+
+coba()
+# print(rahasia)  -> coba jalankan baris ini dan baca errornya
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat variable global `nama` lalu baca isinya dari dalam sebuah function.
+
+**2. Menengah**  
+Buat dua function yang masing-masing punya variable local bernama sama (`x`). Tunjukkan bahwa keduanya tidak saling mengganggu.
+
+**3. Tantangan**  
+Buat penghitung kunjungan halaman. Versi pertama pakai `global`, versi kedua pakai parameter dan return. Bandingkan mana yang lebih mudah dibaca.
+
+**4. Project mini**  
+Buat simulasi dompet digital sederhana. Buat function `tarik(saldo, jumlah)` dan `setor(saldo, jumlah)` yang mengembalikan saldo baru tanpa memakai variable global. Jalankan beberapa transaksi berurutan dan tampilkan saldo akhir.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+def naikkan():
+    angka = angka + 1     # error: angka dianggap local tapi belum ada nilainya
+
+angka = 5
+naikkan()
+```
+
+✅ Benar:
+
+```python
+def naikkan(angka):
+    return angka + 1      # kirim lewat parameter, kembalikan lewat return
+
+angka = 5
+angka = naikkan(angka)
+print(angka)              # 6
+```
+
+Mengubah variable global dari dalam function tanpa rencana sering memicu error. Cara paling aman dan bersih adalah lewat parameter dan return.
+
+:::tip Catatan Pro
+Kalau dua function butuh berbagi nilai, teruskan lewat parameter dan `return` — bukan lewat variabel `global`. Kode jadi lebih mudah dites, diprediksi, dan dipahami orang lain.
+:::
+
+## Ringkasan
+
+- *Scope* menentukan di mana sebuah variable dikenali.
+- Variable *local* hidup di dalam function saja; variable *global* bisa dibaca dari mana-mana.
+- Membaca global dari dalam function boleh; mengubahnya butuh `global` dan sebaiknya dihindari.
+- Pola parameter dan return lebih disarankan daripada mengandalkan global.

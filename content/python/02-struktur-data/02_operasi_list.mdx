@@ -1,0 +1,164 @@
+---
+title: Operasi pada List
+sidebar_position: 2
+---
+
+# Operasi pada List
+
+## Kenapa ini penting?
+
+Membuat list saja belum cukup. Di program nyata kita terus mengubahnya: menambah barang ke keranjang, menghapus item yang dibatalkan, mengurutkan harga dari murah ke mahal. Inilah yang membuat list terasa hidup.
+
+**Fokus kita:** operasi-operasi penting pada list, yaitu menambah, menghapus, mengurutkan, memotong (*slicing*), dan menelusurinya dengan loop.
+
+## Apa itu operasi list?
+
+*Operasi list* adalah aksi yang kita lakukan pada sebuah list untuk membaca atau mengubah isinya. Python sudah menyediakan banyak perintah siap pakai, jadi kita tidak perlu membuatnya dari nol.
+
+## Analogi sederhana
+
+Anggap list itu **keranjang belanja**. Kamu bisa memasukkan barang (`append`), mengeluarkan barang (`remove`), atau merapikan urutannya (`sort`). Operasi list adalah tangan yang melakukan semua itu.
+
+## Bedah konsep
+
+### 1. Menambah item
+
+```python
+keranjang = ["susu", "roti"]
+
+keranjang.append("telur")     # tambah di paling belakang
+print(keranjang)              # ['susu', 'roti', 'telur']
+
+keranjang.insert(0, "kopi")   # sisipkan di index tertentu
+print(keranjang)              # ['kopi', 'susu', 'roti', 'telur']
+```
+
+### 2. Menghapus item
+
+```python
+keranjang.remove("roti")   # hapus berdasarkan nilainya
+barang = keranjang.pop()   # ambil sekaligus hapus item terakhir
+print(barang)              # telur
+```
+
+### 3. Mengurutkan
+
+```python
+harga = [50000, 12000, 30000]
+
+harga.sort()               # urut menaik (kecil ke besar)
+print(harga)               # [12000, 30000, 50000]
+
+harga.sort(reverse=True)   # urut menurun
+print(harga)               # [50000, 30000, 12000]
+```
+
+### 4. Mengecek keberadaan item
+
+Operator `in` mengembalikan `True` atau `False`.
+
+```python
+print("susu" in keranjang)   # True atau False
+```
+
+### 5. Slicing (mengambil sebagian)
+
+Ambil potongan list dengan `[awal:akhir]`. Batas `akhir` tidak ikut terambil.
+
+```python
+angka = [10, 20, 30, 40, 50]
+
+print(angka[1:3])   # [20, 30]
+print(angka[:2])    # [10, 20]  (dari awal)
+print(angka[3:])    # [40, 50]  (sampai akhir)
+```
+
+### 6. Menelusuri dengan loop
+
+Ini gabungan dengan materi perulangan. Sangat sering dipakai.
+
+```python
+harga = [12000, 30000, 50000]
+total = 0
+
+for h in harga:
+    total = total + h
+
+print("Total:", total)   # 92000
+```
+
+## Contoh penggunaan
+
+Mengelola daftar tugas sederhana:
+
+```python
+tugas = ["belajar Python", "olahraga"]
+
+tugas.append("baca buku")     # tambah tugas baru
+tugas.remove("olahraga")      # tugas selesai, hapus
+print("Sisa tugas:", tugas)
+print("Jumlah tugas:", len(tugas))
+```
+
+Mencari produk termurah di sebuah toko:
+
+```python
+harga_produk = [89000, 45000, 120000, 67000]
+harga_produk.sort()
+print("Produk termurah: Rp", harga_produk[0])
+```
+
+## Latihan singkat
+
+Buat list `keranjang` berisi dua barang. Tambahkan satu barang dengan `append`, lalu tampilkan jumlah barang di keranjang.
+
+```python
+keranjang = ["...", "..."]
+keranjang.append("...")
+print("Jumlah barang:", len(keranjang))
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat list berisi 3 nama teman. Tambahkan satu nama baru, lalu tampilkan listnya.
+
+**2. Menengah**  
+Buat list harga `[50000, 12000, 30000]`. Urutkan dari termurah, lalu tampilkan harga termurah dan termahal.
+
+**3. Tantangan**  
+Diberi list nilai `[70, 85, 60, 90, 75]`, hitung rata-ratanya (total dibagi jumlah item) memakai `sum()` dan `len()`.
+
+**4. Project mini**  
+Buat "keranjang belanja interaktif" pakai loop `while`. Terus minta pengguna mengetik nama barang dan masukkan ke list. Kalau pengguna mengetik `selesai`, hentikan loop, lalu tampilkan semua barang yang dibeli beserta jumlah totalnya.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+harga = [30000, 10000, 20000]
+harga_terurut = harga.sort()    # sort() tidak mengembalikan list baru
+print(harga_terurut)            # None
+```
+
+✅ Benar:
+
+```python
+harga = [30000, 10000, 20000]
+harga.sort()                    # sort() mengubah list aslinya langsung
+print(harga)                    # [10000, 20000, 30000]
+```
+
+`sort()` mengubah list di tempat dan mengembalikan `None`, jadi jangan disimpan ke variable baru. Cukup panggil, lalu pakai list aslinya.
+
+:::tip Catatan Pro
+`sorted(data)` mengembalikan list baru tanpa mengubah aslinya; `data.sort()` mengubah data langsung. Pakai `sorted()` kalau ingin menjaga data asli — lebih aman untuk data yang masih dipakai di tempat lain.
+:::
+
+## Ringkasan
+
+- `append()` dan `insert()` menambah item; `remove()` dan `pop()` menghapus item.
+- `sort()` mengurutkan list di tempat (bukan membuat list baru).
+- `in` mengecek keberadaan item; *slicing* `[awal:akhir]` mengambil sebagian.
+- Loop `for` adalah cara utama menelusuri dan mengolah isi list.

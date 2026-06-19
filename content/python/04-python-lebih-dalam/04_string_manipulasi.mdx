@@ -1,0 +1,142 @@
+---
+title: String Formatting & Manipulasi
+sidebar_position: 4
+---
+
+# String Formatting & Manipulasi
+
+## Kenapa ini penting?
+
+Banyak sekali data di dunia nyata berbentuk teks: nama, alamat, komentar, isi file. Mengolah teks dengan rapi, membersihkan, memotong, mengganti, dan menampilkannya dengan format yang enak dibaca, adalah skill yang dipakai terus-menerus, apalagi nanti saat membersihkan data untuk AI.
+
+**Fokus kita:** memformat teks dengan *f-string* tingkat lanjut, dan mengolah teks dengan berbagai method string.
+
+## Apa itu manipulasi string?
+
+*Manipulasi string* adalah mengubah, memeriksa, atau memformat teks. Python menyediakan banyak method bawaan yang menempel langsung pada teks (dipanggil dengan titik).
+
+```python
+nama = "budi santoso"
+print(nama.title())   # Budi Santoso
+```
+
+## Analogi sederhana
+
+Teks itu seperti **kalimat yang ditulis dengan pensil**. Method string adalah alat-alat di kotak pensilmu: penghapus (buang spasi), penggaris (potong bagian), spidol (ganti kata), dan stempel huruf besar/kecil. Kamu pilih alat sesuai kebutuhan.
+
+## Bedah konsep
+
+### 1. f-string tingkat lanjut
+
+Selain menyisipkan variable, f-string bisa mengatur format angka.
+
+```python
+harga = 1500000
+print(f"Harga: Rp {harga:,}")        # Rp 1,500,000  (pemisah ribuan)
+
+nilai = 87.5678
+print(f"Nilai: {nilai:.2f}")         # Nilai: 87.57  (dua angka di belakang koma)
+
+persen = 0.873
+print(f"Akurasi: {persen:.0%}")      # Akurasi: 87%
+```
+
+### 2. Membersihkan dan mengubah huruf
+
+```python
+teks = "  Halo Dunia  "
+print(teks.strip())     # "Halo Dunia"  (buang spasi ujung)
+print(teks.lower())     # huruf kecil semua
+print(teks.upper())     # HURUF BESAR SEMUA
+print("budi".title())   # Budi
+```
+
+### 3. Mencari dan mengganti
+
+```python
+kalimat = "saya suka kopi"
+print(kalimat.replace("kopi", "teh"))   # saya suka teh
+print("kopi" in kalimat)                # True
+print(kalimat.startswith("saya"))       # True
+```
+
+### 4. Memecah dan menggabung
+
+```python
+data = "budi,25,bandung"
+bagian = data.split(",")     # ['budi', '25', 'bandung']
+print(bagian[0])             # budi
+
+kata = ["belajar", "python", "itu", "seru"]
+print(" ".join(kata))        # belajar python itu seru
+```
+
+`split` dan `join` adalah pasangan yang sangat sering dipakai saat mengolah data teks.
+
+## Contoh penggunaan
+
+Merapikan dan menampilkan data pengguna dari teks mentah:
+
+```python
+baris = "  BUDI santoso , bandung  "
+nama, kota = baris.split(",")
+
+nama = nama.strip().title()
+kota = kota.strip().title()
+
+print(f"{nama} berasal dari {kota}")   # Budi Santoso berasal dari Bandung
+```
+
+## Latihan singkat
+
+Diberi `harga = 2500000`, tampilkan dengan pemisah ribuan memakai f-string.
+
+```python
+harga = 2500000
+print(f"Rp {harga:,}")
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Diberi nama `"  rina  "`, bersihkan spasinya lalu jadikan huruf depan kapital.
+
+**2. Menengah**  
+Diberi kalimat, hitung berapa banyak kata di dalamnya (petunjuk: pakai `.split()` lalu `len()`).
+
+**3. Tantangan**  
+Diberi teks `"nama: Budi | umur: 25"`, ekstrak nilai nama dan umurnya, lalu tampilkan dalam kalimat rapi.
+
+**4. Project mini**  
+Buat "perapi data kontak". Diberi list teks mentah seperti `"  budi , 0812xxxx , BANDUNG "`, pecah tiap baris, rapikan setiap bagian (spasi dan format huruf), lalu tampilkan sebagai kartu kontak yang rapi dengan f-string.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+teks = "Halo"
+teks.upper()
+print(teks)        # masih "Halo", method string tidak mengubah aslinya
+```
+
+✅ Benar:
+
+```python
+teks = "Halo"
+teks = teks.upper()
+print(teks)        # "HALO", simpan hasilnya ke variable
+```
+
+Method string tidak mengubah teks aslinya, tapi mengembalikan teks baru. Jadi hasilnya harus disimpan, biasanya ditimpa ke variable yang sama.
+
+:::tip Catatan Pro
+`.strip()` tanpa argumen menghapus semua whitespace (spasi, tab, newline) di kiri dan kanan string — berguna sebelum membandingkan string dari input pengguna yang sering punya spasi tidak sengaja.
+:::
+
+## Ringkasan
+
+- *f-string* bisa memformat angka: `{x:,}` (ribuan), `{x:.2f}` (desimal), `{x:.0%}` (persen).
+- `strip`, `lower`, `upper`, `title` merapikan dan menyeragamkan teks.
+- `replace`, `in`, `startswith` untuk mencari dan mengganti.
+- `split` dan `join` untuk memecah dan menggabung teks; method string selalu mengembalikan teks baru.

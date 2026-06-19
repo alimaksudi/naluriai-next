@@ -1,0 +1,132 @@
+---
+title: "Project: Analisis Data Sederhana"
+sidebar_position: 1
+---
+
+# Project: Analisis Data Sederhana
+
+## Kenapa ini penting?
+
+Ini saatnya menyatukan semua yang sudah kamu pelajari: variable, loop, function, struktur data, membaca file, sampai Pandas. Di dunia nyata, inilah alur kerja seorang Data Analyst, yaitu mengubah file mentah menjadi kesimpulan yang berguna. Selesaikan project ini dan kamu sudah punya bukti nyata bahwa kamu bisa mengolah data dari nol.
+
+**Fokus kita:** mengerjakan satu alur analisis data utuh, dari memuat data, membersihkan, menganalisis, sampai menarik *insight*.
+
+## Gambaran project
+
+Kita berperan sebagai analis di sebuah toko online. Kita punya file penjualan, dan atasan bertanya: **"Produk dan kota mana yang paling menguntungkan, dan bagaimana kondisi datanya?"**
+
+Alur kerja kita empat langkah:
+
+```text
+  1. Muat data    →   2. Bersihkan   →   3. Analisis   →   4. Insight
+   (read_csv)         (cleaning)         (groupby)        (kesimpulan)
+```
+
+## Menyiapkan data
+
+Kalau belum punya file, buat dulu file `penjualan.csv` dengan isi berikut (sengaja sedikit berantakan supaya ada yang dibersihkan):
+
+```text
+produk,kota,harga,jumlah
+Sepatu, Bandung ,350000,2
+topi,jakarta,45000,5
+Tas,Bandung,120000,3
+SEPATU,Jakarta,350000,1
+kaos, Surabaya,80000,4
+Tas, surabaya ,120000,2
+```
+
+## Langkah 1: Muat data
+
+```python
+import pandas as pd
+
+df = pd.read_csv("penjualan.csv")
+
+print(df.shape)      # berapa baris dan kolom
+print(df.head())     # intip datanya
+print(df.info())     # cek tipe data dan nilai kosong
+```
+
+Selalu mulai dengan "berkenalan" dulu sebelum mengolah.
+
+## Langkah 2: Bersihkan data
+
+Datanya berantakan: ada spasi nyasar dan huruf besar kecil tidak konsisten (`Sepatu`, `SEPATU`, `topi`). Kita rapikan kolom teks.
+
+```python
+# rapikan spasi dan samakan format huruf
+df["produk"] = df["produk"].str.strip().str.title()
+df["kota"] = df["kota"].str.strip().str.title()
+
+print(df["produk"].unique())   # cek apakah sudah konsisten
+```
+
+Setelah ini, `Sepatu` dan `SEPATU` dianggap produk yang sama. Tanpa langkah ini, analisis kita akan salah hitung.
+
+## Langkah 3: Analisis
+
+Buat kolom baru `pendapatan` (harga dikali jumlah), lalu ringkas dengan `groupby`.
+
+```python
+# kolom baru
+df["pendapatan"] = df["harga"] * df["jumlah"]
+
+# pendapatan per produk
+per_produk = df.groupby("produk")["pendapatan"].sum()
+print(per_produk)
+
+# pendapatan per kota
+per_kota = df.groupby("kota")["pendapatan"].sum()
+print(per_kota)
+
+# total keseluruhan
+print("Total pendapatan:", df["pendapatan"].sum())
+```
+
+## Langkah 4: Tarik insight
+
+```python
+produk_terlaris = per_produk.idxmax()    # nama produk dengan pendapatan tertinggi
+kota_terbaik = per_kota.idxmax()
+
+print("Produk paling menguntungkan:", produk_terlaris)
+print("Kota dengan pendapatan tertinggi:", kota_terbaik)
+print("Rata-rata pendapatan per transaksi:", df["pendapatan"].mean())
+```
+
+Sekarang kamu bisa menjawab pertanyaan atasan dengan data, bukan tebakan. Itulah inti pekerjaan analisis data.
+
+## Tantangan lanjutan
+
+Kalau sudah lancar, coba kembangkan project ini:
+
+**1. Pakai function**  
+Bungkus tiap langkah jadi function: `muat_data()`, `bersihkan(df)`, `analisis(df)`. Kode jadi rapi dan bisa dipakai ulang untuk file lain.
+
+**2. Tangani error**  
+Bungkus pemuatan file dengan `try/except` supaya program memberi pesan ramah kalau file tidak ditemukan.
+
+**3. Filter lebih dalam**  
+Tampilkan hanya transaksi dengan pendapatan di atas rata-rata. Lalu cari: di kota mana transaksi besar itu paling sering terjadi?
+
+**4. Simpan laporan**  
+Tulis hasil ringkasan (produk terlaris, kota terbaik, total pendapatan) ke file `laporan.txt` atau `laporan.json`.
+
+**5. Data sendiri**  
+Cari dataset CSV apa pun yang kamu minati (olahraga, musik, game), lalu jalankan empat langkah yang sama. Mengerjakan data yang kamu sukai membuat belajar jauh lebih nempel.
+
+## Checklist kelulusan
+
+Kamu dianggap menguasai materi Python untuk data kalau bisa, tanpa banyak melihat contoh:
+
+- Memuat file CSV ke DataFrame dan mengecek isinya.
+- Membersihkan kolom teks yang berantakan.
+- Membuat kolom baru dari perhitungan kolom lain.
+- Meringkas data dengan `groupby` dan menarik satu kesimpulan darinya.
+
+## Penutup
+
+Selamat! Kalau kamu sampai di sini dan menyelesaikan project ini, kamu sudah punya fondasi Python yang nyata untuk data dan AI. Kamu bisa memuat, membersihkan, menganalisis, dan meringkas data, persis langkah-langkah yang dilakukan sebelum melatih sebuah model Machine Learning.
+
+Langkah berikutnya dalam perjalanan AI adalah Matematika, Statistika, dan Machine Learning. Lihat **[Peta Belajar](/peta-belajar)** untuk gambaran lengkap jalannya.

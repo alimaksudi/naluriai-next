@@ -1,0 +1,143 @@
+---
+title: Debugging
+sidebar_position: 2
+---
+
+# Debugging
+
+## Kenapa ini penting?
+
+Tidak ada programmer yang menulis kode tanpa bug. Bedanya, programmer yang baik tahu cara **menemukan dan memperbaiki** bug dengan cepat. Debugging bukan soal jenius, tapi soal metode. Skill ini menghemat waktumu berjam-jam dan bikin belajar terasa jauh lebih tidak frustrasi.
+
+**Fokus kita:** membaca pesan error (*traceback*) dengan benar, dan teknik mengisolasi sumber bug.
+
+## Apa itu debugging?
+
+*Debugging* adalah proses menemukan, memahami, dan memperbaiki kesalahan (*bug*) di program. Langkah pertamanya hampir selalu sama: baca pesan errornya pelan-pelan.
+
+## Analogi sederhana
+
+Debugging itu seperti **jadi detektif**. Ada "kejadian" (program error), dan kamu mengikuti petunjuk: pesan error, baris yang ditunjuk, nilai variable. Kamu tidak menebak-nebak, kamu mengumpulkan bukti sampai pelakunya ketahuan.
+
+## Bedah konsep
+
+### 1. Membaca traceback dari bawah
+
+Saat error, Python menampilkan *traceback*. Kuncinya: **baca dari baris paling bawah ke atas**. Baris terakhir menyebut jenis error dan pesannya. Baris di atasnya menunjuk file dan nomor baris penyebabnya.
+
+```text
+Traceback (most recent call last):
+  File "main.py", line 5, in <module>
+    print(total / jumlah)
+ZeroDivisionError: division by zero
+```
+
+Dari sini langsung jelas: error di baris 5, karena membagi dengan nol.
+
+### 2. Teknik print (paling sederhana)
+
+Sebar `print()` untuk melihat nilai variable di titik-titik tertentu. Sederhana, tapi sangat efektif.
+
+```python
+def hitung(a, b):
+    print("a =", a, "| b =", b)   # cek nilai sebelum dipakai
+    return a / b
+```
+
+### 3. Isolasi: persempit area masalah
+
+Kalau program panjang, jangan menebak. Matikan sebagian kode (beri komentar) atau uji potongan kecil sampai kamu tahu bagian mana yang bermasalah. Persempit terus sampai tinggal beberapa baris.
+
+### 4. Baca pesan error, jangan langsung panik
+
+Sebagian besar pesan error sebenarnya memberi tahu masalahnya. `NameError` artinya variable belum dibuat. `TypeError` artinya tipe datanya tidak cocok. `IndexError` artinya index di luar jangkauan. Cukup kenali polanya.
+
+## Contoh penggunaan
+
+Menemukan kenapa rata-rata error:
+
+```python
+nilai = []
+
+# print untuk cek isi sebelum membagi
+print("Jumlah data:", len(nilai))   # 0 -> ketahuan, list kosong
+
+if len(nilai) == 0:
+    print("Data masih kosong, tidak bisa dihitung")
+else:
+    print(sum(nilai) / len(nilai))
+```
+
+Dengan satu `print`, kita langsung tahu penyebabnya: datanya kosong.
+
+## Latihan singkat
+
+Jalankan kode di bawah, baca tracebacknya, lalu jelaskan dengan kata-katamu sendiri apa yang salah dan di baris berapa.
+
+```python
+angka = [1, 2, 3]
+print(angka[5])   # baca error yang muncul
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Diberi kode yang memicu `NameError`, baca tracebacknya dan perbaiki.
+
+**2. Menengah**  
+Debug program di bawah ini. Ada **dua bug** — baca traceback dengan teliti:
+
+```python
+def hitung_rata_rata(nilai_list):
+    total = sum(nilai_list)
+    rata = total / len(nilai-list)  # bug 1
+    return rata
+
+nilai = [80, 75, 90, 85, "70"]  # bug 2
+print(hitung_rata_rata(nilai))
+```
+
+Jalankan, baca error dari bawah ke atas. Perbaiki satu per satu.
+
+**3. Tantangan**  
+Program ini punya **bug logika** (bukan syntax error — program jalan tapi hasilnya salah):
+
+```python
+def diskon(harga, persen):
+    return harga - (harga / persen)  # harusnya harga * persen / 100
+
+def total_bayar(daftar_harga, diskon_persen):
+    total = 0
+    for harga in daftar_harga:
+        harga_diskon = diskon(harga, diskon_persen)
+        total = harga_diskon  # bug: harusnya total += harga_diskon
+    return total
+
+belanjaan = [50000, 30000, 75000]
+print(f"Total setelah diskon 10%: Rp{total_bayar(belanjaan, 10):,}")
+# Harusnya: Rp139,500 — kalau hasilnya berbeda, berarti ada bug
+```
+
+Gunakan `print()` untuk debug: tampilkan nilai `harga_diskon` di setiap iterasi loop.
+
+**4. Project mini**  
+Ambil salah satu project mini dari modul sebelumnya, lalu sengaja masukkan tiga bug berbeda (satu error tipe, satu logika, satu index). Tukar dengan teman (atau debug sendiri keesokan harinya), dan latih menemukan ketiganya hanya dengan membaca error dan memakai print.
+
+## Kesalahan umum
+
+❌ Salah:
+Melihat layar merah penuh error lalu langsung panik dan menebak-nebak mengubah kode secara acak.
+
+✅ Benar:
+Tarik napas, baca baris **paling bawah** dari traceback dulu (jenis dan pesan error), lalu lihat nomor baris yang ditunjuk. Sebagian besar jawaban ada di situ. Ubah kode berdasarkan bukti, bukan tebakan.
+
+:::tip Catatan Pro
+Baca traceback dari **bawah ke atas**: baris paling bawah adalah titik error sebenarnya; baris di atasnya adalah jejak yang menuju ke sana. Mulai dari bawah, bukan atas — itu tempat masalah sebenarnya berada.
+:::
+
+## Ringkasan
+
+- Baca *traceback* dari bawah ke atas: jenis error dulu, lalu baris penyebabnya.
+- `print()` di titik-titik strategis adalah alat debugging paling cepat dan ampuh.
+- Isolasi masalah dengan mempersempit area kode yang diuji.
+- Kenali jenis error umum (`NameError`, `TypeError`, `IndexError`) supaya cepat paham.

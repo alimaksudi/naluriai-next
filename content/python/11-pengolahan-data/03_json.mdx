@@ -1,0 +1,145 @@
+---
+title: JSON
+sidebar_position: 3
+---
+
+# JSON
+
+## Kenapa ini penting?
+
+Hampir semua data yang dikirim lewat internet, dari aplikasi cuaca, media sosial, sampai layanan AI, memakai format *JSON*. Kalau kamu mau mengambil data dari sebuah *API* nanti, kamu pasti berhadapan dengan JSON. Untungnya bentuknya sangat mirip dictionary dan list yang sudah kamu kuasai.
+
+**Fokus kita:** membaca dan menulis data *JSON* memakai modul `json` bawaan Python.
+
+## Apa itu JSON?
+
+*JSON* (*JavaScript Object Notation*) adalah format teks untuk menyimpan data berstruktur. Bentuknya mirip sekali dengan dictionary dan list di Python.
+
+```json
+{
+  "nama": "Budi",
+  "umur": 25,
+  "hobi": ["coding", "membaca"]
+}
+```
+
+Kalau diperhatikan, ini persis dictionary berisi list. Itulah kenapa JSON terasa akrab buat kita.
+
+## Analogi sederhana
+
+JSON itu seperti **bahasa internasional untuk data**. Sama seperti bahasa Inggris dipakai banyak orang dari negara berbeda untuk saling mengerti, JSON dipakai banyak program berbeda untuk bertukar data tanpa salah paham.
+
+## Bedah konsep
+
+### 1. Dari teks JSON ke data Python
+
+`json.loads()` mengubah teks JSON menjadi dictionary/list Python.
+
+```python
+import json
+
+teks = '{"nama": "Budi", "umur": 25}'
+data = json.loads(teks)
+
+print(data["nama"])   # Budi
+print(type(data))     # <class 'dict'>
+```
+
+### 2. Dari data Python ke teks JSON
+
+`json.dumps()` arah sebaliknya. `indent=2` membuatnya rapi dan mudah dibaca.
+
+```python
+import json
+
+data = {"nama": "Sari", "umur": 30}
+teks = json.dumps(data, indent=2)
+print(teks)
+```
+
+### 3. Membaca dan menulis file JSON
+
+Untuk file, pakai `json.load()` (baca file) dan `json.dump()` (tulis file), tanpa huruf "s".
+
+```python
+import json
+
+# membaca
+with open("profil.json") as f:
+    data = json.load(f)
+
+# menulis
+with open("profil.json", "w") as f:
+    json.dump(data, f, indent=2)
+```
+
+Cara ingat cepat: ada huruf `s` (`loads`/`dumps`) untuk *string* teks, tanpa `s` (`load`/`dump`) untuk *file*.
+
+## Contoh penggunaan
+
+Membaca data pengguna dari file JSON lalu menampilkannya:
+
+```python
+import json
+
+with open("pengguna.json") as f:
+    pengguna = json.load(f)   # misalnya list berisi dictionary
+
+for orang in pengguna:
+    print(orang["nama"], "-", orang["kota"])
+```
+
+## Latihan singkat
+
+Ubah dictionary berikut menjadi teks JSON yang rapi, lalu tampilkan.
+
+```python
+import json
+buku = {"judul": "Belajar AI", "tahun": 2026}
+print(json.dumps(buku, indent=2))
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Ubah teks JSON `'{"kota": "Bandung"}'` menjadi dictionary Python, lalu tampilkan nilai `kota`.
+
+**2. Menengah**  
+Buat dictionary profil dirimu (nama, umur, daftar hobi), lalu simpan ke file `profil.json` dengan rapi.
+
+**3. Tantangan**  
+Baca sebuah file JSON berisi list pengguna, lalu hitung berapa pengguna yang umurnya di atas 25.
+
+**4. Project mini**  
+Buat "penyimpan catatan". Program menyimpan list catatan ke file `catatan.json`. Setiap dijalankan, program membaca catatan lama, menambah satu catatan baru dari input pengguna, lalu menyimpannya kembali. Tampilkan semua catatan yang tersimpan di akhir.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+import json
+with open("data.json") as f:
+    data = json.loads(f)    # loads untuk teks, bukan untuk file
+```
+
+✅ Benar:
+
+```python
+import json
+with open("data.json") as f:
+    data = json.load(f)     # load (tanpa s) untuk file
+```
+
+Tertukar antara `load`/`loads` adalah jebakan paling umum. Ingat: `s` untuk *string*, tanpa `s` untuk *file*.
+
+:::tip Catatan Pro
+`json.dumps(data, indent=2)` membuat JSON mudah dibaca manusia — berguna untuk debug dan menyimpan file konfigurasi yang ingin dilihat langsung tanpa alat tambahan.
+:::
+
+## Ringkasan
+
+- *JSON* adalah format pertukaran data yang bentuknya mirip dictionary dan list Python.
+- `json.loads`/`json.dumps` untuk teks (*string*); `json.load`/`json.dump` untuk file.
+- `indent=2` membuat output JSON rapi dan mudah dibaca.
+- JSON adalah format utama saat mengambil data dari API, yang akan sering kamu temui nanti.

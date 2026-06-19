@@ -1,0 +1,157 @@
+---
+title: Pengenalan NumPy
+sidebar_position: 1
+---
+
+# Pengenalan NumPy
+
+## Kenapa ini penting?
+
+Begitu masuk dunia AI, kamu akan mengolah jutaan angka sekaligus. List Python bisa, tapi lambat dan ribet untuk perhitungan matematika. *NumPy* adalah library yang membuat perhitungan angka dalam jumlah besar jadi cepat dan ringkas. Hampir semua library AI (termasuk yang dipakai untuk Machine Learning dan Deep Learning) dibangun di atas NumPy.
+
+**Fokus kita:** mengenal apa itu *NumPy*, kenapa dia lebih cocok untuk angka daripada list biasa, dan cara memakainya.
+
+## Apa itu NumPy?
+
+*NumPy* (*Numerical Python*) adalah library untuk mengolah angka dalam bentuk *array*, yaitu wadah angka yang cepat dan efisien. Kita memanggilnya dengan singkatan `np`.
+
+```python
+import numpy as np
+
+angka = np.array([1, 2, 3, 4])
+print(angka)          # [1 2 3 4]
+print(angka * 2)      # [2 4 6 8]  -> langsung dikali semua sekaligus
+```
+
+Lihat baris terakhir: mengalikan seluruh isi cukup satu perintah, tanpa loop. Inilah keunggulan NumPy.
+
+## Analogi sederhana
+
+List biasa itu seperti **menghitung pakai jari satu per satu**. NumPy itu seperti **kalkulator yang menghitung seluruh kolom sekaligus**. Untuk sedikit angka bedanya tak terasa, tapi untuk jutaan angka, NumPy menang telak.
+
+## Bedah konsep
+
+### 1. Memasang dan mengimpor
+
+NumPy tidak bawaan Python, tapi sudah tersedia di Google Colab. Kalau di komputer sendiri, pasang dengan:
+
+```bash
+pip install numpy
+```
+
+Lalu impor dengan nama panggilan standar `np`:
+
+```python
+import numpy as np
+```
+
+### 2. List vs array
+
+```python
+# list biasa: mengalikan butuh loop
+angka_list = [1, 2, 3]
+hasil = [x * 2 for x in angka_list]
+
+# numpy: langsung
+angka_np = np.array([1, 2, 3])
+hasil = angka_np * 2
+```
+
+NumPy lebih ringkas, dan jauh lebih cepat untuk data besar.
+
+### 3. Kenapa cepat?
+
+NumPy menyimpan angka secara rapat di memori dan memprosesnya dalam satu gerakan (disebut *vectorization*), bukan satu per satu seperti loop Python. Untuk dataset AI yang besar, perbedaannya bisa puluhan kali lipat.
+
+```python
+import numpy as np
+import time
+
+# Cara Python biasa
+def jumlah_python(n):
+    return sum(range(n))
+
+# Cara NumPy
+def jumlah_numpy(n):
+    return np.arange(n).sum()
+
+n = 1_000_000
+
+mulai = time.time()
+jumlah_python(n)
+print(f"Python: {time.time() - mulai:.4f} detik")
+
+mulai = time.time()
+jumlah_numpy(n)
+print(f"NumPy : {time.time() - mulai:.4f} detik")
+# NumPy biasanya 10-50x lebih cepat untuk operasi seperti ini
+```
+
+## Contoh penggunaan
+
+Menghitung total dan rata-rata nilai ujian satu kelas:
+
+```python
+import numpy as np
+
+nilai = np.array([80, 95, 70, 88, 90])
+
+print("Total:", nilai.sum())
+print("Rata-rata:", nilai.mean())
+print("Tertinggi:", nilai.max())
+```
+
+## Latihan singkat
+
+Buat array berisi `[10, 20, 30]`, lalu tampilkan hasilnya setelah ditambah 5 ke setiap elemen.
+
+```python
+import numpy as np
+angka = np.array([10, 20, 30])
+print(angka + 5)
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat array dari list `[2, 4, 6, 8]`, lalu tampilkan hasil dikali 10.
+
+**2. Menengah**  
+Buat array berisi 5 nilai ujian, lalu tampilkan rata-rata dan nilai tertingginya.
+
+**3. Tantangan**  
+Buat array harga produk, lalu hitung harga setelah diskon 15 persen untuk semua produk sekaligus tanpa loop.
+
+**4. Project mini**  
+Diberi array berisi suhu harian selama satu minggu, tampilkan suhu rata-rata, suhu tertinggi, suhu terendah, dan berapa hari yang suhunya di atas rata-rata.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+import numpy as np
+angka = [1, 2, 3]
+print(angka * 2)     # [1, 2, 3, 1, 2, 3] -> list malah digandakan, bukan dihitung
+```
+
+✅ Benar:
+
+```python
+import numpy as np
+angka = np.array([1, 2, 3])
+print(angka * 2)     # [2 4 6] -> tiap elemen dikali dua
+```
+
+Mengali list biasa dengan angka justru menggandakan isinya, bukan menghitung. Ubah dulu ke `np.array` agar operasinya matematis.
+
+:::tip Catatan Pro
+NumPy array jauh lebih cepat dari list Python untuk kalkulasi numerik — untuk data besar, selalu pakai array dan operasi vektor, bukan loop Python yang lambat.
+:::
+
+## Ringkasan
+
+- *NumPy* adalah library untuk mengolah angka dalam jumlah besar secara cepat.
+- Diimpor dengan nama standar `np`, dan datanya disimpan dalam *array*.
+- Operasi pada array berlaku ke seluruh elemen sekaligus tanpa loop (*vectorization*).
+- NumPy adalah fondasi dari hampir semua library AI.

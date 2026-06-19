@@ -1,0 +1,154 @@
+---
+title: Lambda Function
+sidebar_position: 4
+---
+
+# Lambda Function
+
+## Kenapa ini penting?
+
+Kadang kamu butuh function super kecil yang cuma dipakai sekali, dan menulis `def` lengkap terasa berlebihan. Untuk itu Python punya *lambda*, function singkat satu baris. Kamu akan sering melihatnya saat mengurutkan data dan nanti saat mengolah data dengan Pandas.
+
+**Fokus kita:** menulis function ringkas dengan *lambda*, dan tahu kapan sebaiknya memakainya.
+
+## Apa itu lambda?
+
+*Lambda* adalah cara membuat function kecil tanpa nama dalam satu baris. Bentuknya: `lambda parameter: hasil`.
+
+```python
+kuadrat = lambda x: x * x
+print(kuadrat(5))     # 25
+```
+
+Baris di atas setara dengan:
+
+```python
+def kuadrat(x):
+    return x * x
+```
+
+## Lambda vs def: kapan pakai yang mana?
+
+```text
+┌────────────────┬────────────────────────────────────┬────────────────────────────────────┐
+│ Aspek          │ def                                │ lambda                             │
+├────────────────┼────────────────────────────────────┼────────────────────────────────────┤
+│ Bisa diberi    │ Ya — wajib                         │ Tidak (anonymous)                  │
+│ nama           │                                    │                                    │
+│ Panjang isi    │ Bebas, bisa banyak baris           │ Harus satu ekspresi                │
+│ Bisa di-debug  │ Ya — nama muncul di traceback      │ Susah — muncul sebagai "<lambda>"  │
+│ Pakai untuk    │ Semua kebutuhan umum               │ Argumen fungsi singkat (sort key)  │
+│ Contoh         │ def double(x): return x * 2        │ lambda x: x * 2                   │
+└────────────────┴────────────────────────────────────┴────────────────────────────────────┘
+```
+
+Aturan praktis: kalau `lambda` lebih panjang dari 20 karakter atau kamu ingin memakainya lebih dari satu kali, gunakan `def` saja.
+
+## Analogi sederhana
+
+Kalau `def` itu seperti **resep lengkap di buku masak**, lambda itu seperti **catatan tempel kecil**: cukup untuk satu tugas singkat, tidak perlu formal, dan biasanya dipakai di tempat lalu dibuang.
+
+## Bedah konsep
+
+### 1. Bentuk dasar
+
+```python
+tambah = lambda a, b: a + b
+print(tambah(3, 4))   # 7
+```
+
+Tidak ada kata `return`; nilai setelah titik dua otomatis menjadi hasilnya.
+
+### 2. Paling berguna sebagai "kunci pengurutan"
+
+Inilah pemakaian lambda yang paling sering. Misalnya mengurutkan list dictionary berdasarkan salah satu key.
+
+```python
+produk = [
+    {"nama": "Tas", "harga": 120000},
+    {"nama": "Topi", "harga": 45000},
+    {"nama": "Sepatu", "harga": 350000}
+]
+
+produk.sort(key=lambda p: p["harga"])
+
+for p in produk:
+    print(p["nama"], p["harga"])
+# urut dari harga termurah
+```
+
+### 3. Kapan jangan pakai lambda
+
+Kalau logikanya panjang atau dipakai berkali-kali di banyak tempat, pakai `def` biasa supaya lebih jelas dan bisa diberi nama yang bermakna. Lambda paling pas untuk hal sederhana sekali pakai.
+
+## Contoh penggunaan
+
+Mengurutkan daftar pengguna dari follower terbanyak:
+
+```python
+pengguna = [
+    {"nama": "budi", "follower": 1200},
+    {"nama": "sari", "follower": 5400},
+    {"nama": "andi", "follower": 800}
+]
+
+pengguna.sort(key=lambda u: u["follower"], reverse=True)
+print(pengguna[0]["nama"], "punya follower terbanyak")
+```
+
+## Latihan singkat
+
+Buat lambda `dua_kali` yang mengembalikan sebuah angka dikali dua, lalu panggil untuk angka 9.
+
+```python
+dua_kali = lambda x: ...
+print(dua_kali(9))
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat lambda yang mengembalikan panjang sebuah teks (petunjuk: pakai `len`). Uji dengan kata "python".
+
+**2. Menengah**  
+Diberi list angka, urutkan dari yang terbesar memakai `sort(key=..., reverse=True)`.
+
+**3. Tantangan**  
+Diberi list dictionary film (punya `judul` dan `rating`), urutkan dari rating tertinggi, lalu tampilkan film teratas.
+
+**4. Project mini**  
+Buat "papan peringkat" sederhana. Simpan list dictionary pemain (punya `nama` dan `skor`). Urutkan dari skor tertinggi memakai lambda, lalu tampilkan peringkat 1 sampai 3 dengan rapi.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+# memaksa logika panjang ke dalam lambda jadi susah dibaca
+proses = lambda x: (x * 2 + 10) / 3 if x > 0 else 0 if x == 0 else -1
+```
+
+✅ Benar:
+
+```python
+# kalau sudah serumit ini, pakai def biasa
+def proses(x):
+    if x > 0:
+        return (x * 2 + 10) / 3
+    elif x == 0:
+        return 0
+    return -1
+```
+
+Lambda dibuat untuk hal singkat. Begitu logikanya mulai panjang atau bercabang, `def` jauh lebih mudah dibaca.
+
+:::tip Catatan Pro
+Kalau `lambda` terasa susah dibaca, ubah saja jadi `def` biasa — hasilnya identik secara fungsi, tapi jauh lebih mudah di-debug dan dipahami.
+:::
+
+## Ringkasan
+
+- *Lambda* adalah function kecil satu baris berbentuk `lambda parameter: hasil`.
+- Tidak perlu `return`; nilai setelah titik dua langsung jadi hasilnya.
+- Paling berguna sebagai `key` saat mengurutkan list.
+- Untuk logika panjang atau berulang, pakai `def` biasa.

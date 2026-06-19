@@ -1,0 +1,198 @@
+---
+title: Decorator
+sidebar_position: 2
+---
+
+# Decorator
+
+## Kenapa ini penting?
+
+Kadang kita ingin menambah kemampuan ke sebuah function tanpa mengubah isinya, misalnya mencatat waktu, mengecek izin, atau menghitung lama eksekusi. *Decorator* melakukan itu dengan rapi. Kamu akan sering melihatnya di framework web dan library, ditandai simbol `@` di atas function.
+
+**Fokus kita:** memahami dan membuat *decorator*, yaitu function yang "membungkus" function lain untuk menambah kemampuan.
+
+## Apa itu decorator?
+
+*Decorator* adalah function yang menerima function lain, lalu mengembalikan versi function itu yang sudah ditambahi kemampuan. Dipakai dengan tanda `@` di atas function target.
+
+```python
+@catat_waktu
+def proses_data():
+    print("Memproses...")
+```
+
+Function `proses_data` dijalankan seperti biasa, tapi otomatis dapat tambahan dari `catat_waktu`.
+
+## Analogi sederhana
+
+Decorator itu seperti **membungkus kado**. Isinya (function asli) tetap sama, tapi kamu menambahkan lapisan luar (kertas kado, pita). Object yang sama, dengan tambahan di sekelilingnya tanpa mengubah isinya.
+
+## Bedah konsep
+
+### 1. Function bisa diperlakukan seperti data
+
+Kunci memahami decorator: di Python, function bisa dikirim ke function lain seperti nilai biasa.
+
+```python
+def sapa():
+    return "Halo"
+
+f = sapa       # function disimpan ke variable
+print(f())     # Halo
+```
+
+### 2. Bentuk dasar decorator
+
+Decorator membungkus function asli di dalam function pembungkus (*wrapper*).
+
+```python
+def tambah_garis(fungsi):
+    def pembungkus():
+        print("=" * 20)
+        fungsi()
+        print("=" * 20)
+    return pembungkus
+
+@tambah_garis
+def judul():
+    print("Laporan Penjualan")
+
+judul()
+# ====================
+# Laporan Penjualan
+# ====================
+```
+
+### 3. Decorator untuk function berargumen
+
+Pakai `*args` dan `**kwargs` (dari Module 4) supaya bisa membungkus function apa pun.
+
+```python
+def catat(fungsi):
+    def pembungkus(*args, **kwargs):
+        print(f"Menjalankan {fungsi.__name__}")
+        hasil = fungsi(*args, **kwargs)
+        print("Selesai")
+        return hasil
+    return pembungkus
+
+@catat
+def tambah(a, b):
+    return a + b
+
+print(tambah(2, 3))
+```
+
+## Contoh penggunaan
+
+Mengukur lama eksekusi sebuah function:
+
+```python
+import time
+
+def ukur_waktu(fungsi):
+    def pembungkus(*args, **kwargs):
+        mulai = time.time()
+        hasil = fungsi(*args, **kwargs)
+        durasi = time.time() - mulai
+        print(f"{fungsi.__name__} memakan {durasi:.4f} detik")
+        return hasil
+    return pembungkus
+
+@ukur_waktu
+def hitung_besar():
+    return sum(range(1000000))
+
+hitung_besar()
+```
+
+## Latihan singkat
+
+Buat decorator `sapa` yang mencetak "Halo!" sebelum function asli dijalankan.
+
+```python
+def sapa(fungsi):
+    def pembungkus():
+        print("Halo!")
+        fungsi()
+    return pembungkus
+
+@sapa
+def pesan():
+    print("Selamat datang")
+
+pesan()
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat decorator yang mencetak garis pemisah sebelum dan sesudah function dijalankan.
+
+**2. Menengah**  
+Buat decorator `catat` yang mencetak nama function yang dijalankan (gunakan `fungsi.__name__`).
+
+**3. Tantangan**  
+Buat decorator `ukur_waktu` yang menampilkan berapa lama sebuah function berjalan, dan pastikan tetap bekerja untuk function yang punya argumen.
+
+**4. Project mini**  
+Buat decorator `butuh_login` yang mengecek variable `sudah_login`. Kalau `True`, function dijalankan; kalau `False`, cetak "Akses ditolak, silakan login". Terapkan ke beberapa function (lihat profil, ubah pengaturan) dan uji kedua kondisi.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+def catat(fungsi):
+    def pembungkus():
+        fungsi()
+    return pembungkus
+
+@catat
+def tambah(a, b):    # tambah butuh argumen, tapi pembungkus tidak menerimanya
+    return a + b
+
+tambah(2, 3)         # error
+```
+
+✅ Benar:
+
+```python
+def catat(fungsi):
+    def pembungkus(*args, **kwargs):   # terima argumen apa pun
+        return fungsi(*args, **kwargs)
+    return pembungkus
+```
+
+Supaya decorator bisa membungkus function dengan argumen apa pun, pembungkusnya harus memakai `*args` dan `**kwargs`. Tanpa itu, decorator cuma jalan untuk function tanpa argumen.
+
+:::tip Catatan Pro
+Tambahkan `@functools.wraps(func)` di setiap decorator yang kamu buat — ini mempertahankan nama dan docstring function aslinya agar tidak hilang setelah di-wrap. Tanpanya, `fungsi.__name__` jadi `"wrapper"` bukan nama aslinya.
+
+```python
+import functools
+
+def timer(fungsi):
+    @functools.wraps(fungsi)  # pertahankan nama dan docstring fungsi asli
+    def pembungkus(*args, **kwargs):
+        import time
+        mulai = time.time()
+        hasil = fungsi(*args, **kwargs)
+        print(f"{fungsi.__name__} selesai dalam {time.time()-mulai:.4f}s")
+        return hasil
+    return pembungkus
+
+@timer
+def hitung(n):
+    return sum(range(n))
+
+print(hitung.__name__)  # "hitung" bukan "pembungkus"
+```
+:::
+
+## Ringkasan
+
+- *Decorator* membungkus sebuah function untuk menambah kemampuan tanpa mengubah isinya.
+- Dipakai dengan tanda `@` di atas function.
+- Di dalamnya ada function *pembungkus* yang memanggil function asli.
+- Pakai `*args` dan `**kwargs` di pembungkus agar bisa membungkus function apa pun.

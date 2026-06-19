@@ -1,0 +1,148 @@
+---
+title: Logging Dasar
+sidebar_position: 3
+---
+
+# Logging Dasar
+
+## Kenapa ini penting?
+
+`print()` enak untuk coba-coba, tapi di program nyata kamu butuh catatan kejadian yang lebih rapi: kapan sesuatu terjadi, seberapa penting, dan apakah itu peringatan atau error. Itulah tugas *logging*. Saat nanti melatih model AI yang berjalan berjam-jam, logging adalah cara kamu memantau apa yang terjadi.
+
+**Fokus kita:** mencatat jalannya program dengan module `logging`, dan memahami level pesannya.
+
+## Apa itu logging?
+
+*Logging* adalah cara terstruktur untuk mencatat pesan tentang apa yang sedang terjadi di program. Berbeda dari `print`, tiap pesan punya tingkat kepentingan (*level*) dan bisa disertai waktu.
+
+```python
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logging.info("Program mulai berjalan")
+```
+
+## Analogi sederhana
+
+Kalau `print` itu seperti **teriak iseng**, logging itu seperti **buku catatan harian satpam**: tiap kejadian dicatat dengan jam dan tingkat kepentingannya (biasa, mencurigakan, bahaya). Saat ada masalah, kamu tinggal buka catatannya.
+
+## Bedah konsep
+
+### 1. Level logging
+
+Dari paling santai ke paling serius:
+
+```python
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
+logging.debug("Detail teknis untuk developer")
+logging.info("Informasi normal, program berjalan")
+logging.warning("Peringatan, tapi belum gagal")
+logging.error("Terjadi error")
+logging.critical("Error fatal, program bisa berhenti")
+```
+
+`level=logging.DEBUG` artinya semua pesan ditampilkan. Kalau diset `logging.WARNING`, hanya warning ke atas yang muncul.
+
+### 2. Format dengan waktu
+
+```python
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s"
+)
+
+logging.info("Data berhasil dimuat")
+# 2026-06-19 10:00:00 [INFO] Data berhasil dimuat
+```
+
+### 3. Menyimpan log ke file
+
+```python
+import logging
+
+logging.basicConfig(filename="app.log", level=logging.INFO)
+logging.info("Pesan ini tersimpan ke file app.log")
+```
+
+### 4. Logging vs print
+
+`print` cocok untuk eksperimen cepat. Logging cocok untuk program yang sungguh dipakai, karena bisa diatur levelnya, diberi waktu, dan disimpan ke file tanpa mengubah banyak kode.
+
+## Contoh penggunaan
+
+Mencatat proses pengolahan data:
+
+```python
+import logging
+
+logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
+
+def proses(data):
+    logging.info(f"Mulai memproses {len(data)} baris")
+    if len(data) == 0:
+        logging.warning("Data kosong, tidak ada yang diproses")
+        return
+    logging.info("Pemrosesan selesai")
+
+proses([1, 2, 3])
+proses([])
+```
+
+## Latihan singkat
+
+Atur logging level `INFO`, lalu catat dua pesan: satu `info` saat program mulai, satu `info` saat selesai.
+
+```python
+import logging
+logging.basicConfig(level=logging.INFO)
+logging.info("Mulai")
+logging.info("Selesai")
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Tampilkan satu pesan untuk tiap level: debug, info, warning, error.
+
+**2. Menengah**  
+Atur format log agar menampilkan waktu dan level, lalu catat tiga kejadian berbeda.
+
+**3. Tantangan**  
+Buat function pembagian yang mencatat `info` saat berhasil dan `error` saat pembaginya nol (tanpa membuat program crash).
+
+**4. Project mini**  
+Ambil project "kalkulator ATM" dari modul sebelumnya. Tambahkan logging: catat `info` untuk tiap transaksi berhasil, `warning` saat saldo menipis, dan `error` saat transaksi ditolak. Simpan semua log ke file `transaksi.log`, lalu buka dan periksa isinya.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+import logging
+logging.info("Halo")     # tidak muncul apa-apa
+```
+
+✅ Benar:
+
+```python
+import logging
+logging.basicConfig(level=logging.INFO)   # atur dulu levelnya
+logging.info("Halo")                       # sekarang muncul
+```
+
+Secara default, logging hanya menampilkan level `WARNING` ke atas. Kalau `info` atau `debug`-mu tidak muncul, kemungkinan besar kamu lupa memanggil `basicConfig` untuk mengatur levelnya dulu.
+
+:::tip Catatan Pro
+Pakai `logging.debug()` saat development untuk pesan detail, `logging.info()` untuk produksi. Ubah level sekali di `basicConfig` — tidak perlu hapus baris logging satu per satu saat rilis ke produksi.
+:::
+
+## Ringkasan
+
+- *Logging* mencatat jalannya program secara rapi, dengan level kepentingan dan waktu.
+- Level dari santai ke serius: `debug`, `info`, `warning`, `error`, `critical`.
+- Atur dengan `basicConfig`; log bisa diberi format waktu dan disimpan ke file.
+- Pakai `print` untuk eksperimen cepat, logging untuk program yang sungguh dipakai.

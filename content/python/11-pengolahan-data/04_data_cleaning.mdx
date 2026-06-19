@@ -1,0 +1,186 @@
+---
+title: Data Cleaning Dasar
+sidebar_position: 4
+---
+
+# Data Cleaning Dasar
+
+## Kenapa ini penting?
+
+Data nyata itu kotor. Ada spasi nyasar, huruf besar kecil tidak konsisten, nilai kosong, dan duplikat. Ada pepatah terkenal di dunia data: *"sampah masuk, sampah keluar"*. Sehebat apa pun model AI-mu, kalau datanya berantakan, hasilnya ikut berantakan. Membersihkan data adalah pekerjaan sehari-hari seorang praktisi data.
+
+**Fokus kita:** teknik dasar membersihkan data, yaitu merapikan teks, menangani nilai kosong, menyamakan tipe, dan membuang duplikat.
+
+## Apa itu data cleaning?
+
+*Data cleaning* adalah proses merapikan data mentah supaya konsisten dan siap diolah. Tujuannya bukan mengubah makna data, tapi menghilangkan "kotoran" yang bisa bikin salah hitung.
+
+## Analogi sederhana
+
+Data cleaning itu seperti **mencuci dan memotong sayur sebelum memasak**. Kamu tidak mengubah sayurnya, tapi membuang bagian yang busuk dan kotoran yang menempel, supaya masakannya enak dan aman.
+
+## Bedah konsep
+
+### 1. Merapikan teks
+
+Spasi di ujung dan huruf yang tidak konsisten sering bikin data "kembar" padahal sama.
+
+```python
+nama = "  Budi  "
+print(nama.strip())        # "Budi", spasi di ujung dibuang
+
+kota = "bandung"
+print(kota.title())        # "Bandung"
+print("JAKARTA".lower())   # "jakarta"
+```
+
+Tanpa ini, `"Bandung"` dan `"bandung "` akan dianggap dua kota berbeda.
+
+### 2. Menangani nilai kosong
+
+```python
+nilai = ""
+
+if nilai == "":
+    nilai = 0          # ganti yang kosong dengan nilai default
+```
+
+### 3. Menyamakan tipe data
+
+```python
+harga_teks = "50000"
+harga = int(harga_teks)    # ubah teks jadi angka agar bisa dihitung
+```
+
+### 4. Membuang duplikat
+
+Ingat trik set dari Module 2:
+
+```python
+emails = ["a@mail.com", "b@mail.com", "a@mail.com"]
+unik = list(set(emails))
+print(len(unik))           # 2
+```
+
+### 5. Menangani nilai kosong (None dan string kosong)
+
+Data mentah sering punya nilai yang hilang — bisa berupa `None`, string kosong `""`, atau string `"N/A"`. Cara identifikasi dan tangani:
+
+```python
+data = [
+    {"nama": "Ali",   "nilai": "85"},
+    {"nama": "",      "nilai": "90"},    # nama kosong
+    {"nama": "Budi",  "nilai": None},   # nilai hilang
+    {"nama": "Cici",  "nilai": "N/A"},  # placeholder "tidak ada"
+]
+
+def bersih(baris):
+    nama = baris["nama"].strip()
+    nilai_raw = baris["nilai"]
+    
+    if not nama:                         # nama kosong → skip
+        return None
+    if nilai_raw is None or nilai_raw in ("N/A", "-", ""):
+        return None                      # nilai tidak valid → skip
+    
+    return {"nama": nama, "nilai": int(nilai_raw)}
+
+bersih_data = [bersih(b) for b in data]
+hasil = [b for b in bersih_data if b is not None]
+print(hasil)
+# [{'nama': 'Ali', 'nilai': 85}]   ← hanya data yang valid
+```
+
+### 6. Menangani tipe data campuran
+
+CSV selalu menghasilkan string — konversi tipe harus dilakukan manual:
+
+```python
+baris = {"nama": "Ali", "nilai": "85", "lulus": "True"}
+
+# Konversi yang aman dengan try/except
+def ke_angka(teks):
+    try:
+        return int(teks)
+    except (ValueError, TypeError):
+        try:
+            return float(teks)
+        except (ValueError, TypeError):
+            return None   # bukan angka sama sekali
+
+print(ke_angka("85"))    # 85  (int)
+print(ke_angka("87.5"))  # 87.5  (float)
+print(ke_angka("N/A"))   # None
+```
+
+## Contoh penggunaan
+
+Membersihkan daftar kota yang berantakan menjadi rapi dan unik:
+
+```python
+kota_mentah = ["bandung", "Bandung ", "JAKARTA", "jakarta", "  Surabaya"]
+
+bersih = []
+for k in kota_mentah:
+    bersih.append(k.strip().title())   # rapikan spasi dan huruf
+
+kota_unik = list(set(bersih))
+print(kota_unik)   # ['Bandung', 'Jakarta', 'Surabaya']
+```
+
+Perhatikan: dari 5 data berantakan, setelah dibersihkan tinggal 3 kota unik yang benar.
+
+## Latihan singkat
+
+Diberi nama `"  rina  "`, bersihkan spasinya dan jadikan huruf depan kapital, lalu tampilkan hasilnya.
+
+```python
+nama = "  rina  "
+print(nama.strip().title())   # Rina
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Diberi list nama dengan spasi berlebih, rapikan semuanya dengan `strip()` dan tampilkan.
+
+**2. Menengah**  
+Diberi list kota dengan huruf besar kecil acak, samakan formatnya dengan `.title()` lalu buang duplikatnya.
+
+**3. Tantangan**  
+Diberi list harga dalam bentuk teks `["50000", "", "30000", "abc"]`, ubah jadi angka. Lewati nilai kosong dan yang bukan angka (gabungkan dengan `try/except`), lalu hitung totalnya.
+
+**4. Project mini**  
+Buat "pembersih daftar peserta". Diberi list nama peserta yang berantakan (ada spasi, huruf acak, dan duplikat), hasilkan daftar final yang rapi, unik, dan terurut secara alfabet. Tampilkan jumlah peserta sebelum dan sesudah dibersihkan.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+kota = ["Bandung", "bandung "]
+unik = set(kota)
+print(len(unik))     # 2, dianggap beda padahal sama
+```
+
+✅ Benar:
+
+```python
+kota = ["Bandung", "bandung "]
+bersih = [k.strip().title() for k in kota]
+unik = set(bersih)
+print(len(unik))     # 1, sudah dirapikan dulu sebelum dibandingkan
+```
+
+Selalu rapikan data (spasi dan format huruf) **sebelum** membandingkan atau membuang duplikat. Kalau tidak, data yang sebenarnya sama akan lolos sebagai data berbeda.
+
+:::tip Catatan Pro
+Selalu tampilkan sample data mentah sebelum cleaning (`print(baris[:3])`) — supaya tahu persis apa yang sedang dibersihkan. Asumsi tentang format data sering salah; melihat datanya langsung mencegah banyak bug.
+:::
+
+## Ringkasan
+
+- Data nyata selalu kotor; membersihkannya adalah langkah wajib sebelum analisis.
+- `strip()`, `lower()`, `title()` merapikan teks agar konsisten.
+- Ubah tipe data (teks ke angka) dan tangani nilai kosong sebelum menghitung.
+- Rapikan dulu, baru buang duplikat dengan `set()`.

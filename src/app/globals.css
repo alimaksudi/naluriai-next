@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* rehype-pretty-code code blocks */
+[data-rehype-pretty-code-figure] pre {
+  @apply rounded-lg overflow-x-auto py-4 px-0 text-sm;
+}
+
+[data-rehype-pretty-code-figure] code {
+  @apply grid;
+}
+
+[data-rehype-pretty-code-figure] [data-line] {
+  @apply px-4 border-l-2 border-transparent;
+}
+
+[data-rehype-pretty-code-figure] [data-highlighted-line] {
+  @apply bg-blue-50 border-l-blue-400;
+}
+
+/* Language label */
+[data-rehype-pretty-code-title] {
+  @apply rounded-t-lg bg-gray-100 px-4 py-2 text-xs font-medium text-gray-600;
+}

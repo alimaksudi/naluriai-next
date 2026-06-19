@@ -1,0 +1,169 @@
+---
+title: Struktur Data Bersarang (Nested)
+sidebar_position: 5
+---
+
+# Struktur Data Bersarang (Nested)
+
+## Kenapa ini penting?
+
+Data nyata jarang datar. Satu toko punya banyak produk, dan tiap produk punya banyak detail. Satu aplikasi punya banyak pengguna, dan tiap pengguna punya banyak informasi. Untuk menampung bentuk seperti ini, kita menggabungkan list dan dictionary menjadi struktur **bersarang** (*nested*).
+
+**Fokus kita:** menyusun dan membaca data bersarang, terutama pola yang paling sering dipakai di dunia data, yaitu *list berisi dictionary*.
+
+## Apa itu struktur data bersarang?
+
+*Nested* berarti menaruh struktur data di dalam struktur data lain. Misalnya list yang berisi beberapa dictionary, atau dictionary yang salah satu value-nya berupa list.
+
+```python
+pengguna = [
+    {"nama": "Budi", "umur": 25},
+    {"nama": "Sari", "umur": 30},
+    {"nama": "Andi", "umur": 22}
+]
+```
+
+Bentuk inilah yang kamu temui hampir di semua data nyata: data dari internet (*JSON*), isi file Excel, sampai dataset untuk Machine Learning. Anggap ini "tabel" versi Python.
+
+## Analogi sederhana
+
+Bayangkan **rak arsip kantor**. Raknya adalah list. Di tiap laci ada satu map (dictionary), dan di dalam map ada lembar-lembar informasi berlabel (key dan value). Untuk menemukan satu data, kamu pilih lacinya dulu, baru buka labelnya.
+
+```text
+  pengguna (list)
+  ├── [0] {"nama": "Budi", "umur": 25}   (dictionary)
+  ├── [1] {"nama": "Sari", "umur": 30}
+  └── [2] {"nama": "Andi", "umur": 22}
+```
+
+## Bedah konsep
+
+### 1. Mengakses data bersarang
+
+Bacanya bertahap: pilih index list dulu, lalu key dictionary.
+
+```python
+print(pengguna[0])           # {'nama': 'Budi', 'umur': 25}
+print(pengguna[0]["nama"])   # Budi
+print(pengguna[1]["umur"])   # 30
+```
+
+### 2. Menelusuri dengan loop
+
+Ini cara paling sering dipakai untuk mengolah seluruh data.
+
+```python
+for orang in pengguna:
+    print(orang["nama"], "berumur", orang["umur"])
+```
+
+### 3. Dictionary berisi list
+
+Arah sebaliknya juga umum: satu dictionary yang value-nya berupa list.
+
+```python
+keranjang = {
+    "pembeli": "Budi",
+    "barang": ["susu", "roti", "telur"]
+}
+
+print(keranjang["barang"][0])   # susu
+print(len(keranjang["barang"])) # 3
+```
+
+### 4. Mengubah dan menambah
+
+```python
+pengguna[0]["umur"] = 26                 # ubah data lama
+pengguna.append({"nama": "Rina", "umur": 28})   # tambah orang baru
+```
+
+## Contoh penggunaan
+
+Menghitung rata-rata umur seluruh pengguna:
+
+```python
+pengguna = [
+    {"nama": "Budi", "umur": 25},
+    {"nama": "Sari", "umur": 30},
+    {"nama": "Andi", "umur": 22}
+]
+
+total_umur = 0
+for orang in pengguna:
+    total_umur = total_umur + orang["umur"]
+
+rata_rata = total_umur / len(pengguna)
+print("Rata-rata umur:", rata_rata)
+```
+
+Mencari produk yang stoknya habis di sebuah katalog:
+
+```python
+katalog = [
+    {"nama": "Sepatu", "stok": 0},
+    {"nama": "Topi", "stok": 5},
+    {"nama": "Tas", "stok": 0}
+]
+
+for produk in katalog:
+    if produk["stok"] == 0:
+        print(produk["nama"], "sedang habis")
+```
+
+## Latihan singkat
+
+Buat list berisi dua dictionary film (masing-masing punya `judul` dan `rating`). Telusuri dengan loop dan tampilkan judul tiap film.
+
+```python
+film = [
+    {"judul": "...", "rating": ...},
+    {"judul": "...", "rating": ...}
+]
+
+for f in film:
+    print(f["judul"])
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat list berisi dua dictionary teman (punya `nama` dan `kota`). Tampilkan kota teman pertama.
+
+**2. Menengah**  
+Diberi list produk (tiap produk punya `nama` dan `harga`), telusuri dan tampilkan setiap produk beserta harganya.
+
+**3. Tantangan**  
+Dari list produk yang sama, cari dan tampilkan produk dengan harga termahal beserta namanya.
+
+**4. Project mini: olah data pengguna**  
+Buat list berisi minimal 4 dictionary pengguna, masing-masing punya `nama`, `umur`, dan `kota`. Lalu buat program yang menampilkan: jumlah total pengguna, rata-rata umur, nama pengguna termuda, dan daftar kota unik (petunjuk: kumpulkan kota ke sebuah set). Ini latihan kecil yang persis seperti pekerjaan mengolah data sungguhan.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+pengguna = [{"nama": "Budi"}, {"nama": "Sari"}]
+print(pengguna["nama"])      # error: list diakses pakai index, bukan key
+```
+
+✅ Benar:
+
+```python
+pengguna = [{"nama": "Budi"}, {"nama": "Sari"}]
+print(pengguna[0]["nama"])   # Budi (pilih index dulu, baru key)
+```
+
+Ingat urutannya: kalau lapisan luarnya list, akses dengan index angka dulu, baru masuk ke key dictionary di dalamnya.
+
+:::tip Catatan Pro
+Saat debug struktur nested yang dalam, gunakan `from pprint import pprint; pprint(data)` — tampilan jauh lebih rapi dan terindentasi dibanding `print` biasa, terutama untuk list of dict yang panjang.
+:::
+
+## Ringkasan
+
+- *Nested* berarti menaruh struktur data di dalam struktur data lain.
+- Pola *list berisi dictionary* adalah bentuk data paling umum di dunia nyata.
+- Akses bertahap: index list dulu, lalu key dictionary (atau sebaliknya).
+- Loop `for` adalah alat utama untuk mengolah seluruh data bersarang.

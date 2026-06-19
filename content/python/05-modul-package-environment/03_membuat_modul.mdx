@@ -1,0 +1,142 @@
+---
+title: Membuat Modul Sendiri
+sidebar_position: 3
+---
+
+# Membuat Modul Sendiri
+
+## Kenapa ini penting?
+
+Saat programmu membesar, menaruh semua kode di satu file jadi berantakan. Solusinya: pecah jadi beberapa file (*module*), masing-masing fokus pada satu hal, lalu saling memanggil. Inilah cara program nyata disusun, dan langkah awal menuju kode yang rapi dan bisa dikerjakan banyak orang.
+
+**Fokus kita:** memecah kode ke beberapa file dan memanggil function dari file lain dengan `import`.
+
+## Apa itu modul sendiri?
+
+*Modul sendiri* adalah file Python (`.py`) buatanmu yang berisi function atau variable, lalu dipakai (di-`import`) oleh file lain. Sama seperti `math`, tapi kamu yang menulisnya.
+
+## Analogi sederhana
+
+Bayangkan menulis buku. Daripada menumpuk semua isi di satu halaman raksasa, kamu pecah jadi **bab-bab**. Tiap bab (module) membahas satu topik, dan daftar isi (`import`) menghubungkannya. Lebih rapi dan gampang dicari.
+
+## Bedah konsep
+
+### 1. Buat file module
+
+Misalnya buat file `kalkulator.py` berisi function:
+
+```python
+# file: kalkulator.py
+def tambah(a, b):
+    return a + b
+
+def kali(a, b):
+    return a * b
+```
+
+### 2. Panggil dari file lain
+
+Di file utama (misalnya `main.py`) yang berada di folder yang sama:
+
+```python
+# file: main.py
+import kalkulator
+
+print(kalkulator.tambah(2, 3))   # 5
+print(kalkulator.kali(4, 5))     # 20
+```
+
+Atau ambil function tertentu saja:
+
+```python
+from kalkulator import tambah
+print(tambah(10, 5))   # 15
+```
+
+### 3. Blok if __name__ == "__main__"
+
+Kode di dalam blok ini hanya jalan kalau file dijalankan langsung, bukan saat di-import. Berguna untuk menaruh kode uji coba.
+
+```python
+# file: kalkulator.py
+def tambah(a, b):
+    return a + b
+
+if __name__ == "__main__":
+    # ini hanya jalan kalau kalkulator.py dijalankan langsung
+    print("Tes:", tambah(1, 1))
+```
+
+Saat `kalkulator` di-import dari file lain, blok tes itu tidak ikut jalan. Pola ini standar di kode Python.
+
+## Contoh penggunaan
+
+Memisahkan logika "diskon" ke module sendiri:
+
+```python
+# file: promo.py
+def harga_diskon(harga, persen):
+    return harga - (harga * persen / 100)
+```
+
+```python
+# file: toko.py
+from promo import harga_diskon
+
+print(harga_diskon(100000, 20))   # 80000
+```
+
+Sekarang logika promo bisa dipakai ulang di banyak file tanpa menyalinnya.
+
+## Latihan singkat
+
+Buat file `sapaan.py` berisi function `halo(nama)`, lalu panggil dari file lain dengan `import`.
+
+```python
+# sapaan.py
+def halo(nama):
+    return f"Halo, {nama}!"
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat module `matematika.py` berisi function `kuadrat(x)`, lalu pakai di file lain.
+
+**2. Menengah**  
+Buat module `konversi.py` berisi `celsius_ke_fahrenheit(c)` dan `km_ke_meter(km)`. Panggil keduanya dari file utama.
+
+**3. Tantangan**  
+Buat module `promo.py` dengan beberapa function (diskon, pajak, ongkir). Di file utama, gabungkan semuanya untuk menghitung total bayar sebuah pesanan.
+
+**4. Project mini**  
+Buat aplikasi mini dua file. File `bank.py` berisi function `setor`, `tarik`, dan `cek_saldo`. File `main.py` mengimpornya dan menjalankan beberapa transaksi berurutan, lalu menampilkan saldo akhir. Tambahkan blok `if __name__ == "__main__"` di `bank.py` untuk tes kecil.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+# main.py memanggil function tapi file modulnya beda folder
+import kalkulator    # ModuleNotFoundError kalau kalkulator.py tidak ditemukan
+```
+
+✅ Benar:
+
+```python
+# pastikan kalkulator.py berada di folder yang sama dengan main.py
+import kalkulator
+```
+
+Python mencari module di folder tempat program dijalankan. Kalau muncul `ModuleNotFoundError`, paling sering karena file module ada di folder yang berbeda atau nama filenya salah ketik.
+
+:::tip Catatan Pro
+`if __name__ == "__main__":` adalah garis pemisah antara "kode yang dijalankan langsung" dan "kode yang diimpor". Ini memungkinkan satu file sekaligus menjadi modul yang bisa diimpor DAN script yang bisa dijalankan langsung.
+:::
+
+## Ringkasan
+
+- Pecah program besar jadi beberapa file `.py` (*module*) yang fokus per topik.
+- Panggil isinya dengan `import nama_file` atau `from nama_file import fungsi`.
+- `if __name__ == "__main__":` membuat kode hanya jalan saat file dijalankan langsung.
+- Pastikan module berada di lokasi yang bisa ditemukan agar tidak `ModuleNotFoundError`.

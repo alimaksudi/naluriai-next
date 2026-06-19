@@ -1,0 +1,163 @@
+---
+title: Docstring & Dokumentasi
+sidebar_position: 3
+---
+
+# Docstring & Dokumentasi
+
+## Kenapa ini penting?
+
+Kode yang baik bukan cuma jalan, tapi juga bisa dipahami orang lain (dan dirimu di masa depan). *Docstring* adalah cara resmi Python untuk menjelaskan apa yang dilakukan sebuah function. Ini pembeda antara kode latihan dan kode yang siap dipakai bersama tim, dan kebiasaan yang dihargai di dunia kerja.
+
+**Fokus kita:** menulis *docstring* yang jelas untuk function dan modul.
+
+## Apa itu docstring?
+
+*Docstring* adalah teks penjelasan yang ditulis tepat di bawah definisi function, class, atau modul, di antara tiga tanda kutip (`"""`). Berbeda dari komentar biasa, docstring bisa dibaca otomatis oleh Python dan alat dokumentasi.
+
+```python
+def luas_persegi(sisi):
+    """Menghitung luas persegi dari panjang sisinya."""
+    return sisi * sisi
+```
+
+## Analogi sederhana
+
+Docstring itu seperti **label keterangan pada alat**. Saat kamu ambil sebuah alat dari laci, label kecil menjelaskan "alat ini untuk apa dan cara pakainya". Tanpa perlu membongkar isinya, kamu langsung tahu fungsinya.
+
+## Bedah konsep
+
+### 1. Docstring satu baris
+
+Untuk function sederhana, satu kalimat sudah cukup.
+
+```python
+def sapa(nama):
+    """Mengembalikan sapaan untuk nama yang diberikan."""
+    return f"Halo, {nama}"
+```
+
+### 2. Docstring lengkap
+
+Untuk function yang lebih rumit, jelaskan parameter dan nilai kembaliannya.
+
+```python
+def harga_diskon(harga, persen):
+    """Menghitung harga setelah diskon.
+
+    Args:
+        harga: harga awal (angka).
+        persen: besar diskon dalam persen.
+
+    Returns:
+        Harga setelah dipotong diskon.
+    """
+    return harga - (harga * persen / 100)
+```
+
+### 3. Membaca docstring dengan help()
+
+Docstring bisa dibaca siapa pun lewat `help()`, bahkan tanpa membuka kodenya.
+
+```python
+help(harga_diskon)     # menampilkan docstring-nya
+print(harga_diskon.__doc__)   # cara lain melihat docstring
+```
+
+### 4. Docstring untuk modul
+
+Di baris paling atas file, docstring menjelaskan isi keseluruhan modul.
+
+```python
+"""Modul promo: berisi function perhitungan diskon dan pajak."""
+
+def harga_diskon(harga, persen):
+    ...
+```
+
+## Contoh penggunaan
+
+Modul kecil yang terdokumentasi rapi:
+
+```python
+"""Modul kalkulator: operasi hitung dasar."""
+
+def tambah(a, b):
+    """Menjumlahkan dua angka dan mengembalikan hasilnya."""
+    return a + b
+
+def bagi(a, b):
+    """Membagi a dengan b.
+
+    Memunculkan ValueError kalau b bernilai nol.
+    """
+    if b == 0:
+        raise ValueError("Pembagi tidak boleh nol")
+    return a / b
+```
+
+Siapa pun yang memakai modul ini bisa menjalankan `help(bagi)` dan langsung paham cara serta batasannya.
+
+## Dari docstring ke dokumentasi otomatis
+
+Kalau docstringmu sudah rapi, kamu bisa menghasilkan halaman dokumentasi HTML secara otomatis. Dua alat yang populer:
+
+- **pdoc** — paling mudah dipakai: `pip install pdoc`, lalu `pdoc nama_modul.py`
+- **Sphinx** — standar industri untuk project besar, lebih kompleks tapi lebih fleksibel
+
+Untuk tahap belajar ini, cukup tahu bahwa docstring yang baik adalah investasi: berguna untuk `help()` sekarang, dan bisa jadi dokumentasi web nanti.
+
+## Latihan singkat
+
+Tambahkan docstring satu baris pada function berikut.
+
+```python
+def kuadrat(x):
+    """..."""
+    return x * x
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Tambahkan docstring satu baris pada sebuah function sederhana, lalu baca dengan `help()`.
+
+**2. Menengah**  
+Tulis docstring lengkap (dengan Args dan Returns) untuk function yang punya dua parameter.
+
+**3. Tantangan**  
+Buat sebuah modul kecil berisi tiga function, masing-masing dengan docstring, plus docstring di atas modulnya. Pastikan `help()` menampilkan semuanya dengan rapi.
+
+**4. Project mini**  
+Ambil module yang kamu buat di Module 5 (misalnya `promo.py` atau `bank.py`). Lengkapi setiap function dengan docstring yang jelas, tambahkan docstring modul di atas file, lalu buktikan dokumentasinya bisa dibaca lewat `help(nama_modul)`. Sekarang modulmu siap dipakai orang lain.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+def hitung_pajak(harga):
+    # menghitung pajak       <- komentar biasa, tidak terbaca help()
+    return harga * 0.11
+```
+
+✅ Benar:
+
+```python
+def hitung_pajak(harga):
+    """Menghitung pajak 11 persen dari harga."""   # docstring, terbaca help()
+    return harga * 0.11
+```
+
+Komentar biasa (`#`) berguna untuk catatan internal, tapi tidak muncul di `help()` dan alat dokumentasi. Untuk menjelaskan fungsi sebuah function ke pemakainya, gunakan *docstring* (`"""..."""`).
+
+:::tip Catatan Pro
+Tulis docstring **sebelum** implementasi — memaksa kamu memikirkan dengan jelas "apa yang dilakukan function ini dan apa yang dikembalikannya" sebelum memikirkan "bagaimana caranya." Ini juga teknik yang dipakai saat TDD (Test-Driven Development).
+:::
+
+## Ringkasan
+
+- *Docstring* adalah penjelasan resmi function/class/modul, ditulis dengan `"""..."""`.
+- Satu baris untuk function sederhana; sertakan Args dan Returns untuk yang kompleks.
+- Bisa dibaca lewat `help()` atau `__doc__` tanpa membuka kode.
+- Docstring membuat kodemu siap dipakai dan dipahami orang lain.

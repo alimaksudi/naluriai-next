@@ -1,0 +1,123 @@
+---
+title: Menjalankan Python (Terminal vs Notebook)
+sidebar_position: 3
+---
+
+# Menjalankan Python (Terminal vs Notebook)
+
+## Kenapa ini penting?
+
+Kamu sudah punya "penerjemah" (Python) dan "buku tulis" (VS Code). Sekarang kamu perlu tahu cara **menekan tombol JALAN** supaya perintahmu benar-benar dikerjakan komputer.
+
+**Fokus kita:** mengenal dua cara menjalankan kode Python, yaitu lewat *Terminal* dan lewat *Notebook*, serta kapan sebaiknya pakai yang mana.
+
+## Apa itu menjalankan kode?
+
+Menulis kode saja tidak membuat komputer melakukan apa-apa. Kode itu cuma teks. *Menjalankan* (*run*) berarti kita menyuruh si penerjemah (Python) membaca teks itu dari atas ke bawah, lalu melaksanakannya satu per satu.
+
+Ada dua "gaya" menjalankan kode yang akan sering kamu pakai di dunia AI.
+
+## Analogi sederhana
+
+Bayangkan kamu sedang memasak:
+
+- **File `.py` lewat Terminal** seperti memasak satu resep utuh dari awal sampai akhir. Cocok untuk masakan yang sudah pasti caranya.
+- **Notebook** seperti memasak sambil mencicipi tiap langkah. Masukkan garam, cicipi, tambah lagi, cicipi lagi. Cocok saat kamu masih bereksperimen.
+
+Hasilnya sama-sama matang, hanya gaya kerjanya berbeda.
+
+## Bedah konsep
+
+### 1. Menjalankan lewat file `.py`
+
+Kamu menulis semua perintah di satu file berakhiran `.py`, lalu menjalankannya sekaligus. Seluruh kode dibaca dari baris pertama sampai terakhir.
+
+```bash
+python halo.py
+```
+
+### 2. Menjalankan lewat Notebook
+
+*Notebook* (misalnya **Jupyter** atau **Google Colab**) membagi kode menjadi kotak-kotak kecil bernama *cell*. Kamu bisa menjalankan satu *cell*, melihat hasilnya, lalu lanjut ke *cell* berikutnya tanpa mengulang dari awal. Untuk pemula, Google Colab paling gampang karena jalan langsung di browser tanpa install.
+
+## Contoh penggunaan
+
+**Cara 1, lewat Terminal:**
+
+1. Buat file baru bernama `halo.py` di VS Code, isi dengan:
+
+```python
+print("Halo dari file Python!")
+```
+
+2. Buka Terminal di VS Code (menu `Terminal` lalu `New Terminal`), kemudian ketik:
+
+```bash
+python halo.py
+```
+
+**Cara 2, lewat Notebook (tanpa install apa pun):**
+
+- Buka `colab.research.google.com`, buat *notebook* baru, ketik kode di satu *cell*, lalu tekan tombol play (atau `Shift + Enter`).
+
+## Latihan singkat
+
+Coba jalankan kode yang sama dengan **dua cara**: simpan sebagai file `coba.py` lalu jalankan dengan `python coba.py`, setelah itu salin baris yang sama ke satu *cell* di Google Colab dan jalankan.
+
+```python
+print("Saya berhasil menjalankan Python dengan dua cara!")
+```
+
+Perhatikan: hasilnya sama, hanya cara menjalankannya yang berbeda.
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buka terminal (atau command prompt), ketik `python3` lalu tekan Enter. Di prompt `>>>`, ketik `1 + 1` dan tekan Enter. Pastikan hasilnya `2`.
+
+**2. Menengah**  
+Buat file bernama `halo.py` berisi satu baris `print("Halo, dunia!")`. Jalankan dari terminal dengan `python3 halo.py`. Pastikan teks tercetak.
+
+**3. Tantangan**  
+Buat file `hitung.py` yang berisi perhitungan sederhana dan jalankan dengan dua cara (REPL dan script file):
+
+```python
+# hitung.py
+angka1 = 100
+angka2 = 37
+print("Penjumlahan:", angka1 + angka2)
+print("Perkalian:", angka1 * angka2)
+print("Pembagian:", angka1 / angka2)
+print("Sisa bagi:", angka1 % angka2)
+```
+
+Jalankan: `python hitung.py`. Kemudian buka REPL dan ketik ulang baris pertama satu per satu. Apa perbedaan pengalamannya?
+
+**4. Project mini**  
+Buat file `info_python.py` yang mencetak versi Python yang dipakai dan lokasi file Python-nya:
+
+```python
+import sys  # sys adalah modul bawaan Python untuk berinteraksi dengan sistem operasi — kita pelajari lebih dalam di Modul 5
+print("Versi Python:", sys.version)
+print("Lokasi Python:", sys.executable)
+```
+
+Jalankan dari terminal dan catat hasilnya.
+
+## Kesalahan umum
+
+❌ Salah:
+Menulis kode di VS Code lalu bingung kenapa "tidak terjadi apa-apa", padahal file-nya baru disimpan, belum dijalankan.
+
+✅ Benar:
+Ingat bahwa menyimpan (*save*) dan menjalankan (*run*) itu dua langkah berbeda. Setelah menyimpan, kamu tetap harus menekan tombol JALAN: ketik `python namafile.py` di Terminal, atau jalankan *cell* di Notebook.
+
+:::tip Catatan Pro
+Di terminal interaktif (`>>>`), tekan panah atas ↑ untuk memanggil kembali perintah sebelumnya — hemat waktu saat coba-coba kode.
+:::
+
+## Ringkasan
+
+- Menjalankan kode berarti menyuruh Python benar-benar melaksanakan perintah kita.
+- File `.py` lewat Terminal cocok untuk program utuh yang sudah jelas alurnya.
+- Notebook cocok untuk eksperimen langkah demi langkah, dan paling sering dipakai di dunia AI.

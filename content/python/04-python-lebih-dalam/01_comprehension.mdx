@@ -1,0 +1,149 @@
+---
+title: List & Dictionary Comprehension
+sidebar_position: 1
+---
+
+# List & Dictionary Comprehension
+
+## Kenapa ini penting?
+
+Kamu sudah sering menulis loop untuk membuat list baru: bikin list kosong, lalu `append` satu per satu. Pola itu begitu umum sampai Python punya cara singkat satu baris untuk melakukannya, namanya *comprehension*. Ini ciri khas kode yang "Pythonic", dan kamu akan melihatnya di mana-mana.
+
+**Fokus kita:** menulis *list comprehension* dan *dictionary comprehension* untuk membuat data baru dengan ringkas.
+
+## Apa itu comprehension?
+
+*Comprehension* adalah cara membuat list (atau dictionary) baru dalam satu baris, langsung dari data yang sudah ada.
+
+```python
+# cara biasa
+kuadrat = []
+for x in range(5):
+    kuadrat.append(x * x)
+
+# comprehension: satu baris, hasil sama
+kuadrat = [x * x for x in range(5)]
+print(kuadrat)   # [0, 1, 4, 9, 16]
+```
+
+## Analogi sederhana
+
+Comprehension itu seperti **mesin cetak**. Kamu bilang "untuk setiap bahan ini, hasilkan barang itu", lalu mesin mencetak seluruh hasilnya sekaligus. Tidak perlu menaruh satu per satu dengan tangan.
+
+## Bedah konsep
+
+### 1. Bentuk dasar
+
+Polanya: `[hasil for item in data]`.
+
+```python
+angka = [1, 2, 3, 4]
+dua_kali = [n * 2 for n in angka]
+print(dua_kali)   # [2, 4, 6, 8]
+```
+
+### 2. Dengan kondisi (filter)
+
+Tambahkan `if` untuk menyaring item.
+
+```python
+angka = [1, 2, 3, 4, 5, 6]
+genap = [n for n in angka if n % 2 == 0]
+print(genap)   # [2, 4, 6]
+```
+
+### 3. Mengolah teks
+
+```python
+nama = ["budi", "sari", "andi"]
+rapi = [n.title() for n in nama]
+print(rapi)   # ['Budi', 'Sari', 'Andi']
+```
+
+### 4. Dictionary comprehension
+
+Bentuknya mirip, tapi menghasilkan pasangan `key: value`.
+
+```python
+angka = [1, 2, 3]
+kuadrat = {n: n * n for n in angka}
+print(kuadrat)   # {1: 1, 2: 4, 3: 9}
+```
+
+## Contoh penggunaan
+
+Mengubah daftar harga jadi harga setelah pajak:
+
+```python
+harga = [10000, 25000, 50000]
+setelah_pajak = [h * 1.11 for h in harga]
+print(setelah_pajak)
+```
+
+Menyaring produk yang stoknya habis dari sebuah katalog:
+
+```python
+katalog = [
+    {"nama": "Sepatu", "stok": 0},
+    {"nama": "Topi", "stok": 5},
+    {"nama": "Tas", "stok": 0}
+]
+
+habis = [p["nama"] for p in katalog if p["stok"] == 0]
+print(habis)   # ['Sepatu', 'Tas']
+```
+
+## Latihan singkat
+
+Pakai list comprehension untuk membuat list berisi angka 1 sampai 10 yang sudah dikali 3.
+
+```python
+hasil = [... for x in range(1, 11)]
+print(hasil)
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Dari list `[1, 2, 3, 4, 5]`, buat list baru berisi kuadrat tiap angka memakai comprehension.
+
+**2. Menengah**  
+Dari list nama dengan huruf acak, hasilkan list nama yang sudah rapi (`.title()`) dan hanya yang panjangnya lebih dari 3 huruf.
+
+**3. Tantangan**  
+Dari list harga, buat list berisi hanya harga di atas 20000, masing-masing setelah diskon 10 persen.
+
+**4. Project mini**  
+Diberi list dictionary produk (punya `nama` dan `harga`), buat dictionary comprehension yang memetakan nama produk ke harganya setelah pajak 11 persen. Tampilkan hasilnya dengan rapi.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+# memaksa logika sangat panjang dan bercabang ke satu comprehension
+hasil = [x*2 if x>0 else (0 if x==0 else -x) for x in data if x!=5 and x<100]
+```
+
+✅ Benar:
+
+```python
+# kalau sudah serumit ini, loop biasa lebih mudah dibaca
+hasil = []
+for x in data:
+    if x != 5 and x < 100:
+        hasil.append(x * 2)
+```
+
+Comprehension dibuat untuk hal ringkas. Begitu logikanya mulai bercabang panjang, loop biasa jauh lebih jelas dan tidak bikin pusing yang membacanya.
+
+:::tip Catatan Pro
+Kalau comprehension tidak muat dalam satu baris layar, ubah jadi loop biasa — keterbacaan lebih penting dari keringkasan. Kode yang bisa dibaca cepat lebih bernilai dari kode yang "keren" tapi butuh waktu lama untuk dipahami.
+:::
+
+## Ringkasan
+
+- *Comprehension* membuat list/dictionary baru dalam satu baris dari data yang ada.
+- Bentuk dasar: `[hasil for item in data]`, bisa ditambah `if` untuk menyaring.
+- *Dictionary comprehension* menghasilkan pasangan `key: value`.
+- Pakai untuk transformasi sederhana; kalau logikanya rumit, kembali ke loop biasa.

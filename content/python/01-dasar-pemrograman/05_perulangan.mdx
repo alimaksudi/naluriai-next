@@ -1,0 +1,210 @@
+---
+title: Perulangan (for, while)
+sidebar_position: 5
+---
+
+# Perulangan (for, while)
+
+## Kenapa ini penting?
+
+Bayangkan kamu harus menyapa 1000 pengguna. Menulis `print()` seribu kali jelas gila. *Perulangan* (*loop*) memungkinkan komputer mengulang pekerjaan yang sama berkali-kali hanya dengan beberapa baris kode.
+
+**Fokus kita:** dua jenis loop yang paling sering dipakai, yaitu `for` (mengulang sejumlah tertentu) dan `while` (mengulang selama syarat masih terpenuhi).
+
+## Apa itu perulangan?
+
+*Perulangan* adalah cara menyuruh Python menjalankan blok kode yang sama berulang kali, tanpa kamu menyalin-tempel kode itu.
+
+```python
+for i in range(3):
+    print("Halo!")
+```
+
+Kode di atas mencetak "Halo!" sebanyak tiga kali. Bandingkan dengan menulis `print("Halo!")` tiga kali. Sekarang bayangkan kalau angkanya sejuta.
+
+## Analogi sederhana
+
+Perulangan itu seperti **mesin cuci**. Kamu set programnya sekali, lalu mesin mengulang gerakan memutar yang sama sampai selesai. Kamu tidak perlu memutar drumnya sendiri satu per satu.
+
+```text
+   ┌──────────────────────┐
+   │  syarat masih benar?  │──── tidak ───►  selesai
+   └──────────┬───────────┘
+              │ ya
+              ▼
+       proses satu langkah
+              │
+              └──── ulangi lagi ke atas
+```
+
+## Bedah konsep
+
+### 1. for dengan range()
+
+`range(n)` menghasilkan angka dari 0 sampai `n - 1`. Cocok kalau kamu tahu persis berapa kali ingin mengulang.
+
+```python
+for i in range(5):
+    print("Pengulangan ke-", i)
+# mencetak i = 0, 1, 2, 3, 4
+```
+
+`range()` juga bisa diberi titik awal dan langkah:
+
+```python
+for i in range(1, 6):       # 1 sampai 5
+    print(i)
+
+for i in range(0, 11, 2):   # 0, 2, 4, 6, 8, 10
+    print(i)
+```
+
+### 2. for untuk menelusuri data
+
+`for` juga bisa menelusuri sekumpulan data satu per satu. Ini akan sangat sering kamu pakai nanti saat mengolah data.
+
+```python
+belanjaan = ["susu", "roti", "telur"]
+
+for barang in belanjaan:
+    print("Beli:", barang)
+```
+
+### 3. while (selama syarat terpenuhi)
+
+`while` mengulang **selama** kondisinya masih `True`. Cocok kalau kamu tidak tahu pasti berapa kali harus mengulang.
+
+```python
+saldo = 100000
+
+while saldo > 0:
+    print("Saldo:", saldo)
+    saldo = saldo - 30000
+```
+
+Penting: pastikan ada sesuatu di dalam loop yang membuat kondisi akhirnya `False`. Kalau tidak, loop berjalan selamanya (*infinite loop*).
+
+### 4. Mengakumulasi nilai
+
+Pola yang sangat umum: menyiapkan sebuah variable penampung, lalu menambah isinya di setiap putaran.
+
+```python
+harga_keranjang = [15000, 30000, 25000]
+total = 0
+
+for harga in harga_keranjang:
+    total = total + harga
+
+print("Total belanja: Rp", total)   # 70000
+```
+
+## Contoh penggunaan
+
+Menghitung total like dari beberapa postingan:
+
+```python
+like_per_post = [120, 340, 55, 980]
+total_like = 0
+
+for like in like_per_post:
+    total_like = total_like + like
+
+print("Total like:", total_like)
+```
+
+Mengirim notifikasi ke daftar pengguna:
+
+```python
+pengguna = ["Budi", "Sari", "Andi"]
+
+for nama in pengguna:
+    print(f"Halo {nama}, ada promo spesial untukmu!")
+```
+
+## Latihan singkat
+
+Tampilkan angka 1 sampai 10, masing-masing di baris baru.
+
+```python
+for i in range(1, 11):
+    print(i)
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Tampilkan tulisan "Semangat belajar!" sebanyak 5 kali memakai loop.
+
+**2. Menengah**  
+Diberi daftar harga `[10000, 25000, 5000, 40000]`, hitung dan tampilkan totalnya memakai loop.
+
+**3. Tantangan**  
+Buat program tebak angka memakai `while`: simpan `angka_rahasia = 42`. Minta pengguna menebak angka (1–100), beri petunjuk "Terlalu kecil!" atau "Terlalu besar!", dan berhenti kalau benar atau sudah 10 kali mencoba.
+
+```python
+angka_rahasia = 42
+tebakan = 0
+max_coba = 10
+percobaan = 0
+
+while tebakan != angka_rahasia and percobaan < max_coba:
+    tebakan = int(input("Tebak angka (1-100): "))
+    percobaan += 1
+    if tebakan < angka_rahasia:
+        print("Terlalu kecil!")
+    elif tebakan > angka_rahasia:
+        print("Terlalu besar!")
+
+if tebakan == angka_rahasia:
+    print(f"Benar! Butuh {percobaan} percobaan.")
+else:
+    print(f"Kesempatan habis. Jawabannya {angka_rahasia}.")
+```
+
+**4. Project mini**  
+Buat "mesin kasir" mini. Pakai `while` untuk terus menanyakan harga barang yang dibeli pelanggan. Pengguna mengetik `0` kalau sudah selesai. Setelah itu, tampilkan jumlah barang, total belanja, dan rata-rata harga per barang.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+saldo = 100000
+while saldo > 0:
+    print(saldo)
+    # lupa mengurangi saldo, loop jalan selamanya
+```
+
+✅ Benar:
+
+```python
+saldo = 100000
+while saldo > 0:
+    print(saldo)
+    saldo = saldo - 30000   # ada yang berubah, loop pasti berhenti
+```
+
+Pada `while`, selalu pastikan ada baris yang lama-lama membuat kondisinya menjadi `False`. Kalau programmu seperti macet dan tidak berhenti, kemungkinan besar kamu kena *infinite loop*. Tekan `Ctrl + C` di terminal untuk menghentikannya.
+
+:::tip Catatan Pro
+
+`break` menghentikan loop lebih awal — berguna untuk berhenti saat kondisi terpenuhi:
+
+```python
+# Cari angka pertama yang habis dibagi 7
+for angka in range(1, 100):
+    if angka % 7 == 0:
+        print(f"Ketemu: {angka}")
+        break  # langsung berhenti, tidak lanjut ke angka berikutnya
+```
+
+`continue` melewati satu iterasi, `pass` tidak melakukan apapun (placeholder). Keduanya dibahas lebih dalam saat kamu butuh.
+
+:::
+
+## Ringkasan
+
+- `for` cocok saat kamu tahu jumlah pengulangan atau ingin menelusuri sekumpulan data.
+- `range()` menghasilkan deretan angka untuk loop.
+- `while` mengulang selama kondisinya `True`; pastikan ada yang membuatnya berhenti.
+- Pola "siapkan penampung, lalu tambah di tiap putaran" sangat sering dipakai untuk menghitung total.

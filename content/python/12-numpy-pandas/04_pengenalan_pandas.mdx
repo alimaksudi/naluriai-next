@@ -1,0 +1,165 @@
+---
+title: Pengenalan Pandas
+sidebar_position: 4
+---
+
+# Pengenalan Pandas
+
+## Kenapa ini penting?
+
+NumPy hebat untuk angka, tapi data nyata punya label: nama kolom, judul baris, campuran teks dan angka. *Pandas* adalah library untuk mengolah data bertabel seperti ini, semudah memakai Excel tapi lewat kode. Pandas adalah alat utama yang dipakai Data Scientist dan ML Engineer setiap hari.
+
+**Fokus kita:** mengenal *Pandas*, dua struktur utamanya (*Series* dan *DataFrame*), dan kenapa dia sangat cocok untuk data tabel.
+
+## Apa itu Pandas?
+
+*Pandas* adalah library untuk mengolah dan menganalisis data bertabel. Kita memanggilnya dengan singkatan `pd`. Dua bentuk datanya:
+
+- *Series*: satu kolom data berlabel.
+- *DataFrame*: tabel lengkap dengan banyak kolom dan baris.
+
+```python
+import pandas as pd
+
+data = pd.Series([10, 20, 30])
+print(data)
+```
+
+## Analogi sederhana
+
+Kalau NumPy itu kalkulator, *Pandas* itu **Excel di dalam kode**. Bedanya, alih-alih klik sana sini, kamu mengetik perintah, sehingga bisa diulang otomatis untuk jutaan baris tanpa lelah.
+
+## Bedah konsep
+
+### 1. Memasang dan mengimpor
+
+Sudah tersedia di Colab. Di komputer sendiri:
+
+```bash
+pip install pandas
+```
+
+Impor dengan nama standar:
+
+```python
+import pandas as pd
+```
+
+### 2. Series: satu kolom berlabel
+
+```python
+import pandas as pd
+
+nilai = pd.Series([80, 95, 70], index=["Budi", "Sari", "Andi"])
+print(nilai["Sari"])    # 95
+print(nilai.mean())     # rata-rata
+```
+
+Perhatikan: tiap angka punya label (index), jadi lebih bermakna daripada array polos.
+
+### 3. DataFrame: tabel utuh
+
+DataFrame adalah bintang utama Pandas. Bisa dibuat dari dictionary, dengan key sebagai nama kolom.
+
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "nama": ["Budi", "Sari", "Andi"],
+    "umur": [25, 30, 22],
+    "kota": ["Bandung", "Jakarta", "Surabaya"]
+})
+
+print(df)
+```
+
+```text
+Output saat df dicetak:
+     nama  umur      kota
+0    Budi    25   Bandung
+1    Sari    30   Jakarta
+2    Andi    22  Surabaya
+
+- Angka 0,1,2 di kiri = index (baris)
+- Nama kolom ada di baris pertama
+- Setiap baris = satu record data
+```
+
+Hasilnya tabel rapi dengan tiga kolom. Inilah bentuk yang akan kita kerjakan di lesson-lesson berikutnya.
+
+## Contoh penggunaan
+
+Membuat tabel produk dan melihat ringkasannya:
+
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "produk": ["Sepatu", "Topi", "Tas"],
+    "harga": [350000, 45000, 120000],
+    "stok": [12, 30, 8]
+})
+
+print(df)
+print("Harga rata-rata:", df["harga"].mean())
+```
+
+## Latihan singkat
+
+Buat DataFrame berisi dua kolom: `nama` dan `nilai`, dengan tiga baris data. Lalu tampilkan tabelnya.
+
+```python
+import pandas as pd
+df = pd.DataFrame({
+    "nama": ["...", "...", "..."],
+    "nilai": [..., ..., ...]
+})
+print(df)
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat Series berisi tiga angka dengan label, lalu tampilkan rata-ratanya.
+
+**2. Menengah**  
+Buat DataFrame berisi data tiga teman (nama, umur, kota), lalu tampilkan umur rata-ratanya.
+
+**3. Tantangan**  
+Buat DataFrame produk (nama, harga, stok), lalu tampilkan total nilai stok (harga dikali stok untuk semua produk).
+
+**4. Project mini**  
+Buat DataFrame berisi minimal 5 pegawai dengan kolom `nama`, `divisi`, dan `gaji`. Tampilkan gaji rata-rata, gaji tertinggi, dan jumlah pegawai. Ini latihan kecil sebelum kita masuk filtering dan agregasi.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+import pandas as pd
+df = pd.DataFrame(["Budi", 25, "Bandung"])   # data acak tanpa struktur kolom
+```
+
+✅ Benar:
+
+```python
+import pandas as pd
+df = pd.DataFrame({
+    "nama": ["Budi"],
+    "umur": [25],
+    "kota": ["Bandung"]
+})
+```
+
+DataFrame paling rapi dibuat dari dictionary, di mana key menjadi nama kolom dan value berupa list isi kolomnya. Pastikan semua list panjangnya sama.
+
+:::tip Catatan Pro
+`df.info()` dan `df.describe()` adalah dua perintah pertama yang **selalu** dijalankan saat mendapat data baru — `info()` untuk melihat tipe data dan nilai null, `describe()` untuk statistik ringkas semua kolom numerik.
+:::
+
+## Ringkasan
+
+- *Pandas* adalah library untuk data bertabel, ibarat "Excel di dalam kode".
+- Diimpor dengan nama standar `pd`.
+- *Series* adalah satu kolom berlabel; *DataFrame* adalah tabel lengkap.
+- DataFrame paling mudah dibuat dari dictionary berisi list yang sama panjang.

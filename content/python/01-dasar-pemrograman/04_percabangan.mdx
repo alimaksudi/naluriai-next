@@ -1,0 +1,199 @@
+---
+title: Percabangan (if, elif, else)
+sidebar_position: 4
+---
+
+# Percabangan (if, elif, else)
+
+## Kenapa ini penting?
+
+Program yang pintar harus bisa mengambil keputusan: "kalau saldo cukup, lanjutkan pembayaran; kalau tidak, tolak". Kemampuan memilih jalan berbeda tergantung kondisi inilah yang membuat program terasa hidup.
+
+**Fokus kita:** membuat program bercabang dengan `if`, `elif`, dan `else`.
+
+## Apa itu percabangan?
+
+*Percabangan* adalah cara program memilih tindakan berdasarkan sebuah kondisi yang bernilai `True` atau `False`.
+
+```python
+saldo = 50000
+harga = 30000
+
+if saldo >= harga:
+    print("Pembayaran berhasil")
+else:
+    print("Saldo tidak cukup")
+```
+
+Python mengecek kondisi setelah `if`. Kalau `True`, blok di bawah `if` dijalankan. Kalau `False`, blok di bawah `else` yang jalan.
+
+## Analogi sederhana
+
+Ini seperti **lampu lalu lintas** di kepalamu saat menyeberang.
+
+- Kalau lampu hijau (kondisi `True`), kamu jalan.
+- Kalau tidak (kondisi `False`), kamu berhenti.
+
+Program melakukan hal yang sama: cek kondisi dulu, baru tentukan tindakan.
+
+```text
+            kondisi?
+           /        \
+        True         False
+          │            │
+          ▼            ▼
+   jalankan blok   jalankan blok
+        if             else
+```
+
+## Bedah konsep
+
+### 1. Indentasi itu wajib
+
+Di Python, kode yang "masuk ke dalam" sebuah `if` harus menjorok ke kanan (biasanya 4 spasi). Indentasi inilah yang memberi tahu Python baris mana yang termasuk di dalam cabang. Ini bukan sekadar kerapian, tapi bagian dari aturan.
+
+```python
+if True:
+    print("Baris ini di dalam if")   # menjorok ke kanan
+print("Baris ini di luar if")        # rata kiri lagi
+```
+
+### 2. if dan else
+
+```python
+umur = 15
+
+if umur >= 18:
+    print("Boleh membuat akun")
+else:
+    print("Maaf, belum cukup umur")
+```
+
+### 3. elif untuk banyak pilihan
+
+Kalau ada lebih dari dua kemungkinan, pakai `elif` (singkatan dari "else if"). Python mengecek dari atas ke bawah dan berhenti di kondisi pertama yang `True`.
+
+```python
+nilai = 82
+
+if nilai >= 90:
+    print("Grade A")
+elif nilai >= 80:
+    print("Grade B")
+elif nilai >= 70:
+    print("Grade C")
+else:
+    print("Perlu remedial")
+```
+
+Karena Python berhenti di kecocokan pertama, urutan kondisi penting. Letakkan yang paling ketat di atas.
+
+## Contoh penggunaan
+
+Menentukan tingkat diskon berdasarkan total belanja:
+
+```python
+total = 250000
+
+if total >= 500000:
+    diskon = 0.2
+elif total >= 200000:
+    diskon = 0.1
+else:
+    diskon = 0
+
+bayar = total - (total * diskon)
+print(f"Diskon: {diskon * 100} persen")
+print(f"Total bayar: Rp {bayar}")
+```
+
+Mengelompokkan kategori berat badan dari BMI:
+
+```python
+bmi = 23.5
+
+if bmi < 18.5:
+    print("Kurus")
+elif bmi < 25:
+    print("Normal")
+elif bmi < 30:
+    print("Berlebih")
+else:
+    print("Obesitas")
+```
+
+## Latihan singkat
+
+Minta pengguna memasukkan sebuah angka, lalu tampilkan apakah angka itu positif, negatif, atau nol.
+
+```python
+angka = int(input("Masukkan angka: "))
+
+if angka > 0:
+    print("Positif")
+elif angka < 0:
+    print("Negatif")
+else:
+    print("Nol")
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Minta umur pengguna. Tampilkan "Dewasa" jika 18 atau lebih, selain itu "Belum dewasa".
+
+**2. Menengah**  
+Buat pengecekan login sederhana: simpan `password_benar = "rahasia123"  # ⚠️ catatan: di dunia nyata, JANGAN simpan password sebagai plain text!`. Minta pengguna memasukkan password, lalu tampilkan "Login berhasil" atau "Password salah".
+
+**3. Tantangan**  
+Buat penentu ongkir: jika total belanja di atas 300000, ongkir gratis. Antara 100000 sampai 300000, ongkir 10000. Di bawah itu, ongkir 20000. Tampilkan total akhir termasuk ongkir.
+
+**4. Project mini**  
+Buat "mesin penilai transaksi" sederhana. Minta nominal transaksi dan apakah dari luar negeri (jawab dengan `ya` atau `tidak`). Tandai transaksi sebagai "Mencurigakan" jika nominal di atas 10 juta dan dari luar negeri, "Perlu dicek" jika hanya salah satu syarat terpenuhi, dan "Aman" jika tidak keduanya.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+if umur >= 18:
+print("Boleh masuk")     # error: tidak diindentasi
+```
+
+✅ Benar:
+
+```python
+if umur >= 18:
+    print("Boleh masuk")  # diindentasi 4 spasi
+```
+
+Lupa indentasi adalah error paling sering di awal belajar percabangan. Kalau Python protes soal `IndentationError`, periksa apakah baris di dalam `if` sudah menjorok ke kanan.
+
+:::tip Catatan Pro
+
+Urutan kondisi di `if/elif` penting! Untuk kondisi yang **saling tumpang tindih** (seperti rentang nilai), selalu periksa kondisi yang **paling ketat** dulu:
+
+```python
+# ✅ Benar — dari paling ketat ke paling longgar
+if nilai >= 90:
+    grade = "A"
+elif nilai >= 80:
+    grade = "B"
+elif nilai >= 70:
+    grade = "C"
+
+# ❌ Salah — kondisi longgar duluan, 85 akan jadi "C" bukan "B"!
+if nilai >= 70:
+    grade = "C"
+elif nilai >= 80:
+    grade = "B"
+```
+
+:::
+
+## Ringkasan
+
+- `if` menjalankan blok kode hanya jika kondisinya `True`.
+- `elif` menambah pilihan lain, `else` menangani sisanya.
+- Python mengecek kondisi dari atas ke bawah dan berhenti di yang pertama cocok.
+- Indentasi (4 spasi) wajib dan menentukan baris mana yang masuk ke dalam cabang.

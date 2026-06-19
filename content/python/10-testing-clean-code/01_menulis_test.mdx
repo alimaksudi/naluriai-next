@@ -1,0 +1,147 @@
+---
+title: Menulis Test (pytest)
+sidebar_position: 1
+---
+
+# Menulis Test (pytest)
+
+## Kenapa ini penting?
+
+Mengecek program dengan menjalankannya berulang kali secara manual itu lambat dan gampang lupa. *Test* otomatis memeriksa apakah kodemu masih benar, dalam hitungan detik, kapan pun kamu mau. Saat program membesar, test adalah jaring pengaman yang membuatmu berani mengubah kode tanpa takut merusak yang lama.
+
+**Fokus kita:** menulis test otomatis sederhana dengan `assert` dan `pytest`.
+
+## Apa itu test?
+
+*Test* adalah kode yang memeriksa apakah kode lain bekerja sesuai harapan. Inti pemeriksaannya adalah `assert`: pernyataan "ini harus benar". Kalau ternyata salah, test gagal dan kamu langsung tahu ada yang rusak.
+
+```python
+def tambah(a, b):
+    return a + b
+
+assert tambah(2, 3) == 5    # lolos diam-diam kalau benar
+```
+
+## Analogi sederhana
+
+Test itu seperti **pengecekan kualitas di pabrik**. Sebelum produk dikirim, ada robot yang mengecek "apakah ukurannya pas? apakah berfungsi?". Kalau ada yang gagal, alarm berbunyi sebelum produk cacat sampai ke pelanggan.
+
+## Bedah konsep
+
+### 1. assert: pemeriksaan dasar
+
+`assert kondisi` tidak melakukan apa-apa kalau kondisinya `True`, tapi memunculkan error kalau `False`.
+
+```python
+assert 2 + 2 == 4      # aman
+assert 2 + 2 == 5      # AssertionError
+```
+
+### 2. Menulis function test
+
+Konvensi pytest: simpan di file berawalan `test_`, dan tiap test adalah function berawalan `test_`.
+
+```python
+# file: test_kalkulator.py
+def tambah(a, b):
+    return a + b
+
+def test_tambah():
+    assert tambah(2, 3) == 5
+    assert tambah(-1, 1) == 0
+```
+
+### 3. Menjalankan pytest
+
+Pasang dulu (`pip install pytest`), lalu jalankan di Terminal:
+
+```bash
+pytest
+```
+
+pytest otomatis menemukan semua file `test_*.py`, menjalankan tiap `test_*`, dan melaporkan mana yang lolos dan gagal.
+
+### 4. Menguji beberapa kasus
+
+Uji bukan cuma kasus normal, tapi juga kasus pinggir (angka nol, list kosong, nilai negatif).
+
+```python
+def rata_rata(angka):
+    return sum(angka) / len(angka)
+
+def test_rata_rata():
+    assert rata_rata([10, 20, 30]) == 20
+    assert rata_rata([5]) == 5
+```
+
+## Contoh penggunaan
+
+Menguji function diskon agar selalu benar:
+
+```python
+# file: test_promo.py
+def harga_diskon(harga, persen):
+    return harga - (harga * persen / 100)
+
+def test_harga_diskon():
+    assert harga_diskon(100000, 20) == 80000
+    assert harga_diskon(50000, 0) == 50000
+    assert harga_diskon(100000, 100) == 0
+```
+
+Jalankan `pytest`, dan dalam sekejap kamu tahu function diskonmu masih benar.
+
+## Latihan singkat
+
+Tulis satu test untuk function `kuadrat(x)` yang memastikan `kuadrat(4)` menghasilkan 16.
+
+```python
+def kuadrat(x):
+    return x * x
+
+def test_kuadrat():
+    assert kuadrat(4) == 16
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Tulis test dengan `assert` untuk function penjumlahan sederhana.
+
+**2. Menengah**  
+Tulis function `genap(n)` yang mengembalikan True/False, lalu tulis test untuk kasus genap dan ganjil.
+
+**3. Tantangan**  
+Tulis function konversi suhu, lalu buat beberapa test termasuk kasus suhu nol dan suhu negatif.
+
+**4. Project mini**  
+Ambil module `promo.py` atau `kalkulator.py` dari modul sebelumnya. Buat file `test_*.py` yang menguji setiap function di dalamnya, mencakup kasus normal dan kasus pinggir. Jalankan `pytest` dan pastikan semuanya hijau (lolos).
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+def test_tambah():
+    tambah(2, 3) == 5      # cuma membandingkan, tidak ada assert
+```
+
+✅ Benar:
+
+```python
+def test_tambah():
+    assert tambah(2, 3) == 5   # pakai assert agar test benar-benar memeriksa
+```
+
+Tanpa `assert`, baris perbandingan tidak melakukan apa-apa dan test selalu "lolos" walau kodenya salah. Selalu awali pemeriksaan dengan `assert`.
+
+:::tip Catatan Pro
+Jalankan `pytest -v` untuk melihat nama tiap test satu per satu (bukan hanya titik). Tambahkan `-s` untuk melihat output `print()` di dalam test — berguna saat debug test yang gagal.
+:::
+
+## Ringkasan
+
+- *Test* memeriksa apakah kode bekerja sesuai harapan, secara otomatis dan cepat.
+- `assert kondisi` adalah inti pemeriksaan: error kalau kondisinya salah.
+- pytest menjalankan semua file `test_*.py` dan function `test_*` otomatis.
+- Uji kasus normal dan kasus pinggir (nol, kosong, negatif) agar benar-benar yakin.

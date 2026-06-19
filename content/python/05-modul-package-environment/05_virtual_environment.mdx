@@ -1,0 +1,121 @@
+---
+title: Virtual Environment
+sidebar_position: 5
+---
+
+# Virtual Environment
+
+## Kenapa ini penting?
+
+Bayangkan punya dua project: satu butuh Pandas versi lama, satu butuh versi baru. Kalau semua dipasang campur di satu tempat, mereka bertabrakan. *Virtual environment* memberi tiap project "ruang kerja" terpisah, sehingga package satu project tidak mengganggu yang lain. Ini praktik wajib di dunia kerja Python.
+
+**Fokus kita:** membuat dan memakai *virtual environment* agar tiap project punya package-nya sendiri.
+
+## Apa itu virtual environment?
+
+*Virtual environment* (sering disingkat *venv*) adalah folder berisi salinan Python dan package khusus untuk satu project. Package yang kamu pasang di dalamnya tidak bocor ke project lain.
+
+## Analogi sederhana
+
+Virtual environment itu seperti **kotak makan terpisah untuk tiap anak**. Walaupun menunya beda-beda, tidak ada yang tercampur. Tiap project makan dari kotaknya sendiri, jadi tidak ada rebutan atau tabrakan.
+
+## Bedah konsep
+
+### 1. Membuat virtual environment
+
+Di folder project, jalankan di Terminal:
+
+```bash
+python -m venv venv
+```
+
+Perintah ini membuat folder bernama `venv` berisi lingkungan terpisah. (Pengguna Mac/Linux pakai `python3`.)
+
+### 2. Mengaktifkan
+
+```bash
+# Windows
+venv\Scripts\activate
+
+# Mac / Linux
+source venv/bin/activate
+```
+
+Kalau aktif, biasanya muncul `(venv)` di awal baris Terminal. Mulai sekarang, `pip install` hanya memasang ke dalam environment ini.
+
+### 3. Memasang package di dalamnya
+
+```bash
+pip install pandas requests
+```
+
+Package ini hanya ada di environment project ini, tidak mengganggu project lain.
+
+### 4. Menonaktifkan
+
+```bash
+deactivate
+```
+
+## Contoh penggunaan
+
+Alur kerja standar memulai project baru:
+
+```bash
+# 1. masuk ke folder project
+# 2. buat environment
+python -m venv venv
+
+# 3. aktifkan
+source venv/bin/activate     # atau venv\Scripts\activate di Windows
+
+# 4. pasang kebutuhan
+pip install pandas
+
+# 5. simpan daftar package
+pip freeze > requirements.txt
+```
+
+`pip freeze` mencatat semua package beserta versinya ke `requirements.txt`, sehingga orang lain bisa membuat lingkungan yang sama persis.
+
+## Latihan singkat
+
+Di sebuah folder kosong, buat virtual environment bernama `venv`, lalu aktifkan dan amati munculnya `(venv)` di Terminal.
+
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat virtual environment di sebuah folder, aktifkan, lalu nonaktifkan kembali.
+
+**2. Menengah**  
+Di dalam environment yang aktif, pasang `requests`, lalu jalankan `pip list` dan bandingkan isinya dengan `pip list` di luar environment.
+
+**3. Tantangan**  
+Buat dua folder project terpisah, masing-masing dengan environment sendiri, lalu pasang versi package yang berbeda di masing-masing. Buktikan keduanya tidak saling mengganggu.
+
+**4. Project mini**  
+Siapkan satu project Python kecil yang utuh: buat folder, buat venv, aktifkan, pasang package yang dibutuhkan, buat `requirements.txt` dengan `pip freeze`, lalu tulis skrip kecil yang memakai package itu. Ini persis alur memulai project di dunia nyata.
+
+## Kesalahan umum
+
+❌ Salah:
+Membuat virtual environment tapi lupa mengaktifkannya, lalu bingung kenapa package "tidak terpasang" padahal sudah `pip install`.
+
+✅ Benar:
+Selalu aktifkan environment dulu (`source venv/bin/activate`) sebelum `pip install` dan sebelum menjalankan program. Pastikan ada tanda `(venv)` di Terminal sebagai bukti environment aktif.
+
+:::tip Catatan Pro
+Beri nama folder virtual environment `venv` atau `.venv` — VS Code dan editor modern lain mengenali nama ini secara otomatis dan langsung mengaktifkannya saat membuka project.
+:::
+
+## Ringkasan
+
+- *Virtual environment* memberi tiap project ruang package terpisah agar tidak bentrok.
+- `python -m venv venv` membuatnya; aktifkan dengan `activate`, matikan dengan `deactivate`.
+- `pip install` di dalam venv hanya berlaku untuk project itu.
+- `pip freeze > requirements.txt` menyimpan daftar package agar bisa direproduksi.

@@ -1,0 +1,134 @@
+---
+title: Dasar Function
+sidebar_position: 1
+---
+
+# Dasar Function
+
+## Kenapa ini penting?
+
+Begitu programmu makin besar, kamu akan sering menulis kode yang sama berulang kali. Misalnya menghitung total belanja di lima tempat berbeda. Menyalin kode yang sama ke mana-mana itu melelahkan dan rawan salah. *Function* membungkus kode itu sekali, lalu kamu panggil kapan saja.
+
+**Fokus kita:** membuat dan memanggil *function*, supaya kode jadi rapi, ringkas, dan bisa dipakai ulang.
+
+## Apa itu function?
+
+*Function* adalah blok kode bernama yang menjalankan satu tugas tertentu. Kamu definisikan sekali pakai kata kunci `def`, lalu panggil namanya kapan pun butuh.
+
+```python
+def sapa():
+    print("Halo, selamat datang!")
+
+sapa()   # memanggil function
+sapa()   # bisa dipanggil lagi sesuka hati
+```
+
+## Analogi sederhana
+
+Function itu seperti **resep masakan**. Kamu tulis langkah-langkahnya sekali. Setelah itu, setiap kali mau memasak, kamu cukup bilang "buat nasi goreng" tanpa menjelaskan ulang semua langkahnya. Nama function adalah nama resepnya.
+
+## Bedah konsep
+
+### 1. Mendefinisikan function
+
+Pakai `def`, diikuti nama, tanda kurung, dan titik dua. Isi function diindentasi ke kanan.
+
+```python
+def tampilkan_garis():
+    print("------------------------")
+```
+
+### 2. Memanggil function
+
+Tulis nama function diikuti tanda kurung. Tanpa kurung, function tidak jalan.
+
+```python
+tampilkan_garis()
+```
+
+### 3. Kenapa pakai function?
+
+Bandingkan menulis pesan struk tiga kali, dengan membungkusnya jadi function:
+
+```python
+def struk():
+    print("Terima kasih sudah belanja")
+    print("Sampai jumpa lagi!")
+
+struk()
+struk()
+```
+
+Kalau nanti pesannya mau diubah, kamu cukup mengubahnya di satu tempat, bukan di banyak tempat. Inilah prinsip "jangan mengulang diri sendiri" (*Don't Repeat Yourself*).
+
+## Contoh penggunaan
+
+Function untuk menampilkan menu aplikasi:
+
+```python
+def tampilkan_menu():
+    print("1. Lihat produk")
+    print("2. Tambah ke keranjang")
+    print("3. Keluar")
+
+tampilkan_menu()
+```
+
+## Latihan singkat
+
+Buat function bernama `perkenalan` yang menampilkan namamu dan hobimu, lalu panggil function itu.
+
+```python
+def perkenalan():
+    print("Nama saya ...")
+    print("Hobi saya ...")
+
+perkenalan()
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat function `salam_pagi` yang menampilkan "Selamat pagi!", lalu panggil dua kali.
+
+**2. Menengah**  
+Buat function `garis_pemisah` yang menampilkan satu baris tanda bintang, lalu gunakan untuk memisahkan dua blok teks.
+
+**3. Tantangan**  
+Buat function `tampilkan_judul` yang mencetak sebuah judul di antara dua garis pemisah. Pakai kembali ide dari function sebelumnya di dalamnya.
+
+**4. Project mini**  
+Buat program menu kafe sederhana. Buat satu function untuk menampilkan menu, dan satu function untuk menampilkan struk terima kasih. Panggil keduanya di tempat yang sesuai dalam alur program.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+def sapa():
+    print("Halo")
+
+sapa     # cuma menyebut nama, function tidak dijalankan
+```
+
+✅ Benar:
+
+```python
+def sapa():
+    print("Halo")
+
+sapa()   # ada kurung, function benar-benar dijalankan
+```
+
+Tanpa tanda kurung `()`, kamu hanya menyebut function tanpa menjalankannya. Kurung itulah tombol "JALAN"-nya.
+
+:::tip Catatan Pro
+Kalau sebuah function sudah lebih dari 15–20 baris, itu tanda ia melakukan terlalu banyak hal. Pertimbangkan untuk memecahnya jadi dua function dengan tanggung jawab yang lebih kecil dan nama yang lebih spesifik.
+:::
+
+## Ringkasan
+
+- *Function* membungkus kode jadi satu blok bernama yang bisa dipakai ulang.
+- Definisikan dengan `def nama():`, panggil dengan `nama()`.
+- Function membuat kode lebih rapi dan mudah diubah (prinsip DRY).
+- Jangan lupa tanda kurung saat memanggil.

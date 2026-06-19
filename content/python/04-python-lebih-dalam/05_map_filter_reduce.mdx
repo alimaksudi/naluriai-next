@@ -1,0 +1,150 @@
+---
+title: Map, Filter & Reduce
+sidebar_position: 5
+---
+
+# Map, Filter & Reduce
+
+## Kenapa ini penting?
+
+Ada gaya pemrograman bernama *functional* yang berfokus pada "mengubah data" lewat function, bukan loop manual. Tiga alat utamanya adalah `map`, `filter`, dan `reduce`. Kamu akan menemukan pola ini di banyak tempat, termasuk saat mengolah data berskala besar.
+
+**Fokus kita:** memakai `map` (ubah semua), `filter` (saring), dan `reduce` (ringkas jadi satu) untuk mengolah data.
+
+## Apa itu map, filter, dan reduce?
+
+- `map` menerapkan sebuah function ke setiap item, menghasilkan data baru.
+- `filter` menyaring item yang lolos sebuah syarat.
+- `reduce` menggabungkan semua item jadi satu nilai (misalnya total).
+
+```python
+angka = [1, 2, 3, 4]
+
+dua_kali = list(map(lambda x: x * 2, angka))
+print(dua_kali)   # [2, 4, 6, 8]
+```
+
+## Analogi sederhana
+
+Bayangkan sebuah **jalur pabrik**:
+
+- `map` adalah mesin yang mengecat setiap barang yang lewat.
+- `filter` adalah penjaga kualitas yang menyingkirkan barang cacat.
+- `reduce` adalah mesin pengepak yang menggabungkan semua jadi satu paket akhir.
+
+## Bedah konsep
+
+Ingat *lambda* dari Module 3? Tiga alat ini sering dipakai bersama lambda.
+
+### 1. map (ubah semua item)
+
+```python
+harga = [10000, 20000, 30000]
+setelah_pajak = list(map(lambda h: h * 1.11, harga))
+print(setelah_pajak)
+```
+
+### 2. filter (saring item)
+
+```python
+nilai = [80, 45, 90, 60, 95]
+lulus = list(filter(lambda n: n >= 70, nilai))
+print(lulus)   # [80, 90, 95]
+```
+
+### 3. reduce (ringkas jadi satu)
+
+`reduce` perlu diimpor dari modul `functools`.
+
+```python
+from functools import reduce
+
+angka = [1, 2, 3, 4]
+total = reduce(lambda a, b: a + b, angka)
+print(total)   # 10
+```
+
+:::note
+`reduce` tidak tersedia secara langsung seperti `map` dan `filter`. Harus diimpor dulu: `from functools import reduce`. Ini disengaja oleh Python — `reduce` jarang dibutuhkan dan comprehension biasanya lebih jelas.
+:::
+
+### 4. Sering kali comprehension lebih jelas
+
+Untuk kasus sederhana, *list comprehension* dari Module 4 biasanya lebih mudah dibaca daripada `map`/`filter`.
+
+```python
+# map
+dua_kali = list(map(lambda x: x * 2, angka))
+# comprehension (lebih jelas untuk banyak orang)
+dua_kali = [x * 2 for x in angka]
+```
+
+Keduanya benar. Pilih yang paling enak dibaca di situasimu.
+
+## Contoh penggunaan
+
+Menghitung total pendapatan dari daftar transaksi:
+
+```python
+from functools import reduce
+
+transaksi = [50000, 120000, 30000, 80000]
+
+total = reduce(lambda a, b: a + b, transaksi)
+print("Total pendapatan:", total)
+```
+
+## Latihan singkat
+
+Pakai `filter` untuk mengambil hanya angka genap dari `[1, 2, 3, 4, 5, 6]`.
+
+```python
+angka = [1, 2, 3, 4, 5, 6]
+genap = list(filter(lambda x: x % 2 == 0, angka))
+print(genap)
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Pakai `map` untuk mengubah list suhu Celsius `[20, 25, 30]` menjadi Fahrenheit.
+
+**2. Menengah**  
+Pakai `filter` untuk mengambil hanya produk dengan harga di bawah 100000 dari sebuah list harga.
+
+**3. Tantangan**  
+Gabungkan: dari list harga, saring yang di atas 50000 (`filter`), lalu tambahkan pajak ke masing-masing (`map`), lalu jumlahkan semuanya (`reduce`).
+
+**4. Project mini**  
+Diberi list transaksi (angka penjualan harian), gunakan `filter` untuk mengambil hari di atas rata-rata, `map` untuk menghitung bonus 5 persen dari tiap transaksi besar itu, dan `reduce` untuk menjumlahkan total bonusnya. Tampilkan ringkasannya.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+angka = [1, 2, 3]
+hasil = map(lambda x: x * 2, angka)
+print(hasil)        # <map object ...>, bukan list
+```
+
+✅ Benar:
+
+```python
+angka = [1, 2, 3]
+hasil = list(map(lambda x: x * 2, angka))
+print(hasil)        # [2, 4, 6]
+```
+
+`map` dan `filter` tidak langsung menghasilkan list; mereka menghasilkan objek khusus yang harus dibungkus `list()` dulu kalau ingin dilihat atau dipakai sebagai list.
+
+:::tip Catatan Pro
+Kalau ragu antara comprehension dan `map`/`filter`, pilih comprehension — lebih terbaca, lebih Python, dan hasilnya sama. `map`/`filter` berguna terutama saat fungsi yang dipakai sudah ada (`str`, `int`, dll).
+:::
+
+## Ringkasan
+
+- `map` menerapkan function ke setiap item; `filter` menyaring; `reduce` meringkas jadi satu nilai.
+- `reduce` perlu diimpor dari `functools`.
+- Bungkus hasil `map`/`filter` dengan `list()` untuk memakainya sebagai list.
+- Untuk kasus sederhana, *list comprehension* sering lebih mudah dibaca.

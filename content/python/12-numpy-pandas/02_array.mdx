@@ -1,0 +1,177 @@
+---
+title: Array
+sidebar_position: 2
+---
+
+# Array
+
+## Kenapa ini penting?
+
+*Array* adalah inti dari NumPy. Memahami cara membuat, melihat bentuk, dan mengambil bagian dari array adalah bekal wajib sebelum mengolah data atau melatih model. Di AI, gambar, tabel, dan teks semuanya pada akhirnya direpresentasikan sebagai array angka.
+
+**Fokus kita:** membuat array, memahami *shape* (bentuk), serta mengakses dan memotong isinya.
+
+## Apa itu array?
+
+*Array* adalah kumpulan angka bertipe sama yang tersusun rapi. Bisa satu baris (1 dimensi) atau berbentuk tabel baris dan kolom (2 dimensi).
+
+```python
+import numpy as np
+
+satu_d = np.array([1, 2, 3])              # 1 dimensi
+dua_d = np.array([[1, 2, 3], [4, 5, 6]])  # 2 dimensi (2 baris, 3 kolom)
+```
+
+## Analogi sederhana
+
+Array 1 dimensi itu seperti **satu baris loker**. Array 2 dimensi seperti **rak loker bertingkat**: ada baris dan kolom. Untuk mengambil isi, kamu sebut posisi barisnya, lalu kolomnya.
+
+## Bedah konsep
+
+### 1. Membuat array dengan cepat
+
+```python
+import numpy as np
+
+print(np.zeros(3))        # [0. 0. 0.]
+print(np.ones(3))         # [1. 1. 1.]
+print(np.arange(0, 10, 2))# [0 2 4 6 8]
+```
+
+### 2. Shape (bentuk array)
+
+`shape` memberi tahu jumlah baris dan kolom. Ini sering kamu cek saat bekerja dengan data.
+
+```python
+dua_d = np.array([[1, 2, 3], [4, 5, 6]])
+print(dua_d.shape)        # (2, 3) -> 2 baris, 3 kolom
+```
+
+### 3. dtype: tipe data dalam array
+
+NumPy menyimpan semua elemen array dalam **satu tipe data** yang sama, berbeda dari list Python yang bisa campur-campur. Tipe ini disebut `dtype`:
+
+```python
+import numpy as np
+
+a = np.array([1, 2, 3])
+print(a.dtype)   # int64
+
+b = np.array([1.0, 2.5, 3.7])
+print(b.dtype)   # float64
+
+c = np.array([1, 2, 3.5])   # campur int dan float
+print(c.dtype)   # float64  ← NumPy otomatis pilih float untuk tampung keduanya
+```
+
+### 4. Visualisasi shape
+
+```text
+Array 1D (shape: (4,)):
+  [10, 20, 30, 40]
+   [0]  [1]  [2]  [3]
+
+Array 2D (shape: (3, 4)):
+         kolom 0  kolom 1  kolom 2  kolom 3
+  baris 0 [  1,     2,      3,      4  ]
+  baris 1 [  5,     6,      7,      8  ]
+  baris 2 [  9,    10,     11,     12  ]
+
+  arr.shape  = (3, 4)   ← (jumlah baris, jumlah kolom)
+  arr.ndim   = 2        ← 2 dimensi
+  arr.size   = 12       ← total elemen
+```
+
+### 5. Mengakses elemen
+
+```python
+satu_d = np.array([10, 20, 30, 40])
+print(satu_d[0])          # 10
+
+dua_d = np.array([[1, 2, 3], [4, 5, 6]])
+print(dua_d[0, 1])        # 2  -> baris 0, kolom 1
+```
+
+### 6. Slicing
+
+Sama seperti list, tapi bisa di dua dimensi.
+
+```python
+angka = np.array([10, 20, 30, 40, 50])
+print(angka[1:4])         # [20 30 40]
+
+dua_d = np.array([[1, 2, 3], [4, 5, 6]])
+print(dua_d[:, 0])        # [1 4] -> ambil kolom pertama semua baris
+```
+
+## Contoh penggunaan
+
+Mengambil kolom harga dari tabel angka (misalnya kolom kedua berisi harga):
+
+```python
+import numpy as np
+
+data = np.array([
+    [1, 50000],
+    [2, 30000],
+    [3, 75000]
+])
+
+harga = data[:, 1]        # ambil semua baris, kolom index 1
+print("Total harga:", harga.sum())
+```
+
+## Latihan singkat
+
+Buat array 2 dimensi dengan 2 baris dan 2 kolom, lalu tampilkan shape-nya.
+
+```python
+import numpy as np
+m = np.array([[1, 2], [3, 4]])
+print(m.shape)
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat array `[5, 10, 15, 20]`, lalu tampilkan elemen pertama dan terakhir.
+
+**2. Menengah**  
+Buat array angka 0 sampai 9 memakai `np.arange`, lalu ambil hanya angka di index 2 sampai 5.
+
+**3. Tantangan**  
+Buat array 2 dimensi 3x3, lalu ambil kolom tengahnya saja.
+
+**4. Project mini**  
+Buat tabel nilai 2 dimensi: tiap baris satu siswa, tiap kolom satu mata pelajaran. Hitung rata-rata nilai tiap siswa (per baris) dan rata-rata tiap mata pelajaran (per kolom). Petunjuk: `arr.mean(axis=1)` untuk per baris, `arr.mean(axis=0)` untuk per kolom.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+import numpy as np
+dua_d = np.array([[1, 2], [3, 4]])
+print(dua_d[1])         # malah mengambil seluruh baris, bukan satu elemen
+```
+
+✅ Benar:
+
+```python
+import numpy as np
+dua_d = np.array([[1, 2], [3, 4]])
+print(dua_d[1, 0])      # 3 -> baris 1, kolom 0
+```
+
+Untuk array 2 dimensi, sebutkan dua posisi `[baris, kolom]`. Memberi satu angka saja akan mengambil seluruh baris.
+
+:::tip Catatan Pro
+`arr.shape`, `arr.dtype`, dan `arr.ndim` adalah tiga atribut yang paling sering diperiksa saat debug array NumPy. Tambahkan `print(arr.shape, arr.dtype)` sebagai baris pertama saat array berperilaku tidak terduga.
+:::
+
+## Ringkasan
+
+- *Array* bisa 1 dimensi (satu baris) atau 2 dimensi (baris dan kolom).
+- `shape` menunjukkan ukuran array dalam bentuk (baris, kolom).
+- Akses elemen 2 dimensi dengan `[baris, kolom]`, dan slicing bisa per kolom dengan `[:, n]`.
+- `np.zeros`, `np.ones`, `np.arange` membantu membuat array dengan cepat.

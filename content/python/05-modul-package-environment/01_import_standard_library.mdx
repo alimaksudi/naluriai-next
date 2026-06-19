@@ -1,0 +1,141 @@
+---
+title: Import & Standard Library
+sidebar_position: 1
+---
+
+# Import & Standard Library
+
+## Kenapa ini penting?
+
+Kamu tidak perlu menulis semua dari nol. Python datang dengan ratusan "alat" siap pakai bernama *standard library*, untuk matematika, angka acak, tanggal, dan banyak lagi. Tahu cara memanggilnya (`import`) menghemat waktumu luar biasa, dan ini kebiasaan programmer profesional.
+
+**Fokus kita:** memakai `import` untuk mengambil *module* bawaan Python, dan mengenal beberapa yang paling sering dipakai.
+
+## Apa itu module dan import?
+
+*Module* adalah file berisi kumpulan function siap pakai. *Standard library* adalah module yang sudah ikut terpasang bersama Python. Kita memanggilnya dengan `import`.
+
+```python
+import math
+
+print(math.sqrt(16))   # 4.0
+print(math.pi)         # 3.141592653589793
+```
+
+## Analogi sederhana
+
+Standard library itu seperti **kotak perkakas lengkap** yang sudah ada di rumah. Kamu tidak perlu menempa palu sendiri; cukup buka laci yang benar (`import`) dan ambil alatnya.
+
+## Bedah konsep
+
+### 1. Tiga cara import
+
+```python
+import math               # ambil seluruh module
+print(math.sqrt(25))
+
+from math import sqrt     # ambil function tertentu saja
+print(sqrt(25))
+
+import math as m          # beri nama panggilan
+print(m.sqrt(25))
+```
+
+Cara ketiga inilah yang dipakai NumPy (`import numpy as np`) dan Pandas (`import pandas as pd`).
+
+### 2. Module math
+
+```python
+import math
+print(math.ceil(4.2))    # 5  (bulatkan ke atas)
+print(math.floor(4.8))   # 4  (bulatkan ke bawah)
+print(math.pow(2, 10))   # 1024.0
+```
+
+### 3. Module random
+
+```python
+import random
+print(random.randint(1, 6))         # angka acak 1 sampai 6 (seperti dadu)
+print(random.choice(["A", "B", "C"]))  # pilih acak dari list
+```
+
+### 4. Module datetime (sekilas)
+
+```python
+from datetime import date
+print(date.today())     # tanggal hari ini, misalnya 2026-06-19
+```
+
+Kita akan bahas datetime lebih dalam di Module 9.
+
+## Contoh penggunaan
+
+Membuat simulasi lempar dadu beberapa kali:
+
+```python
+import random
+
+for i in range(5):
+    print("Dadu:", random.randint(1, 6))
+```
+
+Menghitung jarak (rumus matematika) memakai math:
+
+```python
+import math
+jarak = math.sqrt(3**2 + 4**2)
+print(jarak)   # 5.0
+```
+
+## Latihan singkat
+
+Pakai module `random` untuk memilih satu nama acak dari sebuah list teman.
+
+```python
+import random
+teman = ["Budi", "Sari", "Andi"]
+print(random.choice(teman))
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Pakai `math.sqrt` untuk menampilkan akar kuadrat dari 144.
+
+**2. Menengah**  
+Pakai `random.randint` untuk membuat program yang mengeluarkan satu angka lotre acak antara 1 dan 100.
+
+**3. Tantangan**  
+Buat "pemilih menu makan siang acak": simpan list menu, lalu tiap dijalankan program memilih satu secara acak dan menampilkannya dengan kalimat ramah.
+
+**4. Project mini**  
+Buat game tebak angka. Komputer memilih angka acak 1 sampai 50 (`random`). Pengguna terus menebak; program memberi petunjuk "terlalu besar" atau "terlalu kecil" sampai tebakan benar, lalu menampilkan berapa kali percobaan.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+print(math.sqrt(16))    # error: math belum di-import
+```
+
+✅ Benar:
+
+```python
+import math
+print(math.sqrt(16))    # 4.0
+```
+
+Module harus di-`import` dulu sebelum dipakai, biasanya di baris paling atas file. Lupa import adalah `NameError` yang sangat umum.
+
+:::tip Catatan Pro
+Letakkan semua `import` di baris paling atas file — bukan di dalam function. Satu tempat mudah ditemukan, hanya dimuat sekali saat program berjalan, dan PEP8 mewajibkan ini.
+:::
+
+## Ringkasan
+
+- *Module* adalah kumpulan function siap pakai; *standard library* sudah ikut terpasang.
+- `import module`, `from module import fungsi`, atau `import module as nama`.
+- `math` untuk matematika, `random` untuk keacakan, `datetime` untuk tanggal.
+- Selalu `import` di atas file sebelum memakai isinya.

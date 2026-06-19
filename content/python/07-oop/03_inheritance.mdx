@@ -1,0 +1,195 @@
+---
+title: Inheritance (Pewarisan)
+sidebar_position: 3
+---
+
+# Inheritance (Pewarisan)
+
+## Kenapa ini penting?
+
+Sering kali beberapa class punya banyak kesamaan. Misalnya `Kucing` dan `Anjing` sama-sama punya `nama` dan bisa `makan`. Daripada menulis kode yang sama dua kali, *inheritance* membuat satu class mewarisi sifat dari class lain. Ini membuat kode hemat dan rapi, dan banyak dipakai di library besar.
+
+**Fokus kita:** membuat class baru yang mewarisi atribut dan method dari class lain dengan *inheritance*.
+
+## Apa itu inheritance?
+
+*Inheritance* (pewarisan) adalah membuat class baru (*child*) yang otomatis mendapat semua atribut dan method dari class lain (*parent*).
+
+```python
+class Hewan:
+    def makan(self):
+        print("Sedang makan")
+
+class Kucing(Hewan):     # Kucing mewarisi dari Hewan
+    pass
+
+kucing = Kucing()
+kucing.makan()           # bisa, walau method-nya didefinisikan di Hewan
+```
+
+## Analogi sederhana
+
+Inheritance itu seperti **mewarisi sifat dari orang tua**. Anak otomatis mendapat ciri dasar dari orang tuanya (parent), lalu boleh menambahkan ciri khasnya sendiri. Tidak perlu membangun semuanya dari nol.
+
+```text
+        Hewan (parent)
+       /            \
+   Kucing          Anjing   (child, mewarisi makan(), lalu tambah kemampuan sendiri)
+```
+
+## Bedah konsep
+
+### 1. Membuat child class
+
+Tulis nama parent di dalam kurung saat mendefinisikan class.
+
+```python
+class Kendaraan:
+    def __init__(self, merek):
+        self.merek = merek
+
+    def info(self):
+        print("Merek:", self.merek)
+
+class Mobil(Kendaraan):     # mewarisi semua dari Kendaraan
+    pass
+
+mobil = Mobil("Toyota")
+mobil.info()                # Merek: Toyota
+```
+
+### 2. Menambah kemampuan khusus
+
+Child boleh menambahkan method sendiri yang tidak dimiliki parent.
+
+```python
+class Mobil(Kendaraan):
+    def klakson(self):
+        print("Tin tin!")
+```
+
+### 3. super() untuk memanggil parent
+
+Kalau child butuh `__init__` sendiri tapi tetap ingin memakai milik parent, panggil dengan `super()`.
+
+```python
+class Karyawan:
+    def __init__(self, nama):
+        self.nama = nama
+
+class Manager(Karyawan):
+    def __init__(self, nama, tim):
+        super().__init__(nama)   # jalankan __init__ milik Karyawan
+        self.tim = tim
+
+m = Manager("Budi", "Data")
+print(m.nama, m.tim)            # Budi Data
+```
+
+### 4. Override: menimpa method parent
+
+Child boleh menulis ulang method parent dengan versinya sendiri.
+
+```python
+class Hewan:
+    def suara(self):
+        print("...")
+
+class Kucing(Hewan):
+    def suara(self):            # menimpa versi parent
+        print("Meong")
+```
+
+## Contoh penggunaan
+
+Sistem akun dengan tipe khusus:
+
+```python
+class Akun:
+    def __init__(self, nama):
+        self.nama = nama
+
+    def info(self):
+        print("Akun:", self.nama)
+
+class AkunPremium(Akun):
+    def __init__(self, nama, masa_aktif):
+        super().__init__(nama)
+        self.masa_aktif = masa_aktif
+
+    def info(self):
+        print(f"Akun Premium: {self.nama} (aktif {self.masa_aktif} hari)")
+
+a = AkunPremium("Budi", 30)
+a.info()    # Akun Premium: Budi (aktif 30 hari)
+```
+
+## Latihan singkat
+
+Buat class `Kendaraan` dengan atribut `merek` dan method `info()`. Kemudian buat class `Motor` yang mewarisi `Kendaraan` dan tambahkan atribut `jenis` (bebek/sport/matic):
+
+```python
+class Kendaraan:
+    def __init__(self, merek):
+        self.merek = merek
+    
+    def info(self):
+        return f"Kendaraan: {self.merek}"
+
+class Motor(Kendaraan):
+    def __init__(self, merek, jenis):
+        super().__init__(merek)
+        self.jenis = jenis
+    
+    def info(self):
+        return f"Motor {self.jenis}: {self.merek}"
+
+motor1 = Motor("Honda", "matic")
+print(motor1.info())  # Motor matic: Honda
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat class `Kendaraan` dengan method `jalan()`. Buat `Motor` yang mewarisinya dan pakai method itu.
+
+**2. Menengah**  
+Buat `Motor` punya method tambahan `standar()` yang tidak ada di `Kendaraan`.
+
+**3. Tantangan**  
+Buat class `Bentuk` dengan method `luas()` yang mengembalikan 0. Buat `Persegi` dan `Lingkaran` yang menimpa (`override`) method `luas()` dengan rumus masing-masing.
+
+**4. Project mini**  
+Buat class dasar `Karyawan` (atribut `nama`, `gaji_pokok`, method `total_gaji()`). Buat child `Manager` yang menambah tunjangan, dan `Sales` yang menambah komisi, masing-masing dengan `super().__init__` dan `total_gaji()` versi sendiri. Buat beberapa object, masukkan ke list, dan tampilkan total gaji semuanya.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+class Manager(Karyawan):
+    def __init__(self, nama, tim):
+        self.tim = tim          # lupa memanggil __init__ parent, self.nama jadi tidak ada
+```
+
+✅ Benar:
+
+```python
+class Manager(Karyawan):
+    def __init__(self, nama, tim):
+        super().__init__(nama)  # warisi dulu setup dari parent
+        self.tim = tim
+```
+
+Kalau child punya `__init__` sendiri, jangan lupa `super().__init__(...)` supaya setup dari parent tetap jalan. Tanpa itu, atribut dari parent (seperti `nama`) tidak akan ada.
+
+:::tip Catatan Pro
+`super().__init__()` harus dipanggil di **awal** `__init__` anak — supaya atribut dari parent terbentuk dulu sebelum child menambahkan atributnya sendiri. Urutannya penting, jangan balik.
+:::
+
+## Ringkasan
+
+- *Inheritance* membuat *child* class mewarisi atribut dan method dari *parent*.
+- Tulis parent di kurung: `class Child(Parent):`.
+- `super().__init__(...)` menjalankan setup parent dari dalam child.
+- Child bisa menambah method baru atau menimpa (*override*) method parent.

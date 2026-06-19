@@ -1,0 +1,176 @@
+---
+title: Bekerja dengan Tanggal & Waktu
+sidebar_position: 2
+---
+
+# Bekerja dengan Tanggal & Waktu
+
+## Kenapa ini penting?
+
+Hampir semua data nyata punya unsur waktu: tanggal transaksi, jam posting, umur akun. Untuk menghitung "berapa hari lalu", "transaksi bulan ini", atau memformat tanggal dengan rapi, kita butuh module `datetime`. Ini wajib saat menganalisis data yang berkaitan dengan waktu.
+
+**Fokus kita:** memakai module `datetime` untuk membuat, menghitung, dan memformat tanggal serta waktu.
+
+## Apa itu datetime?
+
+`datetime` adalah module standar Python untuk bekerja dengan tanggal dan waktu. Ia bisa menyimpan tanggal, menghitung selisih, dan mengubah tanggal menjadi teks yang rapi.
+
+```python
+from datetime import date
+
+hari_ini = date.today()
+print(hari_ini)   # misalnya 2026-06-19
+```
+
+## Analogi sederhana
+
+`datetime` itu seperti **kalender plus jam pintar** di dalam program. Kamu bisa bertanya "tanggal berapa hari ini?", "berapa hari lagi ke deadline?", atau "tampilkan tanggal ini dalam format Indonesia", dan ia menjawab dengan tepat.
+
+## Bedah konsep
+
+### 1. Tanggal hari ini dan waktu sekarang
+
+```python
+from datetime import date, datetime
+
+print(date.today())       # tanggal saja
+print(datetime.now())     # tanggal + jam sekarang
+```
+
+:::note Tentang timezone
+`datetime.now()` mengembalikan waktu lokal tanpa informasi timezone (*naive datetime*).
+Untuk aplikasi yang butuh timezone-aware, gunakan:
+
+```python
+from datetime import datetime, timezone
+
+sekarang_utc = datetime.now(timezone.utc)
+print(sekarang_utc)  # 2024-01-15 07:30:00+00:00
+```
+
+Untuk keperluan belajar dan proyek lokal, `datetime.now()` sudah cukup.
+:::
+
+### 2. Membuat tanggal tertentu
+
+```python
+from datetime import date
+
+ulang_tahun = date(2000, 8, 17)   # tahun, bulan, tanggal
+print(ulang_tahun.year)           # 2000
+print(ulang_tahun.month)          # 8
+```
+
+### 3. Menghitung selisih waktu
+
+Mengurangi dua tanggal menghasilkan `timedelta`, yang punya atribut `.days`.
+
+```python
+from datetime import date
+
+mulai = date(2026, 1, 1)
+sekarang = date(2026, 6, 19)
+
+selisih = sekarang - mulai
+print(selisih.days)   # jumlah hari di antara keduanya
+```
+
+Menambah hari pakai `timedelta`:
+
+```python
+from datetime import date, timedelta
+
+hari_ini = date.today()
+seminggu_lagi = hari_ini + timedelta(days=7)
+print(seminggu_lagi)
+```
+
+### 4. Memformat tanggal jadi teks (strftime)
+
+`strftime` mengubah tanggal jadi teks sesuai pola yang kamu mau.
+
+```python
+from datetime import datetime
+
+sekarang = datetime.now()
+print(sekarang.strftime("%d-%m-%Y"))        # 19-06-2026
+print(sekarang.strftime("%d %B %Y, %H:%M")) # 19 June 2026, 14:30
+```
+
+### 5. Mengubah teks jadi tanggal (strptime)
+
+Kebalikannya: dari teks ke object tanggal, berguna saat membaca tanggal dari file.
+
+```python
+from datetime import datetime
+
+teks = "2026-06-19"
+tanggal = datetime.strptime(teks, "%Y-%m-%d")
+print(tanggal.year)   # 2026
+```
+
+## Contoh penggunaan
+
+Menghitung umur akun dalam hari:
+
+```python
+from datetime import date
+
+tanggal_daftar = date(2025, 12, 1)
+umur_akun = (date.today() - tanggal_daftar).days
+print(f"Akun sudah aktif {umur_akun} hari")
+```
+
+## Latihan singkat
+
+Tampilkan tanggal hari ini dalam format `dd-mm-yyyy`.
+
+```python
+from datetime import date
+print(date.today().strftime("%d-%m-%Y"))
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Tampilkan tanggal dan jam sekarang memakai `datetime.now()`.
+
+**2. Menengah**  
+Buat tanggal ulang tahunmu, lalu hitung sudah berapa hari kamu hidup sampai hari ini.
+
+**3. Tantangan**  
+Diberi teks tanggal `"2026-12-25"`, ubah jadi object tanggal, lalu hitung berapa hari lagi menuju tanggal itu dari hari ini.
+
+**4. Project mini**  
+Buat "pengingat jatuh tempo". Diberi list dictionary tagihan (punya `nama` dan `jatuh_tempo` dalam bentuk teks tanggal), hitung untuk tiap tagihan berapa hari lagi sampai jatuh tempo, dan tandai mana yang sudah lewat. Tampilkan rapi dan urutkan dari yang paling mendesak.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+from datetime import date
+selisih = date(2026, 6, 19) - date(2026, 1, 1)
+print(selisih)          # 169 days, 0:00:00 (object timedelta, bukan angka)
+```
+
+✅ Benar:
+
+```python
+from datetime import date
+selisih = date(2026, 6, 19) - date(2026, 1, 1)
+print(selisih.days)     # 169  (ambil .days untuk jumlah hari)
+```
+
+Mengurangi dua tanggal menghasilkan object `timedelta`, bukan angka. Untuk mendapat jumlah harinya, ambil atribut `.days`.
+
+:::tip Catatan Pro
+Simpan tanggal sebagai object `datetime`, bukan string — baru ubah ke string dengan `strftime()` saat ingin ditampilkan. Dengan object, kamu bisa langsung menghitung selisih (`timedelta`) dan membandingkan tanggal tanpa parsing tambahan.
+:::
+
+## Ringkasan
+
+- `datetime` mengelola tanggal dan waktu; `date.today()` dan `datetime.now()` untuk saat ini.
+- Mengurangi dua tanggal menghasilkan `timedelta`; ambil `.days` untuk jumlah hari.
+- `timedelta(days=n)` untuk menambah atau mengurangi hari.
+- `strftime` mengubah tanggal jadi teks; `strptime` mengubah teks jadi tanggal.

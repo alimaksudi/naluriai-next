@@ -1,0 +1,157 @@
+---
+title: Operator
+sidebar_position: 3
+---
+
+# Operator
+
+## Kenapa ini penting?
+
+Sejauh ini kamu sudah bisa menyimpan dan menampilkan data. Sekarang kita bikin programnya **berpikir**: menghitung total, membandingkan dua nilai, dan menggabungkan beberapa syarat sekaligus.
+
+**Fokus kita:** tiga kelompok *operator* yang paling sering dipakai, yaitu operator hitung, operator perbandingan, dan operator logika.
+
+## Apa itu operator?
+
+*Operator* adalah simbol yang menyuruh Python melakukan sesuatu pada nilai. Misalnya `+` menjumlahkan, `>` membandingkan, dan `and` menggabungkan kondisi.
+
+```python
+total = 5 + 3        # operator hitung
+lebih_mahal = 100 > 50   # operator perbandingan
+```
+
+## Analogi sederhana
+
+Anggap operator itu seperti **tombol di kalkulator**. Tombol `+`, `-`, `x`, dan `:` melakukan pekerjaan yang berbeda pada angka yang kamu masukkan. Bedanya, Python punya tombol yang jauh lebih banyak, termasuk untuk membandingkan dan mengambil keputusan.
+
+## Bedah konsep
+
+### 1. Operator hitung (aritmatika)
+
+```python
+print(10 + 3)    # 13  -> tambah
+print(10 - 3)    # 7   -> kurang
+print(10 * 3)    # 30  -> kali
+print(10 / 3)    # 3.333...  -> bagi (hasilnya selalu float)
+print(10 // 3)   # 3   -> bagi bulat (buang sisa koma)
+print(10 % 3)    # 1   -> sisa bagi (modulo)
+print(10 ** 3)   # 1000 -> pangkat
+```
+
+Dua yang sering bikin penasaran: `//` mengambil hasil bagi tanpa koma, dan `%` mengambil sisa pembagian. Modulo (`%`) berguna sekali, misalnya untuk mengecek angka ganjil atau genap.
+
+```python
+print(8 % 2)   # 0  -> genap (sisa 0)
+print(7 % 2)   # 1  -> ganjil (sisa 1)
+```
+
+### 2. Operator perbandingan
+
+Hasil perbandingan selalu `True` atau `False`.
+
+```python
+print(100 > 50)    # True   -> lebih besar
+print(100 < 50)    # False  -> lebih kecil
+print(10 >= 10)    # True   -> lebih besar atau sama dengan
+print(10 <= 9)     # False  -> lebih kecil atau sama dengan
+print(5 == 5)      # True   -> sama dengan (perhatikan dua tanda =)
+print(5 != 3)      # True   -> tidak sama dengan
+```
+
+Hati-hati: `=` (satu) untuk mengisi variable, sedangkan `==` (dua) untuk membandingkan. Ini salah satu sumber bug paling umum.
+
+### 3. Operator logika
+
+Dipakai untuk menggabungkan beberapa kondisi: `and`, `or`, `not`.
+
+```python
+umur = 20
+punya_ktp = True
+
+print(umur >= 18 and punya_ktp)   # True  -> dua-duanya harus benar
+print(umur < 18 or punya_ktp)     # True  -> cukup salah satu benar
+print(not punya_ktp)              # False -> membalik nilai
+```
+
+Ringkasnya: `and` butuh **semua** benar, `or` butuh **minimal satu** benar, `not` **membalik** benar jadi salah dan sebaliknya.
+
+## Contoh penggunaan
+
+Menghitung total belanja dengan diskon dan pajak:
+
+```python
+harga = 100000
+jumlah = 3
+diskon = 0.1     # 10 persen
+
+subtotal = harga * jumlah
+subtotal = subtotal - (subtotal * diskon)
+total = subtotal + (subtotal * 0.11)   # tambah pajak 11 persen
+
+print(f"Total bayar: Rp {total}")
+```
+
+Mengecek apakah sebuah transaksi perlu ditandai mencurigakan:
+
+```python
+nominal = 15000000
+dari_luar_negeri = True
+
+mencurigakan = nominal > 10000000 and dari_luar_negeri
+print("Perlu diperiksa?", mencurigakan)   # True
+```
+
+## Latihan singkat
+
+Buat dua variable angka, lalu tampilkan hasil penjumlahan, pengurangan, perkalian, dan apakah angka pertama lebih besar dari angka kedua.
+
+```python
+a = 12
+b = 5
+print("Jumlah:", a + b)
+print("a lebih besar dari b?", a > b)
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat variable `harga` dan `jumlah`, lalu hitung dan tampilkan totalnya.
+
+**2. Menengah**  
+Minta pengguna memasukkan sebuah angka, lalu tampilkan apakah angka itu genap (petunjuk: pakai `% 2`).
+
+**3. Tantangan**  
+Buat pengecekan kelayakan pinjaman: seseorang lolos kalau `penghasilan >= 5000000` **dan** `umur >= 21`. Tampilkan `True` atau `False`.
+
+**4. Project mini**  
+Buat kalkulator belanja lengkap: minta harga satuan, jumlah barang, dan persen diskon dari pengguna. Hitung subtotal, potongan diskon, pajak 11 persen, dan total akhir. Tampilkan semuanya rapi memakai f-string.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+umur = 18
+hasil = (umur = 18)  # SyntaxError: = adalah assignment, bukan perbandingan
+```
+
+✅ Benar:
+
+```python
+umur = 20
+print(umur == 18)   # False
+print(umur == 20)   # True
+print(umur != 18)   # True — tidak sama dengan
+```
+
+Satu `=` mengisi variable, dua `==` membandingkan. Salah satu yang paling sering bikin pemula bingung.
+
+:::tip Catatan Pro
+`//` dan `%` sering dipakai bersama: `//` untuk hasil bagi bulat, `%` untuk sisa bagi. Contoh: `17 // 5 = 3` dan `17 % 5 = 2`. Berguna untuk cek bilangan genap/ganjil, pembagian waktu, dan paginasi.
+:::
+
+## Ringkasan
+
+- Operator hitung: `+ - * / // % **`. Ingat `/` selalu menghasilkan float, `//` membuang koma, `%` mengambil sisa.
+- Operator perbandingan menghasilkan `True` atau `False`, dan pakai `==` (bukan `=`) untuk menyamakan.
+- Operator logika `and`, `or`, `not` menggabungkan beberapa kondisi.

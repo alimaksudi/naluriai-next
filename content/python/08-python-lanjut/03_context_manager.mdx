@@ -1,0 +1,145 @@
+---
+title: Context Manager (with)
+sidebar_position: 3
+---
+
+# Context Manager (with)
+
+## Kenapa ini penting?
+
+Kamu sudah memakai `with open(...)` untuk membaca file. Itu sebenarnya contoh *context manager*: alat yang menjamin sesuatu "dibereskan" setelah selesai, misalnya menutup file walau terjadi error. Memahaminya membuat kodemu lebih aman dan bersih, terutama saat berurusan dengan file, koneksi, atau sumber daya lain.
+
+**Fokus kita:** memahami cara kerja `with` dan membuat *context manager* sendiri.
+
+## Apa itu context manager?
+
+*Context manager* adalah object yang mengatur "buka" dan "tutup" sebuah sumber daya secara otomatis. Dipakai dengan kata kunci `with`. Apa pun yang terjadi di dalam blok, bagian "tutup" dijamin jalan.
+
+```python
+with open("data.txt") as f:
+    isi = f.read()
+# file otomatis ditutup di sini, walau ada error di dalam blok
+```
+
+## Analogi sederhana
+
+Context manager itu seperti **lampu otomatis dengan sensor**. Begitu kamu masuk ruangan (masuk blok `with`), lampu menyala. Begitu kamu keluar (selesai blok), lampu mati sendiri. Kamu tidak perlu ingat mematikannya, dan tidak akan lupa.
+
+## Bedah konsep
+
+### 1. Kenapa with lebih aman
+
+Tanpa `with`, kamu harus ingat menutup file sendiri, dan kalau ada error di tengah, penutupan bisa terlewat.
+
+```python
+# tanpa with: rawan lupa close, apalagi kalau error
+f = open("data.txt")
+isi = f.read()
+f.close()
+
+# dengan with: penutupan dijamin
+with open("data.txt") as f:
+    isi = f.read()
+```
+
+### 2. Membuat context manager dengan contextlib
+
+Cara termudah membuat sendiri adalah dengan decorator `@contextmanager`. Kode sebelum `yield` adalah bagian "buka", sesudahnya bagian "tutup".
+
+```python
+from contextlib import contextmanager
+
+@contextmanager
+def buka_sesi(nama):
+    print(f"Mulai sesi {nama}")     # bagian buka
+    try:
+        yield
+    finally:
+        print(f"Tutup sesi {nama}")     # bagian tutup (selalu jalan)
+
+with buka_sesi("belajar"):
+    print("Sedang mengerjakan...")
+
+# Output:
+# Mulai sesi belajar
+# Sedang mengerjakan...
+# Tutup sesi belajar
+```
+
+### 3. Bagian "tutup" tetap jalan walau error
+
+Itulah nilai utamanya: pembersihan dijamin terjadi, sehingga sumber daya tidak "bocor".
+
+Untuk memastikan bagian penutup selalu jalan (bahkan saat terjadi error), bungkus `yield` dengan `try/finally`. Tanpa `try/finally`, kode setelah `yield` akan dilewati jika terjadi exception di dalam blok `with`.
+
+## Contoh penggunaan
+
+Mengukur waktu sebuah blok kode dengan context manager:
+
+```python
+from contextlib import contextmanager
+import time
+
+@contextmanager
+def ukur_waktu():
+    mulai = time.time()
+    yield
+    print(f"Selesai dalam {time.time() - mulai:.4f} detik")
+
+with ukur_waktu():
+    total = sum(range(1000000))
+```
+
+## Latihan singkat
+
+Pakai `with open(...)` untuk menulis satu baris ke file, dan perhatikan kamu tidak perlu memanggil `close()` sendiri.
+
+```python
+with open("catatan.txt", "w") as f:
+    f.write("Halo dari context manager")
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Tulis lalu baca sebuah file hanya memakai `with`, tanpa `close()` manual.
+
+**2. Menengah**  
+Buat context manager sederhana dengan `@contextmanager` yang mencetak "buka" di awal dan "tutup" di akhir blok.
+
+**3. Tantangan**  
+Buat context manager `ukur_waktu` yang menampilkan durasi blok kode di dalamnya.
+
+**4. Project mini**  
+Buat context manager `sesi_log` yang saat dibuka mencatat "sesi dimulai" ke file log, dan saat ditutup mencatat "sesi selesai" beserta durasinya. Pakai untuk membungkus sebuah proses, dan periksa isi file lognya.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+f = open("data.txt")
+isi = f.read()
+# lupa f.close(), file tetap terbuka dan boros sumber daya
+```
+
+✅ Benar:
+
+```python
+with open("data.txt") as f:
+    isi = f.read()
+# otomatis ditutup, aman walau ada error di dalam blok
+```
+
+Mengelola buka-tutup sumber daya secara manual rawan lupa dan rawan bocor saat error. Gunakan `with` agar pembersihan dijamin terjadi.
+
+:::tip Catatan Pro
+`open()` sudah otomatis context manager — selalu pakai `with open(...) as f:`, jangan `f = open()` diikuti `f.close()` manual. `with` menjamin file tertutup bahkan jika terjadi error di tengah jalan.
+:::
+
+## Ringkasan
+
+- *Context manager* mengatur "buka" dan "tutup" sumber daya otomatis lewat `with`.
+- Bagian "tutup" dijamin jalan walau terjadi error di dalam blok.
+- `@contextmanager` dari `contextlib` adalah cara mudah membuatnya: sebelum `yield` untuk buka, sesudahnya untuk tutup.
+- Pola ini membuat kode yang berurusan dengan file dan sumber daya jadi aman dan bersih.

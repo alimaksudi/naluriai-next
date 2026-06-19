@@ -1,0 +1,171 @@
+---
+title: Konsumsi REST API
+sidebar_position: 2
+---
+
+# Konsumsi REST API
+
+## Kenapa ini penting?
+
+Hampir semua layanan modern menyediakan *REST API*: cara resmi untuk mengambil data mereka secara terstruktur. Begitu kamu bisa membaca dokumentasi API dan mengambil datanya, dunia data terbuka lebar, mulai dari data publik gratis sampai layanan AI. Ini skill yang dipakai setiap hari oleh Data Engineer dan AI Engineer.
+
+**Fokus kita:** mengambil data dari *REST API* dengan parameter, dan mengolah hasil JSON-nya.
+
+## Apa itu REST API?
+
+*REST API* adalah sekumpulan alamat (*endpoint*) di internet yang menyediakan data dalam format terstruktur (biasanya JSON). Tiap endpoint mewakili "sumber data" tertentu, misalnya daftar pengguna atau detail satu produk.
+
+```python
+import requests
+
+respon = requests.get("https://jsonplaceholder.typicode.com/users")
+pengguna = respon.json()    # list berisi dictionary
+print(len(pengguna))
+```
+
+## Analogi sederhana
+
+REST API itu seperti **menu restoran dengan nomor**. Tiap menu (endpoint) punya alamat sendiri. Kamu pesan menu nomor sekian (`/users`, `/products/3`), dan dapur mengantar persis data yang kamu minta dalam kemasan rapi (JSON).
+
+## Bedah konsep
+
+### 1. Endpoint dan data terstruktur
+
+Tiap endpoint memberi jenis data berbeda. Hasilnya sering berupa *list berisi dictionary*, bentuk yang sudah kamu kuasai di Module 2.
+
+```python
+import requests
+
+respon = requests.get("https://jsonplaceholder.typicode.com/users")
+pengguna = respon.json()
+
+for orang in pengguna[:3]:
+    print(orang["name"], "-", orang["email"])
+```
+
+### 2. Mengirim parameter
+
+Banyak API menerima parameter untuk menyaring data. `requests` mengirimnya lewat argumen `params`.
+
+```python
+import requests
+
+respon = requests.get(
+    "https://jsonplaceholder.typicode.com/posts",
+    params={"userId": 1}
+)
+posts = respon.json()
+print("Jumlah post:", len(posts))
+```
+
+### 3. Mengambil satu item tertentu
+
+Endpoint sering punya pola `/sumber/id` untuk satu item.
+
+```python
+import requests
+
+respon = requests.get("https://jsonplaceholder.typicode.com/users/1")
+orang = respon.json()
+print(orang["name"])
+```
+
+### 4. Membaca dokumentasi API
+
+Setiap API punya dokumentasi yang menjelaskan endpoint apa saja yang tersedia. Contoh dari JSONPlaceholder:
+
+```
+GET /users          → daftar semua pengguna
+GET /users/1        → pengguna dengan ID 1
+GET /posts          → daftar semua post
+GET /posts?userId=1 → post dari pengguna ID 1
+```
+
+Cara membaca: perhatikan **method** (GET/POST/PUT/DELETE), **URL**, **parameter** yang bisa dikirim, dan **format response** (biasanya JSON).
+
+```python
+import requests
+
+# Parameter query dikirim via params=
+respon = requests.get(
+    "https://jsonplaceholder.typicode.com/posts",
+    params={"userId": 1}  # sama dengan ?userId=1 di URL
+)
+posts_user1 = respon.json()
+print(f"User 1 punya {len(posts_user1)} post")
+```
+
+Membaca dokumentasi adalah langkah pertama sebelum memakai API mana pun.
+
+## Contoh penggunaan
+
+Mengambil dan meringkas data pengguna dari API publik:
+
+```python
+import requests
+
+respon = requests.get("https://jsonplaceholder.typicode.com/users")
+
+if respon.status_code == 200:
+    pengguna = respon.json()
+    kota = [orang["address"]["city"] for orang in pengguna]
+    print("Jumlah pengguna:", len(pengguna))
+    print("Kota unik:", set(kota))
+else:
+    print("Gagal mengambil data")
+```
+
+Perhatikan: kita menggabungkan requests, JSON, list comprehension, dan set. Semua ilmu sebelumnya menyatu di sini.
+
+## Latihan singkat
+
+Ambil daftar pengguna dari `https://jsonplaceholder.typicode.com/users`, lalu tampilkan nama pengguna pertama.
+
+```python
+import requests
+data = requests.get("https://jsonplaceholder.typicode.com/users").json()
+print(data[0]["name"])
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Ambil daftar post dari `/posts`, lalu tampilkan berapa banyak post yang ada.
+
+**2. Menengah**  
+Ambil satu pengguna lewat `/users/2`, lalu tampilkan nama, email, dan kotanya.
+
+**3. Tantangan**  
+Ambil semua post milik `userId=1` memakai `params`, lalu tampilkan judul tiap post.
+
+**4. Project mini**  
+Buat "ringkasan aktivitas pengguna". Ambil daftar pengguna dari API, lalu untuk satu pengguna pilihan, ambil semua post miliknya (pakai `params` userId). Tampilkan nama pengguna, jumlah postnya, dan judul-judul postnya. Bungkus dengan pengecekan status dan `try/except`.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+data = requests.get(url).json()
+print(data["name"])      # error kalau data ternyata list, bukan dict
+```
+
+✅ Benar:
+
+```python
+data = requests.get(url).json()
+print(data[0]["name"])   # kalau API mengembalikan list, ambil item dulu
+```
+
+Periksa dulu bentuk data dari API: kadang berupa list (banyak item), kadang berupa dictionary (satu item). Salah memperlakukan keduanya adalah error umum. Tampilkan dulu `type(data)` saat ragu.
+
+:::tip Catatan Pro
+Simpan `respon.json()` ke variabel sebelum mengaksesnya (`data = respon.json()`), lalu `print(type(data))` dan `print(data[:2])` untuk melihat bentuk datanya — apakah list atau dict. Ini langkah pertama yang selalu dilakukan saat kerja dengan API baru.
+:::
+
+## Ringkasan
+
+- *REST API* menyediakan data terstruktur lewat *endpoint*, biasanya dalam JSON.
+- Hasilnya sering berupa *list berisi dictionary*, sama seperti di Module 2.
+- Kirim parameter dengan argumen `params` untuk menyaring data.
+- Selalu baca dokumentasi API dan cek bentuk datanya (list atau dict) sebelum mengolah.

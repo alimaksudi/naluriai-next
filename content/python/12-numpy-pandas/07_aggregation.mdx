@@ -1,0 +1,130 @@
+---
+title: Aggregation
+sidebar_position: 7
+---
+
+# Aggregation
+
+## Kenapa ini penting?
+
+Data mentah jarang langsung memberi jawaban. Pertanyaan bisnis biasanya berbunyi: "berapa total penjualan per kota?", "rata-rata umur pelanggan per kategori?". Menjawabnya butuh *aggregation*, yaitu meringkas banyak baris jadi angka yang bermakna. Ini langkah tempat data berubah jadi *insight*.
+
+**Fokus kita:** meringkas data dengan fungsi agregasi dan mengelompokkannya dengan `groupby`.
+
+## Apa itu aggregation?
+
+*Aggregation* adalah meringkas sekumpulan data menjadi satu nilai, misalnya total, rata-rata, atau jumlah. Sering dikombinasikan dengan `groupby` untuk meringkas per kelompok.
+
+```python
+df["harga"].mean()        # rata-rata seluruh harga
+df.groupby("kota")["harga"].mean()   # rata-rata harga per kota
+```
+
+## Analogi sederhana
+
+`groupby` itu seperti **memilah kelereng berdasarkan warna, lalu menghitung tiap tumpukan**. Pertama dikelompokkan (per warna), lalu diringkas (dihitung). Pandas melakukan persis itu pada barisan data.
+
+## Bedah konsep
+
+### 1. Agregasi sederhana satu kolom
+
+```python
+print(df["harga"].sum())     # total
+print(df["harga"].mean())    # rata-rata
+print(df["harga"].max())     # tertinggi
+print(df["harga"].count())   # jumlah data
+```
+
+### 2. groupby: meringkas per kelompok
+
+Pola intinya: kelompokkan dengan satu kolom, pilih kolom yang mau diringkas, lalu panggil fungsi agregasi.
+
+```python
+# total penjualan per kota
+df.groupby("kota")["penjualan"].sum()
+
+# rata-rata harga per kategori
+df.groupby("kategori")["harga"].mean()
+```
+
+### 3. Menghitung jumlah anggota tiap kelompok
+
+`value_counts()` cepat untuk menghitung berapa kali tiap nilai muncul.
+
+```python
+df["kota"].value_counts()    # berapa pelanggan per kota
+```
+
+### 4. Beberapa ringkasan sekaligus
+
+```python
+df.groupby("kategori")["harga"].agg(["mean", "max", "count"])
+```
+
+## Contoh penggunaan
+
+Menghitung total dan rata-rata penjualan per kota:
+
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "kota": ["Bandung", "Jakarta", "Bandung", "Jakarta", "Bandung"],
+    "penjualan": [100, 200, 150, 250, 120]
+})
+
+print(df.groupby("kota")["penjualan"].sum())
+print(df.groupby("kota")["penjualan"].mean())
+print(df["kota"].value_counts())
+```
+
+Dari tabel mentah lima baris, kamu langsung tahu kota mana yang penjualannya lebih besar. Itulah *insight*.
+
+## Latihan singkat
+
+Dari DataFrame berisi kolom `kota` dan `penjualan`, tampilkan total penjualan per kota.
+
+```python
+print(df.groupby("kota")["penjualan"].sum())
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Dari sebuah DataFrame, tampilkan rata-rata salah satu kolom angkanya.
+
+**2. Menengah**  
+Kelompokkan data per kategori, lalu tampilkan total penjualan tiap kategori.
+
+**3. Tantangan**  
+Untuk tiap kategori, tampilkan rata-rata, nilai tertinggi, dan jumlah data sekaligus memakai `.agg([...])`.
+
+**4. Project mini**  
+Muat dataset transaksi (kolom `kota`, `kategori`, `jumlah`). Jawab tiga pertanyaan: kota mana yang total transaksinya terbesar, kategori apa yang paling banyak terjual, dan berapa rata-rata jumlah transaksi per kota. Tulis kesimpulan singkat dari temuanmu.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+df.groupby("kota").sum()        # menjumlah SEMUA kolom, termasuk yang tak relevan
+```
+
+✅ Benar:
+
+```python
+df.groupby("kota")["penjualan"].sum()   # pilih kolom yang memang mau diringkas
+```
+
+Tanpa memilih kolom, Pandas mencoba meringkas semua kolom angka, yang sering menghasilkan tabel membingungkan. Sebutkan kolom yang ingin kamu ringkas agar hasilnya fokus dan jelas.
+
+:::tip Catatan Pro
+Setelah `groupby().agg()`, tambahkan `.reset_index()` agar kolom grup kembali jadi kolom biasa — bukan multi-level index yang membingungkan saat diproses lebih lanjut.
+:::
+
+## Ringkasan
+
+- *Aggregation* meringkas banyak baris jadi satu angka bermakna (total, rata-rata, dll).
+- `groupby` mengelompokkan data dulu, lalu meringkas per kelompok.
+- `value_counts()` cepat untuk menghitung kemunculan tiap nilai.
+- `.agg([...])` menampilkan beberapa ringkasan sekaligus. Di sinilah data berubah jadi insight.

@@ -1,0 +1,176 @@
+---
+title: Operasi Dasar NumPy
+sidebar_position: 3
+---
+
+# Operasi Dasar NumPy
+
+## Kenapa ini penting?
+
+Kekuatan sebenarnya NumPy ada di operasinya: menghitung seluruh array sekaligus, dan meringkasnya jadi satu angka penting (rata-rata, total, maksimum). Inilah yang kamu lakukan terus-menerus saat menganalisis data dan mengevaluasi model AI.
+
+**Fokus kita:** operasi matematika pada array (*vectorization*), fungsi agregasi, dan penyaringan dengan kondisi.
+
+## Apa itu operasi NumPy?
+
+*Operasi NumPy* adalah perhitungan yang berlaku ke seluruh elemen array sekaligus, tanpa loop. Hasilnya bisa berupa array baru, atau satu angka ringkasan.
+
+```python
+import numpy as np
+
+harga = np.array([10000, 20000, 30000])
+print(harga * 1.1)     # [11000. 22000. 33000.] -> semua naik 10 persen
+```
+
+## Analogi sederhana
+
+Bayangkan kamu manajer toko dengan 1000 produk. Operasi NumPy itu seperti **mengumumkan satu aturan ke semua produk sekaligus** lewat pengeras suara ("naikkan semua harga 10 persen"), bukan mendatangi rak satu per satu.
+
+## Bedah konsep
+
+### 1. Operasi antar array
+
+Dua array berukuran sama bisa dihitung berpasangan, elemen demi elemen.
+
+```python
+import numpy as np
+
+harga = np.array([10000, 20000, 30000])
+jumlah = np.array([2, 1, 3])
+
+total = harga * jumlah
+print(total)           # [20000 20000 90000]
+print(total.sum())     # 130000
+```
+
+### 2. Fungsi agregasi (meringkas)
+
+```python
+nilai = np.array([80, 95, 70, 88])
+
+print(nilai.sum())     # total
+print(nilai.mean())    # rata-rata
+print(nilai.max())     # tertinggi
+print(nilai.min())     # terendah
+print(nilai.std())     # simpangan baku (seberapa menyebar datanya)
+```
+
+### 3. Broadcasting
+
+Broadcasting adalah kemampuan NumPy untuk melakukan operasi pada array dengan **shape berbeda** secara otomatis, selama dimensinya kompatibel.
+
+```python
+import numpy as np
+
+# Menambah scalar ke array — scalar "disiarkan" ke semua elemen
+harga = np.array([10000, 25000, 15000, 30000])
+harga_diskon = harga * 0.9  # kalikan SEMUA elemen dengan 0.9
+print(harga_diskon)  # [9000. 22500. 13500. 27000.]
+
+# Menambah 1D array ke 2D array — baris "disiarkan"
+nilai = np.array([[80, 70, 90],   # siswa A
+                  [60, 85, 75]])  # siswa B
+bonus = np.array([5, 10, 5])     # bonus per mata pelajaran
+nilai_final = nilai + bonus       # bonus ditambahkan ke SETIAP baris
+print(nilai_final)
+# [[85, 80, 95],
+#  [65, 95, 80]]
+```
+
+Aturan broadcasting: NumPy membandingkan shape dari kanan ke kiri. Dimensi kompatibel jika sama, atau salah satunya 1.
+
+```python
+# Shape kompatibel: (2, 3) + (3,) → (2, 3) ✅
+# Shape tidak kompatibel: (2, 3) + (2,) → Error ❌
+```
+
+### 4. Penyaringan dengan kondisi (boolean masking)
+
+Ini sangat berguna. Kamu bisa mengambil hanya elemen yang memenuhi syarat.
+
+```python
+nilai = np.array([80, 45, 90, 60, 95])
+
+print(nilai > 70)          # [True False True False True]
+print(nilai[nilai > 70])   # [80 90 95] -> ambil yang lulus saja
+```
+
+### 5. Menghitung yang memenuhi syarat
+
+```python
+lulus = nilai[nilai >= 70]
+print("Jumlah lulus:", len(lulus))
+```
+
+## Contoh penggunaan
+
+Menganalisis data penjualan harian:
+
+```python
+import numpy as np
+
+penjualan = np.array([120, 95, 140, 80, 200, 75, 160])
+
+print("Total seminggu:", penjualan.sum())
+print("Rata-rata harian:", penjualan.mean())
+print("Hari di atas rata-rata:", len(penjualan[penjualan > penjualan.mean()]))
+```
+
+## Latihan singkat
+
+Buat array nilai `[60, 75, 90, 45, 80]`, lalu tampilkan hanya nilai yang 70 ke atas.
+
+```python
+import numpy as np
+nilai = np.array([60, 75, 90, 45, 80])
+print(nilai[nilai >= 70])
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat array berisi 5 angka, lalu tampilkan total dan rata-ratanya.
+
+**2. Menengah**  
+Buat array harga, lalu tampilkan hanya harga yang di atas rata-rata.
+
+**3. Tantangan**  
+Diberi array suhu seminggu, hitung berapa hari yang suhunya di bawah 25 derajat, dan berapa persen dari total hari.
+
+**4. Project mini**  
+Diberi dua array, `harga` dan `jumlah terjual` untuk beberapa produk, hitung pendapatan tiap produk, total pendapatan, produk dengan pendapatan tertinggi, dan rata-rata pendapatan per produk. Semua tanpa loop.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+import numpy as np
+a = np.array([1, 2, 3])
+b = np.array([1, 2])
+print(a + b)        # error: ukuran array berbeda, tidak bisa dijumlah
+```
+
+✅ Benar:
+
+```python
+import numpy as np
+a = np.array([1, 2, 3])
+b = np.array([10, 20, 30])
+print(a + b)        # [11 22 33] -> ukuran sama, aman
+```
+
+Operasi antar array berpasangan butuh ukuran yang cocok. Kalau ukurannya beda, NumPy akan protes. Periksa `shape` keduanya saat ragu.
+
+> **Catatan:** ini adalah contoh broadcasting yang gagal karena shape tidak kompatibel — `(3,)` dan `(2,)` tidak bisa disiarkan satu sama lain. Broadcasting hanya berhasil jika salah satu dimensi bernilai 1, atau keduanya sama.
+
+:::tip Catatan Pro
+Boolean masking `arr[arr > 0]` adalah cara filter paling efisien di NumPy — eksekusinya terjadi di level C (bukan Python), jauh lebih cepat dari loop. Untuk array besar, bedanya bisa ratusan kali lipat.
+:::
+
+## Ringkasan
+
+- Operasi matematika berlaku ke seluruh array sekaligus (*vectorization*).
+- Fungsi agregasi seperti `sum`, `mean`, `max`, `min`, `std` meringkas array jadi satu angka.
+- *Boolean masking* (`arr[arr > nilai]`) menyaring elemen yang memenuhi syarat.
+- Operasi antar array butuh ukuran yang cocok.

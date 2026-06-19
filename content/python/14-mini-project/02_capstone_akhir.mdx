@@ -1,0 +1,184 @@
+---
+title: "Capstone Akhir: Aplikasi Mini Pengelola Data"
+sidebar_position: 2
+---
+
+# Capstone Akhir: Aplikasi Mini Pengelola Data
+
+## Kenapa ini penting?
+
+Ini puncak dari seluruh jalur Python. Project sebelumnya menguji bagian-bagian; capstone ini menyatukan semuanya jadi satu aplikasi utuh: struktur data, function, OOP, file, error handling, sampai analisis. Kalau kamu bisa menyelesaikan ini, kamu benar-benar sudah naik dari nol ke "hero" Python, dan siap melangkah ke Machine Learning.
+
+**Fokus kita:** membangun satu aplikasi mini yang utuh dengan menggabungkan hampir semua materi Python.
+
+## Gambaran project
+
+Kita bikin **Aplikasi Pengelola Inventaris Toko**. Aplikasi ini menyimpan produk, mengolah data dari file, dan menghasilkan laporan. Kita pakai gaya OOP supaya rapi dan profesional.
+
+Skill yang dipakai:
+
+```text
+Class & Object (M7)      → struktur Produk dan Inventaris
+Struktur Data (M2)       → menyimpan banyak produk
+Function (M3)            → memecah tugas
+File & JSON (M11)        → simpan dan muat data
+Error Handling (M6)      → validasi input
+Comprehension & agg (M4) → analisis laporan
+Clean code & docstring   → kode rapi dan terdokumentasi (M10)
+```
+
+## Tahap 1: Class Produk
+
+```python
+class Produk:
+    """Mewakili satu produk di inventaris."""
+
+    def __init__(self, nama, harga, stok):
+        if harga < 0 or stok < 0:
+            raise ValueError("Harga dan stok tidak boleh negatif")
+        self.nama = nama
+        self.harga = harga
+        self.stok = stok
+
+    def nilai_total(self):
+        """Nilai persediaan produk ini (harga dikali stok)."""
+        return self.harga * self.stok
+
+    def __str__(self):
+        return f"{self.nama} | Rp {self.harga:,} | stok {self.stok}"
+```
+
+## Tahap 2: Class Inventaris
+
+```python
+class Inventaris:
+    """Mengelola kumpulan produk."""
+
+    def __init__(self):
+        self.produk = []
+
+    def tambah(self, produk):
+        self.produk.append(produk)
+
+    def total_nilai(self):
+        return sum(p.nilai_total() for p in self.produk)
+
+    def stok_menipis(self, batas=5):
+        return [p for p in self.produk if p.stok < batas]
+
+    def laporan(self):
+        print("=== LAPORAN INVENTARIS ===")
+        for p in self.produk:
+            print(p)
+        print(f"Total nilai persediaan: Rp {self.total_nilai():,}")
+        menipis = self.stok_menipis()
+        if menipis:
+            print("Perlu restok:", ", ".join(p.nama for p in menipis))
+```
+
+## Tahap 3: Menjalankan aplikasi
+
+```python
+toko = Inventaris()
+toko.tambah(Produk("Sepatu", 350000, 12))
+toko.tambah(Produk("Topi", 45000, 3))
+toko.tambah(Produk("Tas", 120000, 8))
+
+toko.laporan()
+```
+
+## Tahap 4: Simpan dan muat dari file (JSON)
+
+```python
+import json
+
+def simpan(inventaris, nama_file):
+    """Menyimpan inventaris ke file JSON."""
+    data = [
+        {"nama": p.nama, "harga": p.harga, "stok": p.stok}
+        for p in inventaris.produk
+    ]
+    with open(nama_file, "w") as f:
+        json.dump(data, f, indent=2)
+
+def muat(nama_file):
+    """Membuat inventaris dari file JSON."""
+    inventaris = Inventaris()
+    try:
+        with open(nama_file) as f:
+            data = json.load(f)
+        for d in data:
+            inventaris.tambah(Produk(d["nama"], d["harga"], d["stok"]))
+    except FileNotFoundError:
+        print("File belum ada, mulai dengan inventaris kosong.")
+    return inventaris
+```
+
+## Spesifikasi tugasmu
+
+Bangun aplikasi lengkap yang bisa:
+
+1. **Menyimpan produk** memakai class `Produk` dan `Inventaris` (dengan validasi input).
+2. **Menu interaktif** memakai loop `while`: tambah produk, lihat laporan, simpan, keluar.
+3. **Menyimpan dan memuat** data dari file JSON, sehingga data tidak hilang saat program ditutup.
+4. **Laporan analisis**: total nilai persediaan, produk yang stoknya menipis, dan produk termahal.
+5. **Kode rapi**: nama jelas (PEP8), function pendek, dan docstring di tiap class/function.
+
+**Skeleton menu interaktif** (lengkapi bagian yang ditandai `# TODO`):
+
+```python
+inventaris = Inventaris()
+muat(inventaris, "inventaris.json")  # muat data jika file ada
+
+while True:
+    print("\n=== MENU INVENTARIS ===")
+    print("1. Lihat semua produk")
+    print("2. Tambah produk")
+    print("3. Cari produk")
+    print("4. Produk stok menipis")
+    print("0. Simpan & keluar")
+
+    pilihan = input("\nPilih menu: ")
+
+    if pilihan == "1":
+        # TODO: tampilkan semua produk
+        pass
+    elif pilihan == "2":
+        # TODO: minta input nama, harga, stok — lalu tambah ke inventaris
+        pass
+    elif pilihan == "3":
+        # TODO: minta input keyword pencarian
+        pass
+    elif pilihan == "4":
+        # TODO: tampilkan produk dengan stok < 5
+        pass
+    elif pilihan == "0":
+        simpan(inventaris, "inventaris.json")
+        print("Data tersimpan. Sampai jumpa!")
+        break
+    else:
+        print("Pilihan tidak valid.")
+```
+
+## Tantangan ekstra (level hero)
+
+- **Tambah API**: ambil data kurs dari sebuah API (Module 13) untuk menampilkan total nilai dalam mata uang lain.
+- **Analisis dengan Pandas**: muat data ke `DataFrame` (Module 12), lalu kelompokkan dan hitung statistik per kategori produk.
+- **Tambah test**: tulis test pytest (Module 10) untuk method `nilai_total` dan `stok_menipis`.
+- **Pecah jadi modul**: pisahkan class ke file sendiri (Module 5) dan impor dari file utama.
+
+## Checklist kelulusan (Zero to Hero)
+
+Centang kalau kamu bisa melakukannya tanpa banyak melihat contoh:
+
+- Merancang dan memakai class dengan atribut, method, dan validasi.
+- Mengelola banyak object dengan struktur data dan comprehension.
+- Menyimpan serta memuat data dari file dengan penanganan error.
+- Memecah program jadi function/modul yang rapi dan terdokumentasi.
+- Menghasilkan laporan analisis dari data yang dikelola.
+
+## Penutup
+
+Kalau kamu menyelesaikan capstone ini, selamat sungguh-sungguh: kamu sudah menempuh perjalanan Python dari nol sampai mahir. Kamu kini bisa membangun program nyata yang terstruktur, aman, dan teranalisis.
+
+Langkah berikutnya dalam perjalanan AI adalah **Matematika, Statistika, lalu Machine Learning**. Pondasimu sudah kokoh. Lihat **[Peta Belajar](/peta-belajar)** untuk melanjutkan.

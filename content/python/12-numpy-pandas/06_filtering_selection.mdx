@@ -1,0 +1,164 @@
+---
+title: Filtering & Selection
+sidebar_position: 6
+---
+
+# Filtering & Selection
+
+## Kenapa ini penting?
+
+Jarang sekali kita butuh seluruh data. Biasanya kita cuma mau bagian tertentu: "pelanggan dari Jakarta", "produk di atas 100 ribu", "transaksi bulan ini". Kemampuan memilih dan menyaring data inilah inti dari analisis data sehari-hari.
+
+**Fokus kita:** memilih kolom dan baris tertentu, serta menyaring data berdasarkan kondisi.
+
+## Apa itu filtering dan selection?
+
+- *Selection* adalah memilih kolom atau baris tertentu dari DataFrame.
+- *Filtering* adalah mengambil hanya baris yang memenuhi sebuah syarat.
+
+```python
+mahal = df[df["harga"] > 100000]
+```
+
+Baris di atas mengambil hanya produk yang harganya di atas 100 ribu. Hanya satu baris kode.
+
+## Analogi sederhana
+
+Filtering itu seperti **filter di toko online**. Kamu centang "harga di bawah 100 ribu" dan "warna hitam", lalu yang muncul cuma produk yang cocok. Pandas melakukan hal yang sama pada data tabelmu.
+
+## Bedah konsep
+
+Anggap kita punya DataFrame `df` berisi kolom `nama`, `umur`, `kota`.
+
+### 1. Memilih kolom
+
+```python
+df["nama"]                 # satu kolom
+df[["nama", "kota"]]       # beberapa kolom (perhatikan dua kurung siku)
+```
+
+### 2. Menyaring baris dengan kondisi
+
+```python
+df[df["umur"] > 25]        # hanya yang umurnya di atas 25
+df[df["kota"] == "Jakarta"]# hanya yang dari Jakarta
+```
+
+### 3. Menggabungkan beberapa syarat
+
+Pakai `&` (dan) serta `|` (atau). Tiap syarat wajib dibungkus tanda kurung.
+
+```python
+df[(df["umur"] > 25) & (df["kota"] == "Jakarta")]
+```
+
+### 4. loc dan iloc
+
+`.loc` = akses berdasarkan **label** (nama baris/kolom)
+`.iloc` = akses berdasarkan **posisi** (nomor integer, mulai dari 0)
+
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "nama": ["Andi", "Budi", "Citra", "Dewi"],
+    "umur": [25, 30, 22, 35],
+    "kota": ["Jakarta", "Bandung", "Surabaya", "Jakarta"]
+}, index=["a", "b", "c", "d"])  # index adalah huruf
+
+# --- loc: gunakan label ---
+print(df.loc["a"])              # baris dengan index label "a"
+print(df.loc["a", "nama"])      # baris "a", kolom "nama" → "Andi"
+print(df.loc["a":"c", "nama":"umur"])  # slice berdasarkan label
+
+# --- iloc: gunakan posisi integer ---
+print(df.iloc[0])               # baris pertama (posisi 0)
+print(df.iloc[0, 0])            # baris 0, kolom 0 → "Andi"
+print(df.iloc[0:3, 0:2])        # baris 0-2, kolom 0-1 (posisi)
+
+# --- Kombinasi paling umum: filter baris + pilih kolom ---
+df.loc[df["umur"] > 25, "nama"]  # baris yang memenuhi kondisi, hanya kolom "nama"
+```
+
+## Contoh penggunaan
+
+Mencari produk murah yang stoknya masih banyak:
+
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "produk": ["Sepatu", "Topi", "Tas", "Kaos"],
+    "harga": [350000, 45000, 120000, 80000],
+    "stok": [12, 30, 8, 25]
+})
+
+murah_dan_banyak = df[(df["harga"] < 100000) & (df["stok"] > 20)]
+print(murah_dan_banyak)
+```
+
+## Latihan singkat
+
+Dari sebuah DataFrame produk, tampilkan hanya produk yang harganya di bawah 100000.
+
+```python
+print(df[df["harga"] < 100000])
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Dari DataFrame berisi nama dan umur, tampilkan hanya kolom nama.
+
+**2. Menengah**  
+Tampilkan hanya baris yang umurnya 18 ke atas.
+
+**3. Tantangan**  
+Gabungkan dua syarat: tampilkan produk yang harganya di bawah 200 ribu dan stoknya lebih dari 10.
+
+**4. Project mini**  
+Muat dataset pelanggan (punya kolom `nama`, `kota`, `total_belanja`). Cari semua "pelanggan setia", yaitu pelanggan dari kota tertentu yang total belanjanya di atas rata-rata. Tampilkan hanya kolom `nama` dan `total_belanja` mereka.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+df[df["umur"] > 25 & df["kota"] == "Jakarta"]   # error: kurang tanda kurung
+```
+
+✅ Benar:
+
+```python
+df[(df["umur"] > 25) & (df["kota"] == "Jakarta")]   # tiap syarat dibungkus kurung
+```
+
+Saat menggabungkan kondisi dengan `&` atau `|`, setiap kondisi wajib dibungkus tanda kurung. Lupa kurung adalah error paling umum di Pandas.
+
+---
+
+❌ Salah — pakai loc dengan posisi integer saat index bukan integer:
+
+```python
+df = pd.DataFrame({"nama": ["Andi", "Budi"]}, index=["a", "b"])
+print(df.loc[0])  # KeyError! index "0" tidak ada, indexnya "a" dan "b"
+```
+
+✅ Benar — gunakan iloc untuk posisi:
+
+```python
+print(df.iloc[0])  # Andi — posisi pertama, bukan label
+```
+
+> **Cara mudah ingat:** **l**oc = **l**abel, **i**loc = **i**nteger position
+
+:::tip Catatan Pro
+Bingung antara `.loc` dan `.iloc`? Ingat: `.loc` pakai **label** (nama kolom, nama index); `.iloc` pakai **posisi angka** (0, 1, 2...). Kalau kolom punya nama, `.loc` hampir selalu lebih aman dan lebih terbaca.
+:::
+
+## Ringkasan
+
+- *Selection*: pilih kolom dengan `df["kolom"]` atau beberapa kolom dengan `df[["a", "b"]]`.
+- *Filtering*: ambil baris dengan kondisi, misalnya `df[df["umur"] > 25]`.
+- Gabungkan syarat dengan `&` dan `|`, dan bungkus tiap syarat dengan kurung.
+- `loc` memilih berdasarkan label, `iloc` berdasarkan posisi angka.

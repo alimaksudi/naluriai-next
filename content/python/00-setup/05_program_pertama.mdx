@@ -1,0 +1,124 @@
+---
+title: Program Python Pertamamu
+sidebar_position: 5
+---
+
+# Program Python Pertamamu
+
+## Kenapa ini penting?
+
+Kamu sudah cukup lama mendengar teori. Sekarang kamu bakal membuat program kecil yang **benar-benar terasa berguna**, bukan cuma `print` polos.
+
+**Fokus kita:** merasakan sendiri serunya menyuruh komputer menghitung sesuatu untukmu. Jangan pusingkan dulu kenapa setiap baris bekerja, itu tugas Module 1.
+
+## Apa yang akan kita buat?
+
+Kita bikin **kalkulator diskon belanja online**. Kamu masukkan harga barang dan persen diskon, lalu komputer langsung memberi tahu harga akhir yang harus kamu bayar.
+
+Ini contoh kecil dari yang dilakukan AI tiap hari: menerima data masuk, mengolahnya, lalu mengeluarkan hasil.
+
+## Analogi sederhana
+
+Bayangkan kamu sedang di kasir. Kamu kasih barang dan info diskonnya, lalu kasir menghitung total bayar. Program ini adalah "kasir mini" versi kamu sendiri, yang nurut 100 persen.
+
+## Bedah konsep
+
+Program kita cuma punya tiga langkah:
+
+1. **Terima data** dari pengguna (harga dan diskon).
+2. **Hitung** harga akhirnya.
+3. **Tampilkan** hasilnya ke layar.
+
+## Contoh penggunaan
+
+Ketik kode di bawah ini (jangan copy-paste ya, lebih nempel kalau diketik sendiri), lalu jalankan:
+
+```python
+# 1. Terima data dari pengguna
+harga = int(input("Harga barang (Rp): "))
+diskon = int(input("Diskon (%): "))
+
+# 2. Hitung harga akhir
+potongan = harga * diskon / 100
+harga_akhir = harga - potongan
+
+# 3. Tampilkan hasil
+print("Kamu hemat Rp", potongan)
+print("Harga yang harus dibayar: Rp", harga_akhir)
+```
+
+Coba jalankan, lalu masukkan harga `50000` dan diskon `20`. Komputer akan langsung bilang kamu hemat Rp 10000 dan cukup membayar Rp 40000.
+
+## Latihan singkat
+
+Ubah programnya supaya juga menambahkan **ongkos kirim Rp 10000** ke harga akhir.
+
+```python
+# 1. Terima data dari pengguna
+harga = int(input("Harga barang (Rp): "))
+diskon = int(input("Diskon (%): "))
+
+# 2. Hitung harga akhir
+potongan = harga * diskon / 100
+ongkir = 10000
+harga_akhir = harga - potongan + ongkir
+
+# 3. Tampilkan hasil
+print("Kamu hemat Rp", potongan)
+print("Ongkos kirim: Rp", ongkir)
+print("Harga yang harus dibayar: Rp", harga_akhir)
+```
+
+Berhasil? Berarti kamu baru saja mengubah program menjadi versimu sendiri. Itu skill nyata.
+
+## Latihan bertingkat
+
+### Pemula
+Ubah program di pelajaran ini agar menghitung total belanja 3 item berbeda yang kamu pilih sendiri. Beri nama variabel yang bermakna (bukan `a`, `b`, `c`).
+
+### Menengah
+Minta pengguna memasukkan nama dan jumlah barang yang dibeli, lalu tampilkan struk sederhana:
+
+```python
+nama_pembeli = input("Nama pembeli: ")
+nama_barang = input("Nama barang: ")
+jumlah = int(input("Jumlah: "))
+harga = int(input("Harga satuan (Rp): "))
+
+total = jumlah * harga
+print(f"\n=== STRUK BELANJA ===")
+print(f"Pembeli  : {nama_pembeli}")
+print(f"Barang   : {nama_barang} x{jumlah}")
+print(f"Total    : Rp{total:,}")
+```
+
+### Tantangan
+Tambahkan fitur diskon ke program di atas. Jika total belanja di atas Rp 100.000, berikan diskon 10%. Tampilkan harga sebelum dan sesudah diskon.
+
+(Hint: Gunakan operator perbandingan `>` dan variabel baru untuk diskon)
+
+### Project mini
+Buat kalkulator ongkos kirim sederhana:
+- Minta input: berat paket (kg) dan kota tujuan ("Jakarta", "luar Jakarta")
+- Harga: Rp 8.000/kg untuk Jakarta, Rp 15.000/kg untuk luar Jakarta
+- Tampilkan rincian lengkap: berat, harga/kg, dan total ongkos kirim
+
+Ini adalah program nyata yang memodelkan logika bisnis sederhana!
+
+## Kesalahan umum
+
+❌ Salah:
+Lupa menulis `int(...)` di sekeliling `input(...)`. Tanpa itu, Python menganggap `50000` sebagai teks, bukan angka, jadi tidak bisa dihitung dan muncul error.
+
+✅ Benar:
+Bungkus input angka dengan `int(...)` supaya Python tahu itu bilangan. Tenang, soal teks vs angka ini akan kita kupas tuntas di lesson Variabel & Tipe Data.
+
+:::tip Catatan Pro
+Biasakan `print()` untuk memeriksa nilai variabel di tengah program — ini teknik debug paling cepat dan paling sering dipakai bahkan oleh programmer berpengalaman.
+:::
+
+## Ringkasan
+
+- Program nyata pun cuma tiga langkah: terima data, olah, tampilkan hasil.
+- Pola ini sama persis dengan cara kerja model AI.
+- Wajar kalau belum paham tiap baris. Yang penting kamu sudah melihatnya jalan.

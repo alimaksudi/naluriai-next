@@ -1,0 +1,154 @@
+---
+title: Exception Lebih Dalam (raise & custom)
+sidebar_position: 1
+---
+
+# Exception Lebih Dalam (raise & custom)
+
+## Kenapa ini penting?
+
+Di Module 3 kamu belajar menangkap error dengan `try/except`. Tapi kadang kamu justru mau **sengaja memunculkan error** ketika ada sesuatu yang salah, misalnya umur negatif atau saldo kurang. Ini membuat program gagal lebih awal dengan pesan yang jelas, bukan menyimpan data ngawur diam-diam.
+
+**Fokus kita:** memunculkan error sendiri dengan `raise`, dan membuat jenis error sendiri (*custom exception*).
+
+## Apa itu raise?
+
+`raise` adalah perintah untuk sengaja memicu sebuah error ketika sebuah aturan dilanggar. Berguna untuk menjaga agar data yang masuk ke program selalu masuk akal.
+
+```python
+def set_umur(umur):
+    if umur < 0:
+        raise ValueError("Umur tidak boleh negatif")
+    return umur
+
+set_umur(-5)   # langsung memicu ValueError dengan pesan jelas
+```
+
+## Analogi sederhana
+
+`raise` itu seperti **wasit yang meniup peluit** saat ada pelanggaran. Daripada membiarkan permainan jalan terus dengan kecurangan, wasit langsung menghentikannya dan menjelaskan apa yang salah.
+
+## Bedah konsep
+
+### 1. Memunculkan error dengan raise
+
+Pilih jenis error yang sesuai, lalu beri pesan yang jelas.
+
+```python
+def bagi(a, b):
+    if b == 0:
+        raise ZeroDivisionError("Pembagi tidak boleh nol")
+    return a / b
+```
+
+### 2. Validasi input lebih awal
+
+Pola umum: cek di awal function, langsung `raise` kalau tidak valid. Ini disebut *fail fast*, gagal cepat sebelum kerusakan menyebar.
+
+```python
+def daftar(nama, umur):
+    if nama == "":
+        raise ValueError("Nama tidak boleh kosong")
+    if umur < 17:
+        raise ValueError("Minimal umur 17 tahun")
+    print("Pendaftaran berhasil")
+```
+
+### 3. Membuat custom exception
+
+Untuk kasus khusus di aplikasimu, buat jenis error sendiri dengan mewarisi `Exception`. Namanya jadi lebih bermakna.
+
+```python
+class SaldoKurangError(Exception):
+    pass
+
+def tarik(saldo, jumlah):
+    if jumlah > saldo:
+        raise SaldoKurangError("Saldo tidak mencukupi")
+    return saldo - jumlah
+```
+
+### 4. Menangkap custom exception
+
+```python
+try:
+    tarik(50000, 100000)
+except SaldoKurangError as e:
+    print("Transaksi ditolak:", e)
+```
+
+## Contoh penggunaan
+
+Validasi data produk sebelum disimpan:
+
+```python
+def simpan_produk(nama, harga):
+    if not nama:
+        raise ValueError("Nama produk wajib diisi")
+    if harga <= 0:
+        raise ValueError("Harga harus lebih dari nol")
+    print(f"Produk {nama} tersimpan")
+
+try:
+    simpan_produk("Sepatu", -100)
+except ValueError as e:
+    print("Gagal menyimpan:", e)
+```
+
+## Latihan singkat
+
+Buat function `set_nilai(n)` yang memunculkan `ValueError` kalau `n` di luar rentang 0 sampai 100.
+
+```python
+def set_nilai(n):
+    if n < 0 or n > 100:
+        raise ValueError("Nilai harus antara 0 dan 100")
+    return n
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat function yang me-`raise` error kalau diberi angka negatif.
+
+**2. Menengah**  
+Buat function `login(password)` yang memunculkan error kalau password kurang dari 8 karakter, lalu tangani dengan `try/except`.
+
+**3. Tantangan**  
+Buat custom exception `StokHabisError`. Function `beli(stok, jumlah)` memunculkannya kalau jumlah beli melebihi stok. Tangani dan tampilkan pesan ramah.
+
+**4. Project mini**  
+Buat sistem pendaftaran event mini. Buat custom exception untuk dua kasus: `KuotaPenuhError` dan `UmurTidakValidError`. Function `daftar(peserta, kuota, umur)` memvalidasi keduanya dan memunculkan error yang sesuai. Di program utama, tangani tiap error dengan pesan berbeda.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+def set_umur(umur):
+    if umur < 0:
+        print("Umur tidak valid")   # cuma cetak, program tetap lanjut dengan data salah
+    return umur
+```
+
+✅ Benar:
+
+```python
+def set_umur(umur):
+    if umur < 0:
+        raise ValueError("Umur tidak boleh negatif")   # hentikan, jangan simpan data ngawur
+    return umur
+```
+
+Sekadar `print` peringatan tidak menghentikan program; data yang salah tetap lolos. `raise` memaksa masalah ditangani sekarang, bukan menumpuk jadi bug misterius nanti.
+
+:::tip Catatan Pro
+`raise ValueError("pesan yang jelas")` lebih baik dari `assert` karena `assert` bisa dinonaktifkan di mode produksi dengan flag `-O`. `raise` selalu aktif dan pesannya lebih informatif untuk pengguna.
+:::
+
+## Ringkasan
+
+- `raise` sengaja memunculkan error saat sebuah aturan dilanggar.
+- Validasi input lebih awal (*fail fast*) mencegah data ngawur menyebar.
+- *Custom exception* (mewarisi `Exception`) membuat jenis error yang bermakna untuk aplikasimu.
+- Tangkap custom exception sama seperti error bawaan, dengan `except NamaError`.

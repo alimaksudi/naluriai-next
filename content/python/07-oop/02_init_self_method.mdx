@@ -1,0 +1,160 @@
+---
+title: "__init__, self, Atribut & Method"
+sidebar_position: 2
+---
+
+# __init__, self, Atribut & Method
+
+## Kenapa ini penting?
+
+Memberi atribut satu per satu seperti di lesson sebelumnya melelahkan dan rawan lupa. Di sinilah `__init__` masuk: ia membuat tiap object langsung lahir lengkap dengan datanya. Dan dengan *method*, object bisa punya kemampuan sendiri. Ini inti sebenarnya dari OOP.
+
+**Fokus kita:** memakai `__init__` untuk menyiapkan atribut otomatis, memahami `self`, dan membuat *method* (function milik object).
+
+## Apa itu __init__, self, dan method?
+
+- `__init__` adalah method khusus yang otomatis jalan saat object dibuat, untuk menyiapkan atribut awal.
+- `self` adalah cara object menyebut dirinya sendiri di dalam class.
+- *Method* adalah function yang menempel pada object.
+
+```python
+class Mobil:
+    def __init__(self, merek, warna):
+        self.merek = merek
+        self.warna = warna
+
+mobil = Mobil("Toyota", "Merah")
+print(mobil.merek)   # Toyota
+```
+
+## Analogi sederhana
+
+`__init__` itu seperti **formulir pendaftaran** yang wajib diisi saat sebuah benda "lahir". Begitu object dibuat, formulir langsung terisi (merek, warna). `self` itu seperti kata "saya": tiap object memakainya untuk menunjuk datanya sendiri.
+
+## Bedah konsep
+
+### 1. __init__ menyiapkan atribut
+
+Saat kamu menulis `Mobil("Toyota", "Merah")`, Python otomatis memanggil `__init__` dan mengisi atributnya.
+
+```python
+class Pengguna:
+    def __init__(self, nama, umur):
+        self.nama = nama
+        self.umur = umur
+
+budi = Pengguna("Budi", 25)
+print(budi.nama, budi.umur)   # Budi 25
+```
+
+### 2. self menunjuk object itu sendiri
+
+`self` selalu jadi parameter pertama tiap method. Lewat `self`, method bisa membaca dan mengubah atribut object.
+
+```python
+class Akun:
+    def __init__(self, saldo):
+        self.saldo = saldo
+```
+
+Saat kamu menulis `akun.saldo`, di dalam class itu adalah `self.saldo`.
+
+### 3. Method: kemampuan object
+
+Method adalah function di dalam class. Parameter pertamanya selalu `self`.
+
+```python
+class Akun:
+    def __init__(self, saldo):
+        self.saldo = saldo
+
+    def setor(self, jumlah):
+        self.saldo = self.saldo + jumlah
+
+    def info(self):
+        print("Saldo:", self.saldo)
+
+akun = Akun(100000)
+akun.setor(50000)
+akun.info()        # Saldo: 150000
+```
+
+Perhatikan: saat memanggil `akun.setor(50000)`, kita tidak menulis `self`. Python mengisinya otomatis dengan object `akun`.
+
+## Contoh penggunaan
+
+Class produk dengan kemampuan menghitung harga diskon:
+
+```python
+class Produk:
+    def __init__(self, nama, harga):
+        self.nama = nama
+        self.harga = harga
+
+    def harga_diskon(self, persen):
+        return self.harga - (self.harga * persen / 100)
+
+sepatu = Produk("Sepatu", 350000)
+print(sepatu.harga_diskon(20))   # 280000.0
+```
+
+## Latihan singkat
+
+Buat class `Lingkaran` dengan `__init__` yang menerima `radius`, dan method `luas()` yang mengembalikan luasnya (`3.14 * radius * radius`).
+
+```python
+class Lingkaran:
+    def __init__(self, radius):
+        self.radius = radius
+
+    def luas(self):
+        return 3.14 * self.radius * self.radius
+
+print(Lingkaran(7).luas())
+```
+
+## Latihan bertingkat
+
+**1. Pemula**  
+Buat class `Siswa` dengan atribut `nama` dan `nilai` lewat `__init__`, lalu buat satu object dan tampilkan datanya.
+
+**2. Menengah**  
+Tambahkan method `lulus()` pada class `Siswa` yang mengembalikan `True` kalau nilai 70 ke atas.
+
+**3. Tantangan**  
+Buat class `RekeningBank` dengan method `setor`, `tarik` (tolak kalau saldo kurang), dan `cek_saldo`. Jalankan beberapa transaksi.
+
+**4. Project mini**  
+Buat class `Keranjang` untuk belanja. Punya atribut list `barang` (awalnya kosong). Method: `tambah(nama, harga)`, `total()` yang menjumlahkan semua harga, dan `jumlah_barang()`. Buat object, tambahkan beberapa barang, lalu tampilkan total belanjanya.
+
+## Kesalahan umum
+
+❌ Salah:
+
+```python
+class Pengguna:
+    def __init__(nama, umur):     # lupa self sebagai parameter pertama
+        self.nama = nama
+```
+
+✅ Benar:
+
+```python
+class Pengguna:
+    def __init__(self, nama, umur):   # self selalu jadi parameter pertama
+        self.nama = nama
+        self.umur = umur
+```
+
+Setiap method, termasuk `__init__`, wajib punya `self` sebagai parameter pertama. Lupa `self` adalah kesalahan paling sering saat mulai belajar OOP.
+
+:::tip Catatan Pro
+Semua method instance (bukan `@staticmethod` atau `@classmethod`) butuh `self` sebagai parameter pertama — bukan hanya `__init__`. Lupa `self` adalah penyebab `TypeError: takes 0 positional arguments but 1 was given` yang paling umum di OOP.
+:::
+
+## Ringkasan
+
+- `__init__` otomatis jalan saat object dibuat, untuk menyiapkan atribut awal.
+- `self` adalah cara object menunjuk dirinya sendiri; selalu jadi parameter pertama method.
+- *Method* adalah function milik object yang bisa membaca dan mengubah atributnya.
+- Saat memanggil method, `self` diisi otomatis oleh Python.
